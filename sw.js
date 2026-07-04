@@ -1,9 +1,10 @@
-const CACHE_NAME = 'aventura-ingles-v5';
+const CACHE_NAME = 'aventura-ingles-v6';
 const urlsToCache = [
   './',
   './index.html',
   './manifest.json',
   './aventura.html',
+  './clasico.html',
   'https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap'
 ];
 
@@ -36,7 +37,8 @@ self.addEventListener('fetch', event => {
   const isPage = req.mode === 'navigate' ||
                  req.url.endsWith('/index.html') ||
                  req.url.endsWith('/ingles/') ||
-                 req.url.endsWith('/aventura.html');
+                 req.url.endsWith('/aventura.html') ||
+                 req.url.endsWith('/clasico.html');
 
   if (isPage) {
     // Página principal: SIEMPRE intentar internet primero.
