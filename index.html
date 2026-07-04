@@ -277,6 +277,37 @@
 
   .back-row{display:flex; justify-content:flex-start; margin-bottom:12px;}
 
+  /* emparejar palabra-imagen */
+  .match-cols{display:flex; gap:14px; margin-top:14px;}
+  .match-col{flex:1; display:flex; flex-direction:column; gap:10px;}
+  .match-item{
+    border:3px solid rgba(40,64,107,.12); border-radius:16px; background:#F4F9FF;
+    padding:12px 8px; cursor:pointer; font-weight:700; color:var(--ink); transition:transform .08s;
+  }
+  .match-item.word{font-family:'Fredoka'; font-size:1rem;}
+  .match-item.img{font-size:1.9rem;}
+  .match-item.sel{border-color:var(--sun); background:#FFF3D6; transform:scale(1.04);}
+  .match-item.done{background:#D9F7E8; border-color:var(--mint); opacity:.65; cursor:default;}
+  .match-item.bad{border-color:var(--coral); background:#FFE3E0; animation:shake .4s;}
+
+  /* escena de búsqueda (busca y oye / busca en la lista) */
+  .scene{position:relative; border-radius:24px; margin-top:12px; border:3px solid rgba(40,64,107,.08); overflow:hidden;}
+  .scene-item{
+    position:absolute; width:58px; height:58px; border-radius:50%; transform:translate(-50%,-50%);
+    background:#fff; border:none; cursor:pointer; font-size:1.9rem;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 0 rgba(40,64,107,.16);
+  }
+  .scene-item.found{background:#D9F7E8; border:3px solid var(--mint); font-size:1.5rem;}
+  .scene-item:disabled{cursor:default;}
+  .scene-item.wrong-shake{animation:shake .4s;}
+  .find-list{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:10px 0;}
+  .find-chip{
+    background:#F4F9FF; border:3px solid rgba(40,64,107,.12); border-radius:14px;
+    padding:7px 13px; font-family:'Fredoka'; font-weight:600; font-size:.95rem; color:var(--ink);
+  }
+  .find-chip.done{background:#D9F7E8; border-color:var(--mint); color:var(--ink-soft); text-decoration:line-through; opacity:.75;}
+
   @media (max-width:420px){
     .word-emoji{font-size:4rem;}
     .word-en{font-size:1.8rem;}
@@ -525,9 +556,9 @@ const L4_UNITS = [
 
 const LEVELS = [
  {id:'l1', name:'Explorador', icon:'🧭', color:'#3EC9A7', desc:'Mis primeras palabras · 14 mundos',
-  units:L1_UNITS, games:['learn','listen','memory','speak'], need:0, needText:''},
+  units:L1_UNITS, games:['learn','listen','memory','match','findaudio','findlist','speak'], need:0, needText:''},
  {id:'l2', name:'Aventurero', icon:'🗺️', color:'#3FA7F5', desc:'Más palabras y a escribir · 10 mundos',
-  units:L2_UNITS, games:['learn','listen','memory','spell','speak'], need:100, needText:'Consigue 100 ⭐ en Explorador'},
+  units:L2_UNITS, games:['learn','listen','memory','match','findaudio','findlist','spell','speak'], need:100, needText:'Consigue 100 ⭐ en Explorador'},
  {id:'l3', name:'Héroe',      icon:'🦸', color:'#B067E8', desc:'¡Frases completas! · 8 mundos',
   units:L3_UNITS, games:['learn','listen','build','trans','speak'], need:80, needText:'Consigue 80 ⭐ en Aventurero'},
  {id:'l4', name:'Campeón',    icon:'🏆', color:'#FF7B54', desc:'Preguntas e historias · 5 mundos',
@@ -541,7 +572,10 @@ const GAME_INFO = {
   speak: {name:'¡Habla!',  icon:'🎤', desc:'Dilo en voz alta'},
   spell: {name:'Deletrea', icon:'🔤', desc:'Escribe la palabra'},
   build: {name:'La Frase', icon:'🧩', desc:'Ordena las palabras'},
-  trans: {name:'Traduce',  icon:'🔁', desc:'Elige en inglés'}
+  trans: {name:'Traduce',  icon:'🔁', desc:'Elige en inglés'},
+  match: {name:'Empareja', icon:'🔗', desc:'Palabra con imagen'},
+  findaudio:{name:'Busca y Oye', icon:'🔍', desc:'Encuentra lo que oigas'},
+  findlist: {name:'Busca en la Lista', icon:'📋', desc:'Encuentra lo escrito'}
 };
 const STARS_PER_GAME = 5;
 const UNLOCK_UNIT = 10; // ⭐ para abrir el siguiente mundo del nivel
@@ -685,6 +719,19 @@ function shuffle(arr){
   for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
   return a;
 }
+// Calcula posiciones (en %) para esparcir n objetos en una escena sin que se amontonen
+function sceneSlots(n){
+  const cols = n <= 6 ? 3 : 4;
+  const rows = Math.ceil(n/cols);
+  const cellW = 100/cols, cellH = 100/rows;
+  const idxs = shuffle([...Array(cols*rows).keys()]).slice(0, n);
+  return idxs.map(i=>{
+    const r = Math.floor(i/cols), c = i%cols;
+    const jitterX = (Math.random()-0.5) * cellW*0.4;
+    const jitterY = (Math.random()-0.5) * cellH*0.4;
+    return { top: r*cellH + cellH/2 + jitterY, left: c*cellW + cellW/2 + jitterX, rows };
+  });
+}
 function starsRow(n){ let s=''; for(let i=0;i<5;i++) s += i<n?'★':'☆'; return s; }
 function emojiLen(e){ return Array.from(e).length; }
 function confetti(){
@@ -737,9 +784,9 @@ function renderHome(){
   updateBadge();
   const t = totalStars(), gm = grandMax();
   const medals = [];
-  if(t >= 150) medals.push('🥉');
-  if(t >= 400) medals.push('🥈');
-  if(t >= 650) medals.push('🥇');
+  if(t >= 220) medals.push('🥉');
+  if(t >= 550) medals.push('🥈');
+  if(t >= 900) medals.push('🥇');
   if(t >= gm)  medals.push('🏆');
   const totalUnits = LEVELS.reduce((a,L)=>a+L.units.length,0);
   const doneToday = state.daily[todayKey()];
@@ -966,11 +1013,11 @@ function runListenRounds(li, ui, rounds, pool, onDone, customTitle, customOnBack
     firstTry = true;
     const stage = gameShell(li, ui, `
       ${dots(idx, rounds.length, results)}
-      <h2 style="margin:4px 0">👂 ¿Qué has oído?</h2>`, customTitle, customOnBack);
+      <h2 style="margin:4px 0">👂 ¿Qué has oído?</h2>
       <button class="btn mint big" id="replayBtn">🔊 Escuchar otra vez</button>
       <div class="opts">
         ${options.map(o=>`<button class="opt ${emojiLen(o.e)>2?'long':''}" data-en="${o.en.replace(/"/g,'')}" aria-label="${o.es}">${o.e}</button>`).join('')}
-      </div>`);
+      </div>`, customTitle, customOnBack);
     const play = ()=>speak(w.en);
     setTimeout(play, 400);
     stage.querySelector('#replayBtn').onclick = play;
@@ -1045,6 +1092,183 @@ function gameMemory(li, ui){
             flipped = []; lock = false;
           }, 850);
         }
+      }
+    };
+  });
+}
+
+/* ============================================================
+   JUEGO · EMPAREJA (palabra escrita ↔ imagen)
+   ============================================================ */
+function gameMatch(li, ui){
+  const u = LEVELS[li].units[ui];
+  const items = shuffle(u.words).slice(0, Math.min(6, u.words.length));
+  const wordsCol = shuffle(items.map((w,i)=>({...w, i})));
+  const imgsCol = shuffle(items.map((w,i)=>({...w, i})));
+  let doneCount = 0, attempts = 0, pending = null;
+
+  const stage = gameShell(li, ui, `
+    <h2 style="margin:4px 0">🔗 Une la palabra con su imagen</h2>
+    <p class="hint" style="margin:0 0 4px">Toca una palabra y luego su dibujo</p>
+    <div class="match-cols">
+      <div class="match-col">
+        ${wordsCol.map(w=>`<button class="match-item word" data-i="${w.i}">${w.en.toUpperCase()}</button>`).join('')}
+      </div>
+      <div class="match-col">
+        ${imgsCol.map(w=>`<button class="match-item img" data-i="${w.i}">${w.e}</button>`).join('')}
+      </div>
+    </div>`);
+
+  function select(side, btn, i){
+    if(btn.classList.contains('done')) return;
+    if(!pending || pending.side !== side){
+      if(pending && pending.side === side){ /* no-op */ }
+    }
+    if(!pending){
+      stage.querySelectorAll(`.match-item.${side}`).forEach(b=>b.classList.remove('sel'));
+      btn.classList.add('sel');
+      pending = {side, btn, i};
+      sndFlip();
+      return;
+    }
+    if(pending.side === side){
+      stage.querySelectorAll(`.match-item.${side}`).forEach(b=>b.classList.remove('sel'));
+      btn.classList.add('sel');
+      pending = {side, btn, i};
+      return;
+    }
+    attempts++;
+    const prevBtn = pending.btn;
+    if(pending.i === i){
+      sndGood(); speak(items[i].en);
+      prevBtn.classList.remove('sel'); prevBtn.classList.add('done');
+      btn.classList.add('done');
+      doneCount++;
+      pending = null;
+      if(doneCount === items.length){
+        const stars = attempts<=items.length+1?5 : attempts<=items.length+3?4 : attempts<=items.length+5?3 : attempts<=items.length+8?2:1;
+        setTimeout(()=>showReward(stars, `Emparejadas ${items.length} palabras en ${attempts} intentos`,
+          ()=>renderUnit(li,ui), ()=>setStars(li,ui,'match',stars)), 500);
+      }
+    }else{
+      sndBad();
+      prevBtn.classList.remove('sel'); prevBtn.classList.add('bad');
+      btn.classList.add('bad');
+      pending = null;
+      setTimeout(()=>{ prevBtn.classList.remove('bad'); btn.classList.remove('bad'); }, 500);
+    }
+  }
+  stage.querySelectorAll('.match-item.word').forEach(b=>{ b.onclick = ()=>select('word', b, +b.dataset.i); });
+  stage.querySelectorAll('.match-item.img').forEach(b=>{ b.onclick = ()=>select('img', b, +b.dataset.i); });
+}
+
+/* ============================================================
+   JUEGO · BUSCA Y OYE (escena con objetos + audio)
+   ============================================================ */
+function gameFindAudio(li, ui){
+  const u = LEVELS[li].units[ui];
+  const items = shuffle(u.words).slice(0, Math.min(8, u.words.length));
+  const slots = sceneSlots(items.length);
+  const sceneHeight = Math.max(200, (slots[0]?.rows||3)*100 + 20);
+  const order = shuffle(items.map((_,i)=>i));
+  const found = new Set();
+  let round = 0, correct = 0, firstTry = true;
+  const results = [];
+
+  function draw(){
+    firstTry = true;
+    const target = items[order[round]];
+    const stage = gameShell(li, ui, `
+      ${dots(round, order.length, results)}
+      <h2 style="margin:4px 0">🔍 Escucha y encuentra</h2>
+      <button class="btn mint" id="replayBtn">🔊 Escuchar otra vez</button>
+      <div class="scene" style="height:${sceneHeight}px; background:linear-gradient(160deg, ${u.color}18, ${u.color}30)">
+        ${items.map((w,i)=>`<button class="scene-item ${found.has(i)?'found':''}" ${found.has(i)?'disabled':''} data-i="${i}" style="top:${slots[i].top}%; left:${slots[i].left}%" aria-label="${w.es}">${found.has(i)?'✅':w.e}</button>`).join('')}
+      </div>`);
+    const play = ()=>speak(target.en);
+    setTimeout(play, 400);
+    stage.querySelector('#replayBtn').onclick = play;
+    stage.querySelectorAll('.scene-item:not(:disabled)').forEach(b=>{
+      b.onclick = ()=>{
+        const i = +b.dataset.i;
+        if(i === order[round]){
+          sndGood(); found.add(i);
+          if(firstTry) correct++;
+          results[round] = firstTry;
+          speak(target.en, 0.9);
+          setTimeout(()=>{
+            round++;
+            if(round < order.length) draw();
+            else{
+              const stars = starsFromScore(correct, order.length);
+              showReward(stars, `Has encontrado ${correct} de ${order.length} a la primera`,
+                ()=>renderUnit(li,ui), ()=>setStars(li,ui,'findaudio',stars));
+            }
+          }, 800);
+        }else{
+          sndBad(); firstTry = false;
+          b.classList.add('wrong-shake');
+          setTimeout(()=>b.classList.remove('wrong-shake'), 400);
+        }
+      };
+    });
+  }
+  draw();
+}
+
+/* ============================================================
+   JUEGO · BUSCA EN LA LISTA (escena con objetos + palabras escritas)
+   ============================================================ */
+function gameFindList(li, ui){
+  const u = LEVELS[li].units[ui];
+  const items = shuffle(u.words).slice(0, Math.min(6, u.words.length));
+  const usedEmojis = new Set(items.map(w=>w.e));
+  const distractPool = [];
+  LEVELS[li].units.forEach(otherU=>{
+    if(otherU.id !== u.id) otherU.words.forEach(w=>{ if(!usedEmojis.has(w.e)) distractPool.push(w); });
+  });
+  const distractors = shuffle(distractPool).slice(0, Math.min(3, distractPool.length));
+  const sceneItems = shuffle([
+    ...items.map((w,i)=>({...w, target:true, key:i})),
+    ...distractors.map(w=>({...w, target:false, key:-1}))
+  ]);
+  const slots = sceneSlots(sceneItems.length);
+  const sceneHeight = Math.max(200, (slots[0]?.rows||3)*100 + 20);
+  const listOrder = shuffle(items.map((_,i)=>i));
+  const found = new Set();
+  let attempts = 0;
+
+  const stage = gameShell(li, ui, `
+    <h2 style="margin:4px 0">📋 Busca lo que está escrito</h2>
+    <p class="hint" style="margin:0 0 4px">Toca en el dibujo cada palabra de la lista</p>
+    <div class="find-list">
+      ${listOrder.map(i=>`<span class="find-chip" data-i="${i}">${items[i].en.toUpperCase()}</span>`).join('')}
+    </div>
+    <div class="scene" style="height:${sceneHeight}px; background:linear-gradient(160deg, ${u.color}18, ${u.color}30)">
+      ${sceneItems.map((w,idx)=>`<button class="scene-item" data-key="${w.target?w.key:-1}" data-target="${w.target?1:0}" style="top:${slots[idx].top}%; left:${slots[idx].left}%" aria-label="${w.es}">${w.e}</button>`).join('')}
+    </div>`);
+
+  stage.querySelectorAll('.scene-item').forEach(b=>{
+    b.onclick = ()=>{
+      const key = +b.dataset.key;
+      const isTarget = b.dataset.target === '1';
+      if(isTarget && found.has(key)) return;
+      attempts++;
+      if(isTarget){
+        found.add(key);
+        sndGood(); speak(items[key].en);
+        b.classList.add('found'); b.disabled = true; b.textContent = '✅';
+        const chip = stage.querySelector(`.find-chip[data-i="${key}"]`);
+        if(chip) chip.classList.add('done');
+        if(found.size === items.length){
+          const stars = attempts<=items.length?5 : attempts<=items.length+2?4 : attempts<=items.length+4?3 : 2;
+          setTimeout(()=>showReward(stars, `Has encontrado los ${items.length} objetos de la lista`,
+            ()=>renderUnit(li,ui), ()=>setStars(li,ui,'findlist',stars)), 500);
+        }
+      }else{
+        sndBad();
+        b.classList.add('wrong-shake');
+        setTimeout(()=>b.classList.remove('wrong-shake'), 400);
       }
     };
   });
@@ -1514,7 +1738,7 @@ function showDiploma(li){
   w.document.close();
 }
 
-const GAME_RUN = {learn:gameLearn, listen:gameListen, memory:gameMemory, speak:gameSpeak, spell:gameSpell, build:gameBuild, trans:gameTrans};
+const GAME_RUN = {learn:gameLearn, listen:gameListen, memory:gameMemory, speak:gameSpeak, spell:gameSpell, build:gameBuild, trans:gameTrans, match:gameMatch, findaudio:gameFindAudio, findlist:gameFindList};
 
 document.getElementById('homeBtn').onclick = ()=>{ stopSR(); renderHome(); };
 document.getElementById('albumBtn').onclick = renderAlbum;
