@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#6B4AC9">
+<title>La Aventura de la Estrella Mágica ⭐</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2B2350; --ink-soft:#6C6494;
+    --sun:#FFC93C; --coral:#FF7B54; --mint:#3EC9A7; --berry:#B067E8; --sea:#3FA7F5;
+    --gem:#7FE3FF;
+    --shadow:0 6px 0 rgba(43,35,80,.18);
+    --radius:26px;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Nunito',system-ui,sans-serif; color:var(--ink);
+    min-height:100vh; overflow-x:hidden;
+    background:linear-gradient(180deg,#8E7CF0,#C9B8FF 45%,#FFE9F3);
+    transition:background 1s;
+  }
+  h1,h2,h3{font-family:'Fredoka','Comic Sans MS',sans-serif;}
+
+  header{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; gap:8px; padding:10px 12px;
+    background:rgba(255,255,255,.85); backdrop-filter:blur(8px);
+    border-bottom:3px solid rgba(43,35,80,.08);
+  }
+  header .title{font-family:'Fredoka'; font-weight:700; font-size:1.02rem; flex:1;}
+  .gem-badge{background:linear-gradient(120deg,#BDEBFF,#7FE3FF); border-radius:999px; padding:6px 12px; font-weight:800; font-size:.95rem; box-shadow:0 3px 0 rgba(30,110,150,.3); white-space:nowrap;}
+  .icon-btn{background:#fff; border:3px solid rgba(43,35,80,.12); border-radius:16px; font-size:1.15rem; padding:6px 9px; cursor:pointer; box-shadow:var(--shadow);}
+  .icon-btn:active{transform:translateY(3px); box-shadow:none;}
+
+  main{max-width:640px; margin:0 auto; padding:18px 16px 90px; position:relative; z-index:1;}
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-family:'Fredoka'; font-weight:600; font-size:1.15rem;
+    border:none; border-radius:var(--radius); padding:14px 26px;
+    cursor:pointer; color:#fff; background:var(--sea);
+    box-shadow:0 5px 0 rgba(0,0,0,.18); transition:transform .08s;
+  }
+  .btn:active{transform:translateY(4px); box-shadow:0 1px 0 rgba(0,0,0,.18);}
+  .btn.sun{background:var(--sun); color:#6B4A00;}
+  .btn.coral{background:var(--coral);}
+  .btn.mint{background:var(--mint);}
+  .btn.berry{background:var(--berry);}
+  .btn.ghost{background:#fff; color:var(--ink); border:3px solid rgba(43,35,80,.14); box-shadow:var(--shadow);}
+  .btn.big{font-size:1.4rem; padding:18px 32px; border-radius:32px;}
+  .btn:focus-visible,.icon-btn:focus-visible,.opt:focus-visible{outline:4px solid #FF8A3D; outline-offset:3px;}
+
+  /* ===== intro / héroe ===== */
+  .story-card{
+    background:rgba(255,255,255,.94); border-radius:32px; padding:26px 20px;
+    text-align:center; box-shadow:0 10px 0 rgba(43,35,80,.12); margin-top:10px;
+  }
+  .story-card .big{font-size:4rem; line-height:1.1;}
+  .story-card p{font-weight:700; color:var(--ink-soft); font-size:1.06rem; line-height:1.5;}
+  .heroes{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:16px 0;}
+  .hero-pick{
+    font-size:2.6rem; padding:16px 6px; border-radius:22px; cursor:pointer;
+    background:#F6F3FF; border:4px solid rgba(43,35,80,.1); transition:transform .1s;
+  }
+  .hero-pick.sel{border-color:var(--sun); background:#FFF3D6; transform:scale(1.1);}
+
+  /* ===== mapa de reinos ===== */
+  .realm-card{
+    width:100%; border:none; text-align:left; cursor:pointer;
+    border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);
+    margin-bottom:14px; font-family:'Nunito'; display:flex; gap:14px; align-items:center;
+    color:#fff;
+  }
+  .realm-card:active{transform:translateY(3px); box-shadow:none;}
+  .realm-card .re{font-size:2.6rem; width:70px; height:70px; min-width:70px; border-radius:22px; background:rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center;}
+  .realm-card .ri{flex:1;}
+  .realm-card .rn{font-family:'Fredoka'; font-weight:700; font-size:1.2rem;}
+  .realm-card .rd{font-weight:700; font-size:.9rem; opacity:.9;}
+  .realm-card.locked{filter:grayscale(.8); opacity:.65;}
+  .artifact{font-size:1.7rem;}
+
+  /* ===== camino del reino ===== */
+  .trail{
+    position:relative; border-radius:32px; margin-top:12px; padding:10px;
+    min-height:520px; overflow:hidden; box-shadow:inset 0 0 0 4px rgba(255,255,255,.35);
+  }
+  .deco{position:absolute; font-size:1.6rem; opacity:.55; pointer-events:none;}
+  .trail-stop{
+    position:absolute; transform:translate(-50%,-50%);
+    width:64px; height:64px; border-radius:50%;
+    border:4px solid #fff; cursor:pointer; font-size:1.7rem;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,.9); box-shadow:0 5px 0 rgba(43,35,80,.22);
+  }
+  .trail-stop.done{background:#D9F7E8; border-color:var(--mint);}
+  .trail-stop.locked{background:rgba(255,255,255,.45); filter:grayscale(1); cursor:default; opacity:.7;}
+  .trail-stop.next{animation:glow 1.4s infinite;}
+  @keyframes glow{50%{box-shadow:0 0 0 12px rgba(255,201,60,.35), 0 5px 0 rgba(43,35,80,.22);}}
+  .hero-token{
+    position:absolute; transform:translate(-50%,-110%); font-size:2.3rem; z-index:5;
+    transition:top 1.1s ease-in-out, left 1.1s ease-in-out; pointer-events:none;
+    filter:drop-shadow(0 4px 3px rgba(0,0,0,.25));
+    animation:hbob 1.6s ease-in-out infinite;
+  }
+  @keyframes hbob{50%{margin-top:-6px;}}
+
+  /* ===== juego ===== */
+  .stage{background:rgba(255,255,255,.95); border-radius:32px; padding:22px 16px; box-shadow:0 10px 0 rgba(43,35,80,.12); text-align:center;}
+  .npc{font-size:3.4rem;}
+  .speech{
+    background:#F6F3FF; border-radius:20px; padding:12px 16px; margin:10px auto;
+    font-weight:700; color:var(--ink); max-width:440px; position:relative; font-size:1.02rem;
+  }
+  .progress-dots{display:flex; gap:6px; justify-content:center; margin-bottom:12px; flex-wrap:wrap;}
+  .dot{width:11px; height:11px; border-radius:50%; background:rgba(43,35,80,.15);}
+  .dot.on{background:var(--mint);}
+  .dot.now{background:var(--sun); transform:scale(1.3);}
+  .word-emoji{font-size:4.6rem; line-height:1.1; margin:6px 0;}
+  .word-emoji.long{font-size:2.9rem;}
+  .word-en{font-family:'Fredoka'; font-weight:700; font-size:2rem; margin:2px 0;}
+  .word-en.phrase{font-size:1.4rem;}
+  .word-es{color:var(--ink-soft); font-weight:700; font-size:1.02rem; margin-bottom:8px;}
+  .controls{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:14px;}
+  .hint{color:var(--ink-soft); font-weight:700; font-size:.92rem; margin-top:10px;}
+
+  .opts{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;}
+  .opt{background:#F6F9FF; border:4px solid rgba(43,35,80,.1); border-radius:24px; font-size:2.9rem; padding:16px 6px; cursor:pointer; transition:transform .08s;}
+  .opt.long{font-size:1.8rem;}
+  .opt.txt{font-family:'Fredoka'; font-weight:600; font-size:1.2rem; color:var(--ink);}
+  .opt:active{transform:scale(.95);}
+  .opt.good{background:#D9F7E8; border-color:var(--mint); animation:pop .4s;}
+  .opt.bad{background:#FFE3E0; border-color:var(--coral); animation:shake .4s;}
+  @keyframes pop{50%{transform:scale(1.12);}}
+  @keyframes shake{25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
+
+  .match-cols{display:flex; gap:14px; margin-top:14px;}
+  .match-col{flex:1; display:flex; flex-direction:column; gap:10px;}
+  .match-item{border:3px solid rgba(43,35,80,.12); border-radius:16px; background:#F6F9FF; padding:12px 8px; cursor:pointer; font-weight:700; color:var(--ink);}
+  .match-item.word{font-family:'Fredoka'; font-size:1rem;}
+  .match-item.img{font-size:1.9rem;}
+  .match-item.sel{border-color:var(--sun); background:#FFF3D6; transform:scale(1.04);}
+  .match-item.done{background:#D9F7E8; border-color:var(--mint); opacity:.65; cursor:default;}
+  .match-item.bad{border-color:var(--coral); background:#FFE3E0; animation:shake .4s;}
+
+  .scene{position:relative; border-radius:24px; margin-top:12px; border:3px solid rgba(43,35,80,.08); overflow:hidden;}
+  .scene-item{position:absolute; width:58px; height:58px; border-radius:50%; transform:translate(-50%,-50%); background:#fff; border:none; cursor:pointer; font-size:1.9rem; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 0 rgba(43,35,80,.16);}
+  .scene-item.found{background:#D9F7E8; border:3px solid var(--mint); font-size:1.5rem;}
+  .scene-item:disabled{cursor:default;}
+  .scene-item.wrong-shake{animation:shake .4s;}
+
+  .mgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px;}
+  .mcard{aspect-ratio:3/3.4; border-radius:18px; border:none; cursor:pointer; background:var(--berry); color:#fff; font-size:2rem; display:flex; align-items:center; justify-content:center; font-family:'Fredoka'; font-weight:600; box-shadow:0 4px 0 rgba(0,0,0,.18);}
+  .mcard.flip{background:#fff; color:var(--ink); border:4px solid rgba(43,35,80,.12); box-shadow:var(--shadow);}
+  .mcard.done{background:#D9F7E8; border:4px solid var(--mint); color:var(--ink); cursor:default;}
+  .mcard .wtxt{font-size:1rem; padding:4px; word-break:break-word;}
+
+  .slots{display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin:14px 0; min-height:52px;}
+  .slot{width:42px; height:50px; border-radius:12px; background:#F6F9FF; border:3px dashed rgba(43,35,80,.25); font-family:'Fredoka'; font-weight:700; font-size:1.5rem; display:flex; align-items:center; justify-content:center;}
+  .slot.filled{border-style:solid; border-color:var(--sea); background:#fff;}
+  .tiles{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:6px;}
+  .tile{min-width:46px; padding:10px 12px; border-radius:14px; border:none; cursor:pointer; background:var(--sun); color:#6B4A00; font-family:'Fredoka'; font-weight:700; font-size:1.35rem; box-shadow:0 4px 0 rgba(180,120,0,.35);}
+  .tile.word{font-size:1.1rem; background:var(--berry); color:#fff; box-shadow:0 4px 0 rgba(0,0,0,.2);}
+  .tile:disabled{opacity:.25; box-shadow:none; transform:translateY(3px);}
+  .tile:active{transform:translateY(3px); box-shadow:none;}
+  .answer-row{min-height:54px; background:#F6F9FF; border-radius:18px; border:3px dashed rgba(43,35,80,.2); display:flex; gap:8px; flex-wrap:wrap; justify-content:center; align-items:center; padding:8px; margin:12px 0;}
+  .answer-row .tile.word{background:var(--sea);}
+  .answer-row.good{border-color:var(--mint); background:#D9F7E8;}
+  .answer-row.bad{border-color:var(--coral); background:#FFE3E0; animation:shake .4s;}
+
+  .mic-btn{width:100px; height:100px; border-radius:50%; border:none; cursor:pointer; background:radial-gradient(circle at 35% 30%, #FF9A76, var(--coral)); color:#fff; font-size:2.7rem; box-shadow:0 7px 0 rgba(0,0,0,.2); margin-top:6px;}
+  .mic-btn:active{transform:translateY(4px); box-shadow:0 2px 0 rgba(0,0,0,.2);}
+  .mic-btn.listening{animation:pulse 1s infinite; background:radial-gradient(circle at 35% 30%, #7DE0C6, var(--mint));}
+  @keyframes pulse{50%{transform:scale(1.08); box-shadow:0 0 0 16px rgba(62,201,167,.18);}}
+  .feedback{min-height:2.1rem; font-family:'Fredoka'; font-weight:600; font-size:1.15rem; margin-top:12px;}
+  .feedback.ok{color:var(--mint);}
+  .feedback.no{color:var(--coral);}
+  .heard{color:var(--ink-soft); font-weight:700; font-size:.9rem; min-height:1.2rem;}
+
+  .overlay{position:fixed; inset:0; background:rgba(43,35,80,.5); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;}
+  .reward{background:#fff; border-radius:36px; padding:28px 24px; text-align:center; max-width:390px; width:100%; box-shadow:0 14px 0 rgba(0,0,0,.18); animation:pop .4s; max-height:90vh; overflow:auto;}
+  .reward h2{margin:4px 0 8px; font-size:1.6rem;}
+  .rgems{font-size:2.4rem; letter-spacing:6px; margin:8px 0;}
+  .rgems .g{opacity:.2; display:inline-block;}
+  .rgems .g.fill{opacity:1; animation:gempop .45s both;}
+  @keyframes gempop{0%{transform:scale(0) rotate(-40deg);}70%{transform:scale(1.4);}100%{transform:scale(1);}}
+  .reward p{color:var(--ink-soft); font-weight:700; margin:6px 0 14px;}
+
+  .confetti{position:fixed; top:-20px; width:12px; height:12px; z-index:200; border-radius:3px; pointer-events:none; animation:fall linear forwards;}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);}}
+
+  .panel{background:#fff; border-radius:28px; padding:22px; max-width:400px; width:100%; box-shadow:0 12px 0 rgba(0,0,0,.15); max-height:88vh; overflow:auto;}
+  .panel .btn{width:100%; margin-top:10px;}
+  .panel p{color:var(--ink-soft); font-weight:600; font-size:.95rem;}
+
+  .back-row{display:flex; justify-content:flex-start; margin-bottom:12px; gap:8px;}
+
+  @media (max-width:420px){
+    .word-emoji{font-size:3.8rem;}
+    .opt{font-size:2.4rem; padding:14px 6px;}
+    .heroes{grid-template-columns:repeat(3,1fr);}
+    .slot{width:34px; height:44px; font-size:1.25rem;}
+  }
+  @media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important;} }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="icon-btn" id="homeBtn" aria-label="Mapa de reinos">🗺️</button>
+  <div class="title">La Estrella Mágica</div>
+  <div class="gem-badge" id="gemBadge">💎 0</div>
+  <a class="icon-btn" href="index.html" aria-label="Volver a la app clásica" style="text-decoration:none">🏠</a>
+  <button class="icon-btn" id="parentBtn" aria-label="Zona de padres">⚙️</button>
+</header>
+
+<main id="app"></main>
+
+<script>
+"use strict";
+
+/* ============================================================
+   HISTORIA · 5 REINOS · RETOS EN INGLÉS
+   ============================================================ */
+const HEROES = ['🦸‍♀️','🦸','🧙‍♀️','🧙','🐱','🦊'];
+
+const REALMS = [
+ {id:'forest', name:'El Bosque Encantado', icon:'🌳', guardian:'🦉', artifact:'🍀',
+  bg:'linear-gradient(180deg,#7BC47F,#B9E4A8 50%,#E8F7DC)', deco:['🌲','🍄','🦋','🌷','🐿️'],
+  color:'#3E9A5F',
+  intro:'El Búho Sabio protege la primera gema. ¡Ayuda a los animales del bosque y te dejará pasar!',
+  words:[
+   {en:'dog',es:'perro',e:'🐶'},{en:'cat',es:'gato',e:'🐱'},{en:'bird',es:'pájaro',e:'🐦'},
+   {en:'rabbit',es:'conejo',e:'🐰'},{en:'bear',es:'oso',e:'🐻'},{en:'frog',es:'rana',e:'🐸'},
+   {en:'tree',es:'árbol',e:'🌳'},{en:'flower',es:'flor',e:'🌷'},{en:'butterfly',es:'mariposa',e:'🦋'},{en:'mushroom',es:'seta',e:'🍄'}]},
+ {id:'island', name:'La Isla Pirata', icon:'🏝️', guardian:'🦜', artifact:'🗝️',
+  bg:'linear-gradient(180deg,#5AC8FA,#9FE0FF 45%,#FFF2C9)', deco:['⛵','🐚','🦀','🌴','⚓'],
+  color:'#1E90C9',
+  intro:'El Loro Pirata esconde la gema en su cofre. ¡Consigue la llave superando sus pruebas!',
+  words:[
+   {en:'apple',es:'manzana',e:'🍎'},{en:'banana',es:'plátano',e:'🍌'},{en:'fish',es:'pez',e:'🐟'},
+   {en:'water',es:'agua',e:'💧'},{en:'bread',es:'pan',e:'🍞'},{en:'cheese',es:'queso',e:'🧀'},
+   {en:'boat',es:'barco',e:'⛵'},{en:'sea',es:'mar',e:'🌊'},{en:'crab',es:'cangrejo',e:'🦀'},{en:'shell',es:'concha',e:'🐚'}]},
+ {id:'ice', name:'La Montaña de Hielo', icon:'🏔️', guardian:'🐻‍❄️', artifact:'❄️',
+  bg:'linear-gradient(180deg,#8FB8E8,#CFE6FF 50%,#F2F9FF)', deco:['⛄','🧊','🌨️','🐧','✨'],
+  color:'#4A7FC1',
+  intro:'¡Brrr! El Oso Polar guarda la gema helada. ¡Abrígate bien y demuestra lo que sabes!',
+  words:[
+   {en:'hat',es:'gorro',e:'🧢'},{en:'jacket',es:'chaqueta',e:'🧥'},{en:'gloves',es:'guantes',e:'🧤'},
+   {en:'scarf',es:'bufanda',e:'🧣'},{en:'boots',es:'botas',e:'👢'},{en:'snow',es:'nieve',e:'❄️'},
+   {en:'cold',es:'frío',e:'🥶'},{en:'penguin',es:'pingüino',e:'🐧'},{en:'ice',es:'hielo',e:'🧊'},{en:'snowman',es:'muñeco de nieve',e:'⛄'}]},
+ {id:'clouds', name:'El Reino de las Nubes', icon:'🌈', guardian:'🦄', artifact:'🌟',
+  bg:'linear-gradient(180deg,#C9A7F5,#F5C9E8 50%,#FFF3D6)', deco:['☁️','🎈','🪁','🌙','⭐'],
+  color:'#9A5FD1',
+  intro:'El Unicornio de las Nubes pinta arcoíris con números y colores. ¡Juega con él para ganar su gema!',
+  words:[
+   {en:'red',es:'rojo',e:'🔴'},{en:'blue',es:'azul',e:'🔵'},{en:'green',es:'verde',e:'🟢'},
+   {en:'yellow',es:'amarillo',e:'🟡'},{en:'one',es:'uno',e:'1️⃣'},{en:'two',es:'dos',e:'2️⃣'},
+   {en:'three',es:'tres',e:'3️⃣'},{en:'star',es:'estrella',e:'⭐'},{en:'moon',es:'luna',e:'🌙'},{en:'rainbow',es:'arcoíris',e:'🌈'}]},
+ {id:'castle', name:'El Castillo del Dragón', icon:'🏰', guardian:'🐉', artifact:'👑',
+  bg:'linear-gradient(180deg,#6B5CC9,#9A8AE8 50%,#E8D9FF)', deco:['🗝️','🕯️','🛡️','⚔️','💜'],
+  color:'#5A4AB8',
+  intro:'¡El Dragón habla solo en inglés! Dile frases mágicas completas y te devolverá la última gema.',
+  phrases:true,
+  words:[
+   {en:'Hello! How are you?',es:'¡Hola! ¿Cómo estás?',e:'👋😃'},
+   {en:'My name is Leo',es:'Me llamo Leo',e:'🙋💬'},
+   {en:'I am six years old',es:'Tengo seis años',e:'6️⃣🎂'},
+   {en:'I like pizza',es:'Me gusta la pizza',e:'🍕👍'},
+   {en:'I have a dog',es:'Tengo un perro',e:'🙋🐶'},
+   {en:'This is fun',es:'Esto es divertido',e:'🎉😄'},
+   {en:'Can you help me?',es:'¿Puedes ayudarme?',e:'🤝❓'},
+   {en:'Thank you very much',es:'Muchas gracias',e:'💝🙏'}]}
+];
+
+/* Historias de cada parada (7 retos + guardián). {G} = guardián, {A} = artefacto */
+const STOP_PLOTS = [
+ {icon:'🌉', story:'¡El puente está roto! Escucha las palabras mágicas y toca el dibujo correcto para repararlo.', game:'listen'},
+ {icon:'🧺', story:'Un duende ha mezclado sus carteles. ¡Une cada palabra con su dibujo para ayudarle!', game:'match'},
+ {icon:'🔮', story:'La bola mágica dice cosas en inglés. ¡Encuentra en el paisaje lo que va diciendo!', game:'find'},
+ {icon:'🎒', story:'¡Cofres gemelos! Levanta las tapas y une cada palabra con su pareja secreta.', game:'memory'},
+ {icon:'🗣️', story:'La puerta encantada solo se abre con tu voz. ¡Di las palabras mágicas en inglés!', game:'speak'},
+ {icon:'🧩', story:'Las letras del hechizo se han desordenado. ¡Colócalas bien para seguir el camino!', game:'spell'},
+ {icon:'⚡', story:'¡Última prueba antes del guardián! Escucha con atención y no falles.', game:'listen'},
+ {icon:'💎', story:'¡Ha llegado el momento! El guardián te pondrá a prueba con preguntas sorpresa.', game:'boss'}
+];
+/* En el castillo (frases) las paradas cambian ligeramente */
+const STOP_PLOTS_CASTLE = [
+ {icon:'🌉', story:'¡El puente levadizo está cerrado! Escucha la frase del guardia y elige el dibujo correcto.', game:'listen'},
+ {icon:'📜', story:'El pergamino mágico se ha roto en trozos. ¡Ordena las palabras para arreglar la frase!', game:'build'},
+ {icon:'🗣️', story:'La armadura encantada quiere oírte. ¡Dile una frase completa en inglés!', game:'speak'},
+ {icon:'🔮', story:'¿Qué frase es? Lee con atención y elige la traducción correcta.', game:'trans'},
+ {icon:'📜', story:'¡Otro pergamino roto! Ordena las palabras del hechizo final.', game:'build'},
+ {icon:'🗣️', story:'El eco del castillo repite lo que dices. ¡Pronuncia otra frase mágica!', game:'speak'},
+ {icon:'⚡', story:'El Dragón se acerca… ¡última prueba de escucha!', game:'listen'},
+ {icon:'👑', story:'¡El Dragón te espera! Contesta sus preguntas y recupera la última gema.', game:'boss'}
+];
+
+const GEMS_TO_UNLOCK = 10; // gemas para abrir el siguiente reino (además del guardián)
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+let state = { hero:null, gems:0, realms:{}, noMic:false };
+function loadState(){
+  try{
+    const raw = localStorage.getItem('estrellaMagica');
+    if(raw) state = Object.assign(state, JSON.parse(raw));
+  }catch(e){}
+}
+function saveState(){ try{ localStorage.setItem('estrellaMagica', JSON.stringify(state)); }catch(e){} }
+function realmProg(id){
+  if(!state.realms[id]) state.realms[id] = {stop:0, boss:false, gems:0};
+  return state.realms[id];
+}
+function realmUnlocked(i){
+  if(i===0) return true;
+  const prev = realmProg(REALMS[i-1].id);
+  return prev.boss;
+}
+function artifacts(){ return REALMS.filter(r=>realmProg(r.id).boss).map(r=>r.artifact); }
+function updateBadge(){ document.getElementById('gemBadge').textContent = '💎 ' + state.gems; }
+
+/* ============================================================
+   SONIDO Y VOZ
+   ============================================================ */
+let audioCtx = null;
+function tone(seq){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    let t = audioCtx.currentTime;
+    seq.forEach(([f,d])=>{
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = 'triangle'; o.frequency.value = f;
+      g.gain.setValueAtTime(.18, t); g.gain.exponentialRampToValueAtTime(.001, t+d);
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(t); o.stop(t+d); t += d*0.9;
+    });
+  }catch(e){}
+}
+const sndGood = ()=>tone([[523,.12],[659,.12],[784,.2]]);
+const sndBad  = ()=>tone([[220,.18],[180,.25]]);
+const sndGem  = ()=>tone([[880,.09],[1175,.14]]);
+const sndFlip = ()=>tone([[600,.06]]);
+const sndWin  = ()=>tone([[523,.14],[659,.14],[784,.14],[1047,.3]]);
+
+let enVoice = null;
+function pickVoice(){
+  const vs = speechSynthesis.getVoices();
+  if(!vs.length) return;
+  enVoice = vs.find(v=>/en[-_](GB|US)/i.test(v.lang) && /google/i.test(v.name))
+         || vs.find(v=>/^en[-_]/i.test(v.lang)) || null;
+}
+if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function speak(text, rate){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US'; u.rate = rate || 0.85; u.pitch = 1.05;
+  if(enVoice) u.voice = enVoice;
+  speechSynthesis.speak(u);
+}
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const DIGIT_MAP = {one:'1',two:'2',three:'3',four:'4',five:'5',six:'6',seven:'7',eight:'8',nine:'9',ten:'10'};
+const HOMOPHONES = {red:['read'],one:['won'],two:['to','too'],blue:['blew'],sea:['see','si','c'],bee:['be','b'],bear:['bare'],ice:['eyes'],three:['tree','free']};
+function normalize(s){
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();
+}
+function lev(a,b){
+  const m=a.length,n=b.length; if(!m) return n; if(!n) return m;
+  const d=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+  for(let j=1;j<=n;j++) d[0][j]=j;
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++)
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[m][n];
+}
+function matchesAnswer(transcript, target){
+  const t = normalize(transcript);
+  const tgt = normalize(target);
+  if(!t) return false;
+  if(t === tgt || t.includes(tgt)) return true;
+  const tgtWords = tgt.split(' ');
+  const tWords = t.split(' ');
+  if(tgtWords.length === 1){
+    if(DIGIT_MAP[tgt] && tWords.includes(DIGIT_MAP[tgt])) return true;
+    if(HOMOPHONES[tgt] && tWords.some(w=>HOMOPHONES[tgt].includes(w))) return true;
+    const tol = tgt.length >= 5 ? 2 : (tgt.length >= 4 ? 1 : 0);
+    return tWords.some(w => lev(w, tgt) <= tol);
+  }
+  if(lev(t, tgt) <= Math.max(2, Math.floor(tgt.length * 0.28))) return true;
+  const stop = new Set(['a','an','the','to','is','it','i']);
+  const key = tgtWords.filter(w=>!stop.has(w));
+  const hits = key.filter(w => tWords.some(x => lev(x,w) <= (w.length>=5?2:1))).length;
+  return key.length > 0 && hits / key.length >= 0.6;
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+const app = document.getElementById('app');
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function emojiLen(e){ return Array.from(e).length; }
+function dots(idx, total, doneArr){
+  let h = '<div class="progress-dots">';
+  for(let i=0;i<total;i++) h += `<div class="dot ${i===idx?'now':(doneArr&&doneArr[i]?'on':'')}"></div>`;
+  return h + '</div>';
+}
+function confetti(){
+  const colors = ['#FF7B54','#FFC93C','#3EC9A7','#3FA7F5','#B067E8','#7FE3FF'];
+  for(let i=0;i<70;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*100 + 'vw';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.animationDuration = (2 + Math.random()*2) + 's';
+    c.style.animationDelay = (Math.random()*0.6) + 's';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 4500);
+  }
+}
+function gemsFromScore(correct, total){
+  const p = correct/total;
+  if(p >= 0.9) return 3;
+  if(p >= 0.6) return 2;
+  return 1;
+}
+function sceneSlots(n){
+  const cols = n <= 6 ? 3 : 4;
+  const rows = Math.ceil(n/cols);
+  const cellW = 100/cols, cellH = 100/rows;
+  const idxs = shuffle([...Array(cols*rows).keys()]).slice(0, n);
+  return idxs.map(i=>{
+    const r = Math.floor(i/cols), c = i%cols;
+    return { top: r*cellH + cellH/2 + (Math.random()-0.5)*cellH*0.4,
+             left: c*cellW + cellW/2 + (Math.random()-0.5)*cellW*0.4, rows };
+  });
+}
+let activeSR = null;
+function stopSR(){ if(activeSR){ try{activeSR.abort();}catch(e){} activeSR = null; } }
+function setBg(realm){
+  document.body.style.background = realm ? realm.bg : 'linear-gradient(180deg,#8E7CF0,#C9B8FF 45%,#FFE9F3)';
+}
+
+/* ============================================================
+   PANTALLA · INTRO Y ELECCIÓN DE HÉROE
+   ============================================================ */
+function renderIntro(){
+  stopSR(); setBg(null);
+  let selected = state.hero || null;
+  app.innerHTML = `
+    <div class="story-card">
+      <div class="big">⭐</div>
+      <h1 style="margin:6px 0">La Estrella Mágica</h1>
+      <p>¡Oh no! Una tormenta ha robado las <b>5 gemas</b> de la Estrella Mágica y las ha escondido en <b>5 reinos de fantasía</b>.<br><br>
+      Solo un valiente que sepa hablar <b>inglés</b> puede recuperarlas. ¿Serás tú?</p>
+      <h3 style="margin:14px 0 4px">Elige a tu héroe</h3>
+      <div class="heroes">
+        ${HEROES.map(h=>`<button class="hero-pick ${h===selected?'sel':''}" data-h="${h}">${h}</button>`).join('')}
+      </div>
+      <button class="btn sun big" id="startBtn" ${selected?'':'disabled'}>¡Empezar la aventura! 🚀</button>
+    </div>`;
+  const startBtn = document.getElementById('startBtn');
+  app.querySelectorAll('.hero-pick').forEach(b=>{
+    b.onclick = ()=>{
+      app.querySelectorAll('.hero-pick').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel');
+      selected = b.dataset.h;
+      startBtn.disabled = false;
+      sndFlip();
+    };
+  });
+  startBtn.onclick = ()=>{
+    state.hero = selected; saveState();
+    sndWin();
+    renderWorld();
+  };
+}
+
+/* ============================================================
+   PANTALLA · MAPA DE REINOS
+   ============================================================ */
+function renderWorld(){
+  stopSR(); setBg(null); updateBadge();
+  const arts = artifacts();
+  const allDone = arts.length === REALMS.length;
+  let html = `
+    <div class="story-card" style="padding:16px; margin-bottom:14px">
+      <span style="font-size:2.2rem">${state.hero||'🦸'}</span>
+      <h2 style="margin:4px 0">${allDone ? '¡La Estrella brilla de nuevo!' : 'Elige un reino'}</h2>
+      <p style="margin:4px 0">Gemas de la Estrella: ${REALMS.map(r=>realmProg(r.id).boss?r.artifact:'❔').join(' ')}</p>
+      ${allDone ? '<button class="btn sun big" id="finaleBtn">🌟 Ver el final 🌟</button>' : ''}
+    </div>`;
+  REALMS.forEach((r,i)=>{
+    const p = realmProg(r.id);
+    const unlocked = realmUnlocked(i);
+    html += `
+      <button class="realm-card ${unlocked?'':'locked'}" data-r="${i}" ${unlocked?'':'disabled'} style="background:${r.color}">
+        <span class="re">${unlocked?r.icon:'🔒'}</span>
+        <span class="ri">
+          <span class="rn">${r.name}</span><br>
+          <span class="rd">${unlocked ? (p.boss ? '¡Gema conseguida!' : 'Retos superados: '+p.stop+' / '+STOP_PLOTS.length) : 'Vence al guardián del reino anterior'}</span>
+        </span>
+        <span class="artifact">${p.boss ? r.artifact : ''}</span>
+      </button>`;
+  });
+  app.innerHTML = html;
+  app.querySelectorAll('.realm-card:not(.locked)').forEach(b=>{ b.onclick = ()=>renderRealm(+b.dataset.r); });
+  const fb = document.getElementById('finaleBtn');
+  if(fb) fb.onclick = renderFinale;
+  window.scrollTo(0,0);
+}
+
+/* ============================================================
+   PANTALLA · CAMINO DEL REINO (aventura visual)
+   ============================================================ */
+const TRAIL_POS = [
+  {top:92, left:20},{top:80, left:62},{top:68, left:28},{top:56, left:70},
+  {top:44, left:30},{top:32, left:66},{top:20, left:32},{top:8,  left:60}
+];
+function renderRealm(ri, walkFrom){
+  stopSR();
+  const r = REALMS[ri];
+  setBg(r);
+  const p = realmProg(r.id);
+  const plots = r.phrases ? STOP_PLOTS_CASTLE : STOP_PLOTS;
+  const heroPos = Math.min(p.stop, plots.length-1);
+  const startPos = (walkFrom!==undefined) ? walkFrom : heroPos;
+  let decoHtml = '';
+  for(let i=0;i<10;i++){
+    const d = r.deco[i % r.deco.length];
+    decoHtml += `<span class="deco" style="top:${5+Math.random()*90}%; left:${Math.random()*92}%">${d}</span>`;
+  }
+  app.innerHTML = `
+    <div class="back-row">
+      <button class="btn ghost" id="backBtn">⬅ Reinos</button>
+      <button class="btn ghost" id="storyBtn">📖 Historia</button>
+    </div>
+    <h2 style="text-align:center; color:#fff; text-shadow:0 2px 0 rgba(0,0,0,.25); margin:4px 0">${r.icon} ${r.name}</h2>
+    <div class="trail" style="background:${r.bg}">
+      ${decoHtml}
+      ${plots.map((s,i)=>{
+        const done = i < p.stop || (s.game==='boss' && p.boss);
+        const isNext = i === p.stop && !(s.game==='boss' && p.boss);
+        const locked = i > p.stop;
+        return `<button class="trail-stop ${done?'done':''} ${isNext?'next':''} ${locked?'locked':''}"
+          data-i="${i}" ${locked?'disabled':''}
+          style="top:${TRAIL_POS[i].top}%; left:${TRAIL_POS[i].left}%"
+          aria-label="Reto ${i+1}">${done ? '✅' : (s.game==='boss' ? r.guardian : s.icon)}</button>`;
+      }).join('')}
+      <span class="hero-token" id="heroTok" style="top:${TRAIL_POS[startPos].top}%; left:${TRAIL_POS[startPos].left}%">${state.hero||'🦸'}</span>
+    </div>
+    <p class="hint" style="text-align:center; color:#fff; text-shadow:0 1px 0 rgba(0,0,0,.3)">Toca la parada que brilla ✨ para tu siguiente reto</p>`;
+  document.getElementById('backBtn').onclick = renderWorld;
+  document.getElementById('storyBtn').onclick = ()=>showStoryPopup(r);
+  app.querySelectorAll('.trail-stop:not(.locked)').forEach(b=>{
+    b.onclick = ()=>{
+      const i = +b.dataset.i;
+      const s = plots[i];
+      if(i < p.stop && s.game!=='boss'){ startStop(ri, i, true); return; } // repetir reto ya superado
+      if(s.game==='boss' && p.boss){ startStop(ri, i, true); return; }
+      startStop(ri, i, false);
+    };
+  });
+  // Animación de caminar si venimos de completar un reto
+  if(walkFrom!==undefined && heroPos!==startPos){
+    setTimeout(()=>{
+      const tok = document.getElementById('heroTok');
+      tok.style.top = TRAIL_POS[heroPos].top + '%';
+      tok.style.left = TRAIL_POS[heroPos].left + '%';
+    }, 250);
+  }
+  window.scrollTo(0,0);
+}
+function showStoryPopup(r){
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
+  ov.innerHTML = `
+    <div class="reward">
+      <div style="font-size:3rem">${r.guardian}</div>
+      <h2>${r.name}</h2>
+      <p>${r.intro}</p>
+      <button class="btn sun" id="ok">¡Vamos! 💪</button>
+    </div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('#ok').onclick = ()=>ov.remove();
+  ov.onclick = (e)=>{ if(e.target===ov) ov.remove(); };
+}
+
+/* ============================================================
+   PARADA: HISTORIA + RETO
+   ============================================================ */
+function startStop(ri, si, replay){
+  const r = REALMS[ri];
+  const plots = r.phrases ? STOP_PLOTS_CASTLE : STOP_PLOTS;
+  const s = plots[si];
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
+  ov.innerHTML = `
+    <div class="reward">
+      <div style="font-size:3rem">${s.game==='boss' ? r.guardian : s.icon}</div>
+      <h2>${s.game==='boss' ? '¡El Guardián!' : 'Reto ' + (si+1)}</h2>
+      <p>${s.story}</p>
+      <button class="btn sun big" id="go">¡Acepto el reto! ⚡</button>
+    </div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('#go').onclick = ()=>{
+    ov.remove();
+    GAME_RUN[s.game](ri, si, replay);
+  };
+}
+
+function gameShell(ri, inner){
+  const r = REALMS[ri];
+  app.innerHTML = `
+    <div class="back-row"><button class="btn ghost" id="backBtn">⬅ ${r.name}</button></div>
+    <div class="stage" id="stage">${inner}</div>`;
+  document.getElementById('backBtn').onclick = ()=>{ stopSR(); renderRealm(ri); };
+  window.scrollTo(0,0);
+  return document.getElementById('stage');
+}
+
+/* Recompensa de un reto: gemas + avance del héroe */
+function stopReward(ri, si, gems, msg, replay){
+  const r = REALMS[ri];
+  const p = realmProg(r.id);
+  const isBoss = (r.phrases ? STOP_PLOTS_CASTLE : STOP_PLOTS)[si].game === 'boss';
+  const isNew = !replay;
+  if(isNew){
+    state.gems += gems;
+    p.gems += gems;
+    if(isBoss){ p.boss = true; }
+    else if(si === p.stop){ p.stop = si+1; }
+    saveState();
+  }
+  updateBadge();
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
+  let gemHtml = '';
+  for(let i=0;i<3;i++) gemHtml += `<span class="g ${i<gems?'fill':''}" style="animation-delay:${0.3+i*0.35}s">💎</span>`;
+  ov.innerHTML = `
+    <div class="reward">
+      <div style="font-size:3rem">${isBoss ? r.artifact : (gems>=3?'🎉':'😄')}</div>
+      <h2>${isBoss ? '¡GEMA RECUPERADA!' : (gems>=3?'¡PERFECTO!':(gems>=2?'¡Muy bien!':'¡Buen intento!'))}</h2>
+      <div class="rgems">${gemHtml}</div>
+      <p>${msg}${isNew?'':' (reto repetido: sin gemas nuevas)'}</p>
+      <button class="btn sun big" id="rwOk">¡Seguir! 🚀</button>
+    </div>`;
+  document.body.appendChild(ov);
+  let i = 0;
+  const tm = setInterval(()=>{ i++; if(i<=gems) sndGem(); else clearInterval(tm); }, 350);
+  if(gems >= 3 || isBoss){ confetti(); if(isBoss) sndWin(); }
+  ov.querySelector('#rwOk').onclick = ()=>{
+    ov.remove();
+    renderRealm(ri, isBoss ? undefined : si); // animar el paseo del héroe
+    if(!isBoss && isNew){ /* el héroe camina a la siguiente parada */ }
+    if(isBoss && artifacts().length === REALMS.length){ setTimeout(renderFinale, 1200); }
+  };
+}
+
+/* ============================================================
+   RETOS (adaptados del modo clásico, 5 rondas)
+   ============================================================ */
+function pickWords(r, n){ return shuffle(r.words).slice(0, Math.min(n, r.words.length)); }
+
+/* --- Escucha y elige --- */
+function gameListen(ri, si, replay, roundsN, bossMode){
+  const r = REALMS[ri];
+  const rounds = pickWords(r, roundsN||5);
+  let idx = 0, correct = 0, firstTry = true;
+  const results = [];
+  function draw(){
+    const w = rounds[idx];
+    const used = new Set([w.e]);
+    const distract = shuffle(r.words).filter(x=>{
+      if(x.en===w.en || used.has(x.e)) return false;
+      used.add(x.e); return true;
+    }).slice(0,3);
+    const options = shuffle([w, ...distract]);
+    firstTry = true;
+    const stage = gameShell(ri, `
+      ${dots(idx, rounds.length, results)}
+      <div class="npc">${bossMode ? r.guardian : '🔮'}</div>
+      <h2 style="margin:4px 0">👂 ¿Qué has oído?</h2>
+      <button class="btn mint" id="replayBtn">🔊 Escuchar otra vez</button>
+      <div class="opts">
+        ${options.map(o=>`<button class="opt ${emojiLen(o.e)>2?'long':''}" data-en="${o.en.replace(/"/g,'')}" aria-label="${o.es}">${o.e}</button>`).join('')}
+      </div>`);
+    const play = ()=>speak(w.en);
+    setTimeout(play, 400);
+    stage.querySelector('#replayBtn').onclick = play;
+    stage.querySelectorAll('.opt').forEach(b=>{
+      b.onclick = ()=>{
+        if(b.dataset.en === w.en.replace(/"/g,'')){
+          b.classList.add('good'); sndGood();
+          if(firstTry) correct++;
+          results[idx] = firstTry;
+          speak(w.en, 0.9);
+          setTimeout(()=>{
+            idx++;
+            if(idx < rounds.length) draw();
+            else if(bossMode) bossMode(correct, rounds.length);
+            else stopReward(ri, si, gemsFromScore(correct, rounds.length), `Has acertado ${correct} de ${rounds.length}`, replay);
+          }, 900);
+        }else{
+          b.classList.add('bad'); sndBad(); firstTry = false;
+          setTimeout(()=>b.classList.remove('bad'), 500);
+        }
+      };
+    });
+  }
+  draw();
+}
+
+/* --- Empareja palabra e imagen --- */
+function gameMatch(ri, si, replay){
+  const r = REALMS[ri];
+  const items = pickWords(r, 5);
+  const wordsCol = shuffle(items.map((w,i)=>({...w, i})));
+  const imgsCol = shuffle(items.map((w,i)=>({...w, i})));
+  let doneCount = 0, attempts = 0, pending = null;
+  const stage = gameShell(ri, `
+    <div class="npc">🧝</div>
+    <h2 style="margin:4px 0">🔗 Une palabra y dibujo</h2>
+    <div class="match-cols">
+      <div class="match-col">${wordsCol.map(w=>`<button class="match-item word" data-i="${w.i}">${w.en.toUpperCase()}</button>`).join('')}</div>
+      <div class="match-col">${imgsCol.map(w=>`<button class="match-item img" data-i="${w.i}">${w.e}</button>`).join('')}</div>
+    </div>`);
+  function select(side, btn, i){
+    if(btn.classList.contains('done')) return;
+    if(!pending || pending.side === side){
+      stage.querySelectorAll(`.match-item.${side}`).forEach(b=>b.classList.remove('sel'));
+      btn.classList.add('sel');
+      pending = {side, btn, i};
+      sndFlip();
+      return;
+    }
+    attempts++;
+    const prev = pending.btn;
+    if(pending.i === i){
+      sndGood(); speak(items[i].en);
+      prev.classList.remove('sel'); prev.classList.add('done');
+      btn.classList.add('done');
+      doneCount++; pending = null;
+      if(doneCount === items.length){
+        const gems = attempts<=items.length+1?3 : attempts<=items.length+4?2 : 1;
+        setTimeout(()=>stopReward(ri, si, gems, `Todo emparejado en ${attempts} intentos`, replay), 500);
+      }
+    }else{
+      sndBad();
+      prev.classList.remove('sel'); prev.classList.add('bad'); btn.classList.add('bad');
+      pending = null;
+      setTimeout(()=>{ prev.classList.remove('bad'); btn.classList.remove('bad'); }, 500);
+    }
+  }
+  stage.querySelectorAll('.match-item.word').forEach(b=>{ b.onclick = ()=>select('word', b, +b.dataset.i); });
+  stage.querySelectorAll('.match-item.img').forEach(b=>{ b.onclick = ()=>select('img', b, +b.dataset.i); });
+}
+
+/* --- Busca en el paisaje lo que suena --- */
+function gameFind(ri, si, replay){
+  const r = REALMS[ri];
+  const items = pickWords(r, 7);
+  const slots = sceneSlots(items.length);
+  const sceneHeight = Math.max(200, (slots[0]?.rows||3)*100 + 20);
+  const order = shuffle(items.map((_,i)=>i)).slice(0,5);
+  const found = new Set();
+  let round = 0, correct = 0, firstTry = true;
+  const results = [];
+  function draw(){
+    firstTry = true;
+    const target = items[order[round]];
+    const stage = gameShell(ri, `
+      ${dots(round, order.length, results)}
+      <div class="npc">🔮</div>
+      <h2 style="margin:4px 0">🔍 Escucha y encuentra</h2>
+      <button class="btn mint" id="replayBtn">🔊 Escuchar otra vez</button>
+      <div class="scene" style="height:${sceneHeight}px; background:${r.bg}">
+        ${items.map((w,i)=>`<button class="scene-item ${found.has(i)?'found':''}" ${found.has(i)?'disabled':''} data-i="${i}" style="top:${slots[i].top}%; left:${slots[i].left}%" aria-label="${w.es}">${found.has(i)?'✅':w.e}</button>`).join('')}
+      </div>`);
+    const play = ()=>speak(target.en);
+    setTimeout(play, 400);
+    stage.querySelector('#replayBtn').onclick = play;
+    stage.querySelectorAll('.scene-item:not(:disabled)').forEach(b=>{
+      b.onclick = ()=>{
+        const i = +b.dataset.i;
+        if(i === order[round]){
+          sndGood(); found.add(i);
+          if(firstTry) correct++;
+          results[round] = firstTry;
+          speak(target.en, 0.9);
+          setTimeout(()=>{
+            round++;
+            if(round < order.length) draw();
+            else stopReward(ri, si, gemsFromScore(correct, order.length), `Has encontrado ${correct} de ${order.length} a la primera`, replay);
+          }, 800);
+        }else{
+          sndBad(); firstTry = false;
+          b.classList.add('wrong-shake');
+          setTimeout(()=>b.classList.remove('wrong-shake'), 400);
+        }
+      };
+    });
+  }
+  draw();
+}
+
+/* --- Memoria (cofres gemelos) --- */
+function gameMemory(ri, si, replay){
+  const r = REALMS[ri];
+  const pairs = pickWords(r, 4);
+  const cards = shuffle([
+    ...pairs.map(w=>({key:w.en, type:'e', label:w.e})),
+    ...pairs.map(w=>({key:w.en, type:'t', label:w.en.toUpperCase()}))
+  ]);
+  let flipped = [], attempts = 0, found = 0, lock = false;
+  const stage = gameShell(ri, `
+    <div class="npc">🎒</div>
+    <h2 style="margin:4px 0">🧠 Cofres gemelos</h2>
+    <p class="hint" style="margin:0">Intentos: <b id="attCnt">0</b></p>
+    <div class="mgrid" style="grid-template-columns:repeat(4,1fr)">
+      ${cards.map((c,i)=>`<button class="mcard" data-i="${i}">📦</button>`).join('')}
+    </div>`);
+  stage.querySelectorAll('.mcard').forEach(btn=>{
+    btn.onclick = ()=>{
+      if(lock) return;
+      const c = cards[+btn.dataset.i];
+      if(btn.classList.contains('flip') || btn.classList.contains('done')) return;
+      sndFlip();
+      btn.classList.add('flip');
+      btn.innerHTML = c.type==='e' ? c.label : `<span class="wtxt">${c.label}</span>`;
+      flipped.push({btn, c});
+      if(flipped.length === 2){
+        lock = true; attempts++;
+        stage.querySelector('#attCnt').textContent = attempts;
+        const [a,b] = flipped;
+        if(a.c.key === b.c.key && a.c.type !== b.c.type){
+          sndGood(); speak(a.c.key);
+          a.btn.classList.add('done'); b.btn.classList.add('done');
+          found++; flipped = []; lock = false;
+          if(found === pairs.length){
+            const gems = attempts<=6?3 : attempts<=9?2 : 1;
+            setTimeout(()=>stopReward(ri, si, gems, `Parejas encontradas en ${attempts} intentos`, replay), 600);
+          }
+        }else{
+          sndBad();
+          setTimeout(()=>{
+            [a,b].forEach(x=>{ x.btn.classList.remove('flip'); x.btn.textContent = '📦'; });
+            flipped = []; lock = false;
+          }, 850);
+        }
+      }
+    };
+  });
+}
+
+/* --- Deletreo del hechizo --- */
+function gameSpell(ri, si, replay){
+  const r = REALMS[ri];
+  const words = shuffle(r.words.filter(w=>!w.en.includes(' ') && w.en.length<=6)).slice(0,4);
+  let idx = 0, wins = 0, firstTry = true;
+  const results = [];
+  function draw(){
+    firstTry = true;
+    const w = words[idx];
+    const letters = w.en.toUpperCase().split('');
+    const tiles = shuffle(letters.map((ch,i)=>({ch,i})));
+    let filled = [];
+    const stage = gameShell(ri, `
+      ${dots(idx, words.length, results)}
+      <div class="npc">🧩</div>
+      <div class="word-emoji">${w.e}</div>
+      <div class="word-es" style="font-size:1.15rem"><b>${w.es}</b></div>
+      <div class="controls" style="margin-top:4px">
+        <button class="btn ghost" id="hearBtn">🔊 Escuchar</button>
+        <button class="btn ghost" id="peekBtn">👁️ Pista</button>
+      </div>
+      <div class="slots" id="slots">${letters.map(()=>'<div class="slot"></div>').join('')}</div>
+      <div class="tiles">${tiles.map((t,k)=>`<button class="tile" data-k="${k}">${t.ch}</button>`).join('')}</div>
+      <div class="controls"><button class="btn coral" id="delBtn">⬅ Borrar</button></div>
+      <div class="feedback" id="fb"></div>`);
+    const slots = stage.querySelectorAll('.slot');
+    const fb = stage.querySelector('#fb');
+    const play = ()=>speak(w.en);
+    setTimeout(play, 350);
+    stage.querySelector('#hearBtn').onclick = play;
+    stage.querySelector('#peekBtn').onclick = ()=>{
+      firstTry = false;
+      fb.className = 'feedback'; fb.textContent = w.en.toUpperCase();
+      setTimeout(()=>{ if(fb.textContent === w.en.toUpperCase()) fb.textContent = ''; }, 1500);
+    };
+    function refresh(){
+      slots.forEach((s,i)=>{ s.textContent = filled[i]?filled[i].ch:''; s.classList.toggle('filled', !!filled[i]); });
+    }
+    function check(){
+      const word = filled.map(f=>f.ch).join('');
+      if(word === w.en.toUpperCase()){
+        sndGood(); speak(w.en);
+        fb.className = 'feedback ok'; fb.textContent = '¡Hechizo completado! ✨';
+        if(firstTry) wins++;
+        results[idx] = firstTry;
+        setTimeout(()=>{
+          idx++;
+          if(idx < words.length) draw();
+          else stopReward(ri, si, gemsFromScore(wins, words.length), `Has escrito bien ${wins} de ${words.length} hechizos`, replay);
+        }, 1000);
+      }else{
+        sndBad(); firstTry = false;
+        fb.className = 'feedback no'; fb.textContent = 'Uy, casi… ¡otra vez! 🔁';
+        setTimeout(()=>{
+          filled.forEach(f=>{ stage.querySelector(`.tile[data-k="${f.k}"]`).disabled = false; });
+          filled = []; refresh(); fb.textContent = '';
+        }, 900);
+      }
+    }
+    stage.querySelectorAll('.tile').forEach(btn=>{
+      btn.onclick = ()=>{
+        if(filled.length >= letters.length) return;
+        sndFlip();
+        btn.disabled = true;
+        filled.push({ch:btn.textContent, k:btn.dataset.k});
+        refresh();
+        if(filled.length === letters.length) setTimeout(check, 250);
+      };
+    });
+    stage.querySelector('#delBtn').onclick = ()=>{
+      const last = filled.pop();
+      if(last){ stage.querySelector(`.tile[data-k="${last.k}"]`).disabled = false; refresh(); }
+    };
+  }
+  draw();
+}
+
+/* --- Ordena la frase (castillo) --- */
+function gameBuild(ri, si, replay){
+  const r = REALMS[ri];
+  const phrases = pickWords(r, 4);
+  let idx = 0, wins = 0, firstTry = true;
+  const results = [];
+  function draw(){
+    firstTry = true;
+    const w = phrases[idx];
+    const tokens = w.en.split(' ');
+    const tiles = shuffle(tokens.map((t,i)=>({t,i})));
+    let answer = [];
+    const stage = gameShell(ri, `
+      ${dots(idx, phrases.length, results)}
+      <div class="npc">📜</div>
+      <div class="word-emoji ${emojiLen(w.e)>2?'long':''}">${w.e}</div>
+      <div class="word-es" style="font-size:1.1rem"><b>${w.es}</b></div>
+      <button class="btn ghost" id="hearBtn">🔊 Escuchar la frase</button>
+      <div class="answer-row" id="ans"></div>
+      <div class="tiles" id="tiles">${tiles.map((t,k)=>`<button class="tile word" data-k="${k}">${t.t}</button>`).join('')}</div>
+      <div class="feedback" id="fb"></div>`);
+    const ans = stage.querySelector('#ans');
+    const fb = stage.querySelector('#fb');
+    const play = ()=>speak(w.en);
+    setTimeout(play, 350);
+    stage.querySelector('#hearBtn').onclick = play;
+    function refresh(){
+      ans.innerHTML = answer.map((a,j)=>`<button class="tile word" data-j="${j}">${a.t}</button>`).join('');
+      ans.querySelectorAll('.tile').forEach(b=>{
+        b.onclick = ()=>{
+          const item = answer.splice(+b.dataset.j,1)[0];
+          stage.querySelector(`#tiles .tile[data-k="${item.k}"]`).disabled = false;
+          refresh();
+        };
+      });
+    }
+    function check(){
+      const built = answer.map(a=>a.t).join(' ');
+      if(built === w.en){
+        sndGood(); speak(w.en);
+        ans.classList.add('good');
+        fb.className = 'feedback ok'; fb.textContent = '¡Pergamino reparado! ✨';
+        if(firstTry) wins++;
+        results[idx] = firstTry;
+        setTimeout(()=>{
+          idx++;
+          if(idx < phrases.length) draw();
+          else stopReward(ri, si, gemsFromScore(wins, phrases.length), `Has ordenado bien ${wins} de ${phrases.length} frases`, replay);
+        }, 1100);
+      }else{
+        sndBad(); firstTry = false;
+        ans.classList.add('bad');
+        fb.className = 'feedback no'; fb.textContent = 'Escucha otra vez y ordénala 🔁';
+        speak(w.en, 0.75);
+        setTimeout(()=>{
+          ans.classList.remove('bad');
+          answer.forEach(a=>{ stage.querySelector(`#tiles .tile[data-k="${a.k}"]`).disabled = false; });
+          answer = []; refresh(); fb.textContent = '';
+        }, 1100);
+      }
+    }
+    stage.querySelectorAll('#tiles .tile').forEach(btn=>{
+      btn.onclick = ()=>{
+        sndFlip();
+        btn.disabled = true;
+        answer.push({t:btn.textContent, k:btn.dataset.k});
+        refresh();
+        if(answer.length === tokens.length) setTimeout(check, 250);
+      };
+    });
+  }
+  draw();
+}
+
+/* --- Traduce (castillo) --- */
+function gameTrans(ri, si, replay){
+  const r = REALMS[ri];
+  const rounds = pickWords(r, 5);
+  let idx = 0, correct = 0, firstTry = true;
+  const results = [];
+  function draw(){
+    const w = rounds[idx];
+    const options = shuffle([w, ...shuffle(r.words.filter(x=>x.en!==w.en)).slice(0,3)]);
+    firstTry = true;
+    const stage = gameShell(ri, `
+      ${dots(idx, rounds.length, results)}
+      <div class="npc">🔮</div>
+      <h2 style="margin:4px 0">🔁 ¿Cómo se dice en inglés?</h2>
+      <div class="word-emoji ${emojiLen(w.e)>2?'long':''}">${w.e}</div>
+      <div class="word-es" style="font-size:1.2rem"><b>${w.es}</b></div>
+      <div class="opts" style="grid-template-columns:1fr">
+        ${options.map((o,i)=>`<button class="opt txt" data-i="${i}">${o.en}</button>`).join('')}
+      </div>`);
+    stage.querySelectorAll('.opt').forEach(b=>{
+      b.onclick = ()=>{
+        if(options[+b.dataset.i].en === w.en){
+          b.classList.add('good'); sndGood();
+          if(firstTry) correct++;
+          results[idx] = firstTry;
+          speak(w.en, 0.9);
+          setTimeout(()=>{
+            idx++;
+            if(idx < rounds.length) draw();
+            else stopReward(ri, si, gemsFromScore(correct, rounds.length), `Has acertado ${correct} de ${rounds.length}`, replay);
+          }, 950);
+        }else{
+          b.classList.add('bad'); sndBad(); firstTry = false;
+          setTimeout(()=>b.classList.remove('bad'), 500);
+        }
+      };
+    });
+  }
+  draw();
+}
+
+/* --- ¡Habla! --- */
+function gameSpeak(ri, si, replay){
+  const r = REALMS[ri];
+  const isPhrase = !!r.phrases;
+  const words = pickWords(r, 4);
+  let idx = 0, wins = 0, tries = 0;
+  const results = [];
+  function next(){
+    idx++;
+    if(idx < words.length) draw();
+    else stopReward(ri, si, gemsFromScore(wins, words.length), `Has pronunciado bien ${wins} de ${words.length}`, replay);
+  }
+  function draw(){
+    tries = 0;
+    const hasSR = !!SR && !state.noMic;
+    const w = words[idx];
+    const stage = gameShell(ri, `
+      ${dots(idx, words.length, results)}
+      <div class="npc">🚪</div>
+      <div class="word-emoji ${emojiLen(w.e)>2?'long':''}">${w.e}</div>
+      <div class="word-en ${isPhrase?'phrase':''}" style="color:${r.color}">${isPhrase?w.en:w.en.toUpperCase()}</div>
+      <div class="word-es">${w.es}</div>
+      <button class="btn ghost" id="hearBtn">🔊 Escuchar cómo suena</button><br>
+      ${hasSR
+        ? `<button class="mic-btn" id="micBtn" aria-label="Hablar">🎤</button>
+           <div class="feedback" id="fb">Pulsa el micro y di la palabra mágica</div>
+           <div class="heard" id="heard"></div>`
+        : `<div class="feedback">Dilo en voz alta.<br>Un adulto marca cómo ha salido:</div>
+           <div class="controls">
+             <button class="btn mint big" id="okBtn">✔️ ¡Lo dijo bien!</button>
+             <button class="btn coral" id="koBtn">Otra vez</button>
+           </div>`}
+    `);
+    stage.querySelector('#hearBtn').onclick = ()=>speak(w.en);
+    setTimeout(()=>speak(w.en), 350);
+    if(hasSR){
+      const mic = stage.querySelector('#micBtn');
+      const fb = stage.querySelector('#fb');
+      const heard = stage.querySelector('#heard');
+      function fail(silent){
+        tries++;
+        sndBad();
+        fb.className = 'feedback no';
+        if(tries >= 3){
+          fb.textContent = 'No pasa nada, ¡a la siguiente! 💪';
+          results[idx] = false;
+          setTimeout(next, 1300);
+        }else{
+          fb.textContent = silent ? 'No te he oído, ¡inténtalo otra vez! 🎤' : 'Casi… escúchala y repite 🔁';
+          speak(w.en, 0.75);
+        }
+      }
+      mic.onclick = ()=>{
+        stopSR();
+        speechSynthesis.cancel();
+        const rec = new SR();
+        activeSR = rec;
+        rec.lang = 'en-US'; rec.interimResults = false; rec.maxAlternatives = 5;
+        mic.classList.add('listening');
+        fb.className = 'feedback'; fb.textContent = 'Te escucho… 👂';
+        heard.textContent = '';
+        let got = false;
+        rec.onresult = (ev)=>{
+          got = true;
+          const alts = Array.from(ev.results[0]).map(x=>x.transcript);
+          heard.textContent = 'He oído: "' + alts[0] + '"';
+          if(alts.some(t=>matchesAnswer(t, w.en))){
+            sndGood(); fb.className = 'feedback ok'; fb.textContent = '¡La puerta se abre! ✨';
+            wins++; results[idx] = true;
+            setTimeout(next, 1100);
+          }else fail();
+        };
+        rec.onerror = (ev)=>{
+          mic.classList.remove('listening');
+          if(ev.error === 'not-allowed' || ev.error === 'service-not-allowed'){
+            fb.className = 'feedback no';
+            fb.textContent = 'El micrófono está bloqueado en este dispositivo';
+            if(!stage.querySelector('#switchBtn')){
+              const sw = document.createElement('button');
+              sw.className = 'btn berry'; sw.id = 'switchBtn';
+              sw.textContent = '🙋 Jugar sin micrófono (valida un adulto)';
+              sw.onclick = ()=>{ state.noMic = true; saveState(); draw(); };
+              heard.after(sw);
+            }
+          } else if(!got) fail(true);
+        };
+        rec.onend = ()=>{ mic.classList.remove('listening'); if(!got && fb.textContent.startsWith('Te escucho')) fail(true); };
+        try{ rec.start(); }catch(e){}
+      };
+    }else{
+      stage.querySelector('#okBtn').onclick = ()=>{ sndGood(); wins++; results[idx]=true; next(); };
+      stage.querySelector('#koBtn').onclick = ()=>{ sndBad(); speak(w.en, 0.75); tries++; if(tries>=3){ results[idx]=false; next(); } };
+    }
+  }
+  draw();
+}
+
+/* --- Guardián del reino (jefe): 6 preguntas mixtas --- */
+function gameBoss(ri, si, replay){
+  gameListen(ri, si, replay, 6, (correct, total)=>{
+    if(correct >= 4){
+      stopReward(ri, si, 3, `¡Has vencido al guardián! ${correct} de ${total} respuestas correctas`, replay);
+    }else{
+      const r = REALMS[ri];
+      const ov = document.createElement('div');
+      ov.className = 'overlay';
+      ov.innerHTML = `
+        <div class="reward">
+          <div style="font-size:3rem">${r.guardian}</div>
+          <h2>¡Casi lo tienes!</h2>
+          <p>El guardián pide al menos 4 aciertos de ${total}.<br>Tuviste ${correct}. ¡Practica los retos del camino y vuelve a intentarlo! 💪</p>
+          <button class="btn sun big" id="rt">Reintentar 🔁</button>
+          <button class="btn ghost" id="bk" style="margin-top:10px">Volver al camino</button>
+        </div>`;
+      document.body.appendChild(ov);
+      ov.querySelector('#rt').onclick = ()=>{ ov.remove(); gameBoss(ri, si, replay); };
+      ov.querySelector('#bk').onclick = ()=>{ ov.remove(); renderRealm(ri); };
+    }
+  });
+}
+
+const GAME_RUN = {listen:gameListen, match:gameMatch, find:gameFind, memory:gameMemory, speak:gameSpeak, spell:gameSpell, build:gameBuild, trans:gameTrans, boss:gameBoss};
+
+/* ============================================================
+   FINAL DE LA AVENTURA
+   ============================================================ */
+function renderFinale(){
+  stopSR(); setBg(null);
+  confetti(); sndWin();
+  setTimeout(confetti, 800);
+  app.innerHTML = `
+    <div class="story-card">
+      <div class="big">🌟</div>
+      <h1 style="margin:6px 0">¡LO HAS CONSEGUIDO!</h1>
+      <p style="font-size:1.5rem; letter-spacing:4px; margin:8px 0">${REALMS.map(r=>r.artifact).join(' ')}</p>
+      <p>Has recuperado las <b>5 gemas</b> y la Estrella Mágica vuelve a brillar sobre todos los reinos.<br><br>
+      El Dragón, el Unicornio, el Oso Polar, el Loro y el Búho te nombran…<br>
+      <b style="font-size:1.3rem">🏅 ¡Héroe del Inglés! 🏅</b><br><br>
+      Gemas conseguidas en total: <b>💎 ${state.gems}</b></p>
+      <div style="font-size:2.6rem; margin:8px 0">${state.hero||'🦸'}</div>
+      <button class="btn sun big" id="againBtn">Seguir explorando 🗺️</button>
+    </div>`;
+  document.getElementById('againBtn').onclick = renderWorld;
+  window.scrollTo(0,0);
+}
+
+/* ============================================================
+   ZONA DE PADRES
+   ============================================================ */
+function renderParent(){
+  const ov = document.createElement('div');
+  ov.className = 'overlay';
+  ov.innerHTML = `
+    <div class="panel">
+      <h2>⚙️ Zona de padres</h2>
+      <p style="margin-top:-8px; font-size:.8rem; color:#9A94B8">Modo Aventura · Versión 1</p>
+      <p>${REALMS.map((r,i)=>{
+        const p = realmProg(r.id);
+        return r.icon+' '+r.name+': '+(p.boss?'✅ completado':'retos '+p.stop+'/'+STOP_PLOTS.length);
+      }).join('<br>')}</p>
+      <p>Gemas totales: 💎 ${state.gems}</p>
+      <button class="btn berry" id="micModeBtn">${state.noMic?'🎤 Activar micrófono':'🙋 Modo sin micrófono (valida un adulto)'}</button>
+      <button class="btn mint" id="heroBtn">🦸 Cambiar de héroe</button>
+      <button class="btn coral" id="resetBtn">🗑️ Empezar la aventura de cero</button>
+      <button class="btn ghost" id="closeBtn">Cerrar</button>
+    </div>`;
+  document.body.appendChild(ov);
+  ov.querySelector('#micModeBtn').onclick = ()=>{ state.noMic = !state.noMic; saveState(); ov.remove(); };
+  ov.querySelector('#heroBtn').onclick = ()=>{ ov.remove(); renderIntro(); };
+  ov.querySelector('#resetBtn').onclick = ()=>{
+    if(confirm('¿Seguro que quieres borrar toda la aventura y las gemas?')){
+      state = {hero:null, gems:0, realms:{}, noMic:state.noMic}; saveState(); ov.remove(); renderIntro();
+    }
+  };
+  ov.querySelector('#closeBtn').onclick = ()=>ov.remove();
+  ov.onclick = (e)=>{ if(e.target === ov) ov.remove(); };
+}
+
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
+document.getElementById('homeBtn').onclick = ()=>{ stopSR(); renderWorld(); };
+document.getElementById('parentBtn').onclick = renderParent;
+loadState();
+updateBadge();
+if(state.hero) renderWorld(); else renderIntro();
+</script>
+</body>
+</html>

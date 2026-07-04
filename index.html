@@ -804,6 +804,14 @@ function renderHome(){
         <span>${doneToday ? 'Conseguidas ' + doneToday + ' ⭐ hoy · ¡vuelve mañana!' : '10 preguntas sorpresa · gana hasta 5 ⭐ extra'}</span>
       </span>
       <span class="streak">🔥 ${streak()}</span>
+    </button>
+    <button class="daily" id="advBtn" style="background:linear-gradient(120deg,#D8CCFF,#C9E8FF)">
+      <span class="de">🗺️</span>
+      <span class="dt">
+        <b>Modo Aventura ¡NUEVO!</b>
+        <span>Recorre 5 reinos de fantasía y recupera las gemas de la Estrella Mágica</span>
+      </span>
+      <span class="streak" style="color:#6B4AC9">⭐</span>
     </button>`;
   LEVELS.forEach((L,li)=>{
     const unlocked = levelUnlocked(li);
@@ -821,6 +829,7 @@ function renderHome(){
   });
   app.innerHTML = html;
   document.getElementById('dailyBtn').onclick = gameDaily;
+  document.getElementById('advBtn').onclick = ()=>{ window.location.href = 'aventura.html'; };
   app.querySelectorAll('.lvl-card:not(.locked)').forEach(b=>{ b.onclick = ()=>renderLevel(+b.dataset.l); });
   
   const heroFox = document.getElementById('heroFox');
