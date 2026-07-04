@@ -1653,6 +1653,7 @@ function renderParent(){
   ov.innerHTML = `
     <div class="panel">
       <h2>⚙️ Zona de padres</h2>
+      <p style="margin-top:-8px; font-size:.8rem; color:#9AA8C4">Versión 4 · con juegos de buscar y emparejar</p>
       <table>
         ${LEVELS.map((L,li)=>`<tr><td>${L.icon} Nivel ${li+1} · ${L.name}</td><td>⭐ ${levelStars(li)} / ${levelMax(li)}</td></tr>`).join('')}
         <tr><td>🎯 Retos diarios</td><td>⭐ ${dailyStars()}</td></tr>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'aventura-ingles-v3';
+const CACHE_NAME = 'aventura-ingles-v4';
 const urlsToCache = [
   './',
   './index.html',
@@ -10,25 +10,9 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
+      .catch(() => {})
   );
   self.skipWaiting();
-});
-
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        if (response) return response;
-        return fetch(event.request).then(fetchRes => {
-          return caches.open(CACHE_NAME).then(cache => {
-            if (event.request.url.startsWith('http')) {
-              cache.put(event.request, fetchRes.clone());
-            }
-            return fetchRes;
-          });
-        });
-      })
-  );
 });
 
 self.addEventListener('activate', event => {
@@ -44,4 +28,40 @@ self.addEventListener('activate', event => {
     })
   );
   self.clients.claim();
+});
+
+self.addEventListener('fetch', event => {
+  const req = event.request;
+  const isPage = req.mode === 'navigate' ||
+                 req.url.endsWith('/index.html') ||
+                 req.url.endsWith('/ingles/');
+
+  if (isPage) {
+    // Página principal: SIEMPRE intentar internet primero.
+    // Solo se usa la copia guardada si no hay conexión.
+    event.respondWith(
+      fetch(req)
+        .then(fetchRes => {
+          const copy = fetchRes.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
+          return fetchRes;
+        })
+        .catch(() => caches.match(req).then(r => r || caches.match('./index.html')))
+    );
+  } else {
+    // Recursos (fuentes, etc.): caché primero, red como respaldo.
+    event.respondWith(
+      caches.match(req).then(response => {
+        if (response) return response;
+        return fetch(req).then(fetchRes => {
+          return caches.open(CACHE_NAME).then(cache => {
+            if (req.url.startsWith('http')) {
+              cache.put(req, fetchRes.clone());
+            }
+            return fetchRes;
+          });
+        });
+      })
+    );
+  }
 });
