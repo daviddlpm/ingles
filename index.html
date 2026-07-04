@@ -966,11 +966,11 @@ function runListenRounds(li, ui, rounds, pool, onDone, customTitle, customOnBack
     firstTry = true;
     const stage = gameShell(li, ui, `
       ${dots(idx, rounds.length, results)}
-      <h2 style="margin:4px 0">👂 ¿Qué has oído?</h2>`, customTitle, customOnBack);
+      <h2 style="margin:4px 0">👂 ¿Qué has oído?</h2>
       <button class="btn mint big" id="replayBtn">🔊 Escuchar otra vez</button>
       <div class="opts">
         ${options.map(o=>`<button class="opt ${emojiLen(o.e)>2?'long':''}" data-en="${o.en.replace(/"/g,'')}" aria-label="${o.es}">${o.e}</button>`).join('')}
-      </div>`);
+      </div>`, customTitle, customOnBack);
     const play = ()=>speak(w.en);
     setTimeout(play, 400);
     stage.querySelector('#replayBtn').onclick = play;
@@ -1508,7 +1508,7 @@ function showDiploma(li){
         <div class="icon">${L.icon} <b style="vertical-align:middle">${L.name.toUpperCase()}</b> ${L.icon}</div>
         <div class="stars">⭐⭐⭐⭐⭐</div>
       </div>
-      <script>setTimeout(()=>window.print(), 500);</script>
+      <script>setTimeout(()=>window.print(), 500);<\/script>
     </body></html>
   `);
   w.document.close();
