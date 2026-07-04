@@ -966,11 +966,11 @@ function runListenRounds(li, ui, rounds, pool, onDone, customTitle, customOnBack
     firstTry = true;
     const stage = gameShell(li, ui, `
       ${dots(idx, rounds.length, results)}
-      <h2 style="margin:4px 0">👂 ¿Qué has oído?</h2>
+      <h2 style="margin:4px 0">👂 ¿Qué has oído?</h2>`, customTitle, customOnBack);
       <button class="btn mint big" id="replayBtn">🔊 Escuchar otra vez</button>
       <div class="opts">
         ${options.map(o=>`<button class="opt ${emojiLen(o.e)>2?'long':''}" data-en="${o.en.replace(/"/g,'')}" aria-label="${o.es}">${o.e}</button>`).join('')}
-      </div>`, customTitle, customOnBack);
+      </div>`);
     const play = ()=>speak(w.en);
     setTimeout(play, 400);
     stage.querySelector('#replayBtn').onclick = play;
