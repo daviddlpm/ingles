@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#6B4AC9">
+<meta name="theme-color" content="#2B2350">
 <title>La Aventura de la Estrella Mágica ⭐</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -11,7 +11,6 @@
   :root{
     --ink:#2B2350; --ink-soft:#6C6494;
     --sun:#FFC93C; --coral:#FF7B54; --mint:#3EC9A7; --berry:#B067E8; --sea:#3FA7F5;
-    --gem:#7FE3FF;
     --shadow:0 6px 0 rgba(43,35,80,.18);
     --radius:26px;
   }
@@ -20,107 +19,148 @@
   body{
     font-family:'Nunito',system-ui,sans-serif; color:var(--ink);
     min-height:100vh; overflow-x:hidden;
-    background:linear-gradient(180deg,#8E7CF0,#C9B8FF 45%,#FFE9F3);
-    transition:background 1s;
+    background:linear-gradient(180deg,#1E1840,#4A3D8F 55%,#8E7CF0);
+    transition:background 1.2s;
   }
   h1,h2,h3{font-family:'Fredoka','Comic Sans MS',sans-serif;}
 
   header{
     position:sticky; top:0; z-index:50;
     display:flex; align-items:center; gap:8px; padding:10px 12px;
-    background:rgba(255,255,255,.85); backdrop-filter:blur(8px);
+    background:rgba(255,255,255,.82); backdrop-filter:blur(10px);
     border-bottom:3px solid rgba(43,35,80,.08);
   }
   header .title{font-family:'Fredoka'; font-weight:700; font-size:1.02rem; flex:1;}
-  .gem-badge{background:linear-gradient(120deg,#BDEBFF,#7FE3FF); border-radius:999px; padding:6px 12px; font-weight:800; font-size:.95rem; box-shadow:0 3px 0 rgba(30,110,150,.3); white-space:nowrap;}
+  .gem-badge{
+    background:linear-gradient(120deg,#BDEBFF,#7FE3FF); border-radius:999px; padding:6px 12px;
+    font-weight:800; font-size:.95rem; box-shadow:0 3px 0 rgba(30,110,150,.3), inset 0 0 10px rgba(255,255,255,.7);
+    white-space:nowrap;
+  }
   .icon-btn{background:#fff; border:3px solid rgba(43,35,80,.12); border-radius:16px; font-size:1.15rem; padding:6px 9px; cursor:pointer; box-shadow:var(--shadow);}
   .icon-btn:active{transform:translateY(3px); box-shadow:none;}
 
-  main{max-width:640px; margin:0 auto; padding:18px 16px 90px; position:relative; z-index:1;}
+  main{max-width:680px; margin:0 auto; padding:16px 14px 90px; position:relative; z-index:1;}
+  .screen{animation:screenIn .45s ease both;}
+  @keyframes screenIn{from{opacity:0; transform:translateY(16px);}to{opacity:1; transform:none;}}
 
   .btn{
     display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    font-family:'Fredoka'; font-weight:600; font-size:1.15rem;
+    font-family:'Fredoka'; font-weight:600; font-size:1.12rem;
     border:none; border-radius:var(--radius); padding:14px 26px;
     cursor:pointer; color:#fff; background:var(--sea);
-    box-shadow:0 5px 0 rgba(0,0,0,.18); transition:transform .08s;
+    box-shadow:0 5px 0 rgba(0,0,0,.22); transition:transform .08s;
   }
-  .btn:active{transform:translateY(4px); box-shadow:0 1px 0 rgba(0,0,0,.18);}
-  .btn.sun{background:var(--sun); color:#6B4A00;}
-  .btn.coral{background:var(--coral);}
-  .btn.mint{background:var(--mint);}
-  .btn.berry{background:var(--berry);}
-  .btn.ghost{background:#fff; color:var(--ink); border:3px solid rgba(43,35,80,.14); box-shadow:var(--shadow);}
-  .btn.big{font-size:1.4rem; padding:18px 32px; border-radius:32px;}
+  .btn:active{transform:translateY(4px); box-shadow:0 1px 0 rgba(0,0,0,.22);}
+  .btn.sun{background:linear-gradient(180deg,#FFD968,#FFB82E); color:#6B4A00;}
+  .btn.coral{background:linear-gradient(180deg,#FF9270,#FF6238);}
+  .btn.mint{background:linear-gradient(180deg,#5BDDBB,#27B591);}
+  .btn.berry{background:linear-gradient(180deg,#C284F0,#9A4DDB);}
+  .btn.ghost{background:rgba(255,255,255,.92); color:var(--ink); border:3px solid rgba(43,35,80,.14); box-shadow:var(--shadow);}
+  .btn.big{font-size:1.35rem; padding:18px 32px; border-radius:32px;}
   .btn:focus-visible,.icon-btn:focus-visible,.opt:focus-visible{outline:4px solid #FF8A3D; outline-offset:3px;}
 
-  /* ===== intro / héroe ===== */
-  .story-card{
-    background:rgba(255,255,255,.94); border-radius:32px; padding:26px 20px;
-    text-align:center; box-shadow:0 10px 0 rgba(43,35,80,.12); margin-top:10px;
+  /* ===== paneles ===== */
+  .glass{
+    background:rgba(255,255,255,.93); backdrop-filter:blur(8px);
+    border-radius:32px; padding:24px 20px; text-align:center;
+    box-shadow:0 12px 30px rgba(20,12,60,.35), 0 8px 0 rgba(43,35,80,.15);
   }
-  .story-card .big{font-size:4rem; line-height:1.1;}
-  .story-card p{font-weight:700; color:var(--ink-soft); font-size:1.06rem; line-height:1.5;}
+  .glass p{font-weight:700; color:var(--ink-soft); font-size:1.02rem; line-height:1.5;}
+
+  /* ===== intro ===== */
+  .intro-sky{position:relative; overflow:hidden; border-radius:36px; margin-bottom:-70px; height:220px;
+    background:linear-gradient(180deg,#141031,#3A2E7A 70%,#6B5CC9);}
+  .intro-sky svg{position:absolute; inset:0; width:100%; height:100%;}
+  .big-star{
+    position:absolute; left:50%; top:44%; transform:translate(-50%,-50%);
+    font-size:4.6rem; filter:drop-shadow(0 0 22px #FFE28A) drop-shadow(0 0 60px #FFC93C);
+    animation:starFloat 3.5s ease-in-out infinite;
+  }
+  @keyframes starFloat{50%{transform:translate(-50%,-58%) rotate(8deg);}}
   .heroes{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:16px 0;}
   .hero-pick{
     font-size:2.6rem; padding:16px 6px; border-radius:22px; cursor:pointer;
-    background:#F6F3FF; border:4px solid rgba(43,35,80,.1); transition:transform .1s;
+    background:#F6F3FF; border:4px solid rgba(43,35,80,.1); transition:transform .12s;
   }
-  .hero-pick.sel{border-color:var(--sun); background:#FFF3D6; transform:scale(1.1);}
+  .hero-pick.sel{border-color:var(--sun); background:#FFF3D6; transform:scale(1.12) rotate(-3deg);
+    box-shadow:0 0 0 6px rgba(255,201,60,.25);}
 
   /* ===== mapa de reinos ===== */
   .realm-card{
-    width:100%; border:none; text-align:left; cursor:pointer;
-    border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);
-    margin-bottom:14px; font-family:'Nunito'; display:flex; gap:14px; align-items:center;
-    color:#fff;
+    width:100%; border:none; cursor:pointer; position:relative;
+    border-radius:28px; margin-bottom:16px; padding:0; overflow:hidden;
+    box-shadow:0 12px 26px rgba(15,10,50,.45), 0 6px 0 rgba(0,0,0,.25);
+    height:118px; text-align:left; font-family:'Nunito'; color:#fff;
+    transition:transform .12s;
   }
-  .realm-card:active{transform:translateY(3px); box-shadow:none;}
-  .realm-card .re{font-size:2.6rem; width:70px; height:70px; min-width:70px; border-radius:22px; background:rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center;}
+  .realm-card:active{transform:scale(.97);}
+  .realm-card .scene-bg{position:absolute; inset:0;}
+  .realm-card .scene-bg svg{width:100%; height:100%; display:block;}
+  .realm-card .veil{position:absolute; inset:0; background:linear-gradient(90deg, rgba(10,5,40,.62) 0%, rgba(10,5,40,.28) 55%, rgba(10,5,40,0) 100%);}
+  .realm-card .content{position:relative; z-index:2; display:flex; align-items:center; gap:14px; height:100%; padding:0 16px;}
+  .realm-card .re{font-size:2.5rem; filter:drop-shadow(0 3px 4px rgba(0,0,0,.4));}
   .realm-card .ri{flex:1;}
-  .realm-card .rn{font-family:'Fredoka'; font-weight:700; font-size:1.2rem;}
-  .realm-card .rd{font-weight:700; font-size:.9rem; opacity:.9;}
-  .realm-card.locked{filter:grayscale(.8); opacity:.65;}
-  .artifact{font-size:1.7rem;}
+  .realm-card .rn{font-family:'Fredoka'; font-weight:700; font-size:1.25rem; text-shadow:0 2px 4px rgba(0,0,0,.55); display:block;}
+  .realm-card .rd{font-weight:700; font-size:.86rem; text-shadow:0 1px 3px rgba(0,0,0,.6); opacity:.95;}
+  .realm-card .artifact{font-size:1.9rem; filter:drop-shadow(0 0 8px #FFE28A);}
+  .realm-card.locked .scene-bg{filter:grayscale(.9) brightness(.6);}
+  .realm-card.locked .re{filter:grayscale(1);}
+  .gems-strip{
+    display:flex; justify-content:center; gap:10px; font-size:1.6rem; margin:8px 0 2px;
+  }
+  .gems-strip span{filter:drop-shadow(0 0 8px rgba(255,226,138,.9));}
+  .gems-strip .off{filter:grayscale(1); opacity:.45;}
 
   /* ===== camino del reino ===== */
-  .trail{
-    position:relative; border-radius:32px; margin-top:12px; padding:10px;
-    min-height:520px; overflow:hidden; box-shadow:inset 0 0 0 4px rgba(255,255,255,.35);
-  }
-  .deco{position:absolute; font-size:1.6rem; opacity:.55; pointer-events:none;}
+  .trail-wrap{position:relative; border-radius:32px; overflow:hidden; margin-top:10px;
+    box-shadow:0 16px 36px rgba(10,5,40,.5), inset 0 0 0 4px rgba(255,255,255,.25); height:560px;}
+  .trail-scene{position:absolute; inset:0;}
+  .trail-scene svg{width:100%; height:100%; display:block;}
+  .trail-fx{position:absolute; inset:0; pointer-events:none;}
+  .trail-road{position:absolute; inset:0; pointer-events:none;}
   .trail-stop{
     position:absolute; transform:translate(-50%,-50%);
-    width:64px; height:64px; border-radius:50%;
-    border:4px solid #fff; cursor:pointer; font-size:1.7rem;
+    width:62px; height:62px; border-radius:50%;
+    border:4px solid #fff; cursor:pointer; font-size:1.65rem;
     display:flex; align-items:center; justify-content:center;
-    background:rgba(255,255,255,.9); box-shadow:0 5px 0 rgba(43,35,80,.22);
+    background:radial-gradient(circle at 35% 30%, #FFFDF4, #F3E8CF);
+    box-shadow:0 6px 12px rgba(20,10,50,.4), 0 3px 0 rgba(120,90,40,.5);
+    z-index:4;
   }
-  .trail-stop.done{background:#D9F7E8; border-color:var(--mint);}
-  .trail-stop.locked{background:rgba(255,255,255,.45); filter:grayscale(1); cursor:default; opacity:.7;}
+  .trail-stop.done{background:radial-gradient(circle at 35% 30%, #E7FFF3, #B7EDD3); border-color:#7FDCB4;}
+  .trail-stop.locked{filter:grayscale(1) brightness(.85); cursor:default; opacity:.75;}
   .trail-stop.next{animation:glow 1.4s infinite;}
-  @keyframes glow{50%{box-shadow:0 0 0 12px rgba(255,201,60,.35), 0 5px 0 rgba(43,35,80,.22);}}
+  @keyframes glow{50%{box-shadow:0 0 0 14px rgba(255,220,90,.4), 0 6px 12px rgba(20,10,50,.4);}}
   .hero-token{
-    position:absolute; transform:translate(-50%,-110%); font-size:2.3rem; z-index:5;
-    transition:top 1.1s ease-in-out, left 1.1s ease-in-out; pointer-events:none;
-    filter:drop-shadow(0 4px 3px rgba(0,0,0,.25));
-    animation:hbob 1.6s ease-in-out infinite;
+    position:absolute; transform:translate(-50%,-115%); font-size:2.5rem; z-index:6;
+    transition:top 1.3s cubic-bezier(.5,0,.5,1), left 1.3s cubic-bezier(.5,0,.5,1);
+    pointer-events:none; filter:drop-shadow(0 5px 4px rgba(0,0,0,.35));
+    animation:hbob 1.5s ease-in-out infinite;
   }
+  .hero-token.walking{animation:walkHop .35s ease-in-out infinite;}
   @keyframes hbob{50%{margin-top:-6px;}}
-
-  /* ===== juego ===== */
-  .stage{background:rgba(255,255,255,.95); border-radius:32px; padding:22px 16px; box-shadow:0 10px 0 rgba(43,35,80,.12); text-align:center;}
-  .npc{font-size:3.4rem;}
-  .speech{
-    background:#F6F3FF; border-radius:20px; padding:12px 16px; margin:10px auto;
-    font-weight:700; color:var(--ink); max-width:440px; position:relative; font-size:1.02rem;
+  @keyframes walkHop{50%{margin-top:-14px; transform:translate(-50%,-115%) rotate(6deg);}}
+  .realm-title{
+    text-align:center; color:#fff; margin:4px 0;
+    text-shadow:0 2px 6px rgba(0,0,0,.5); letter-spacing:.5px;
   }
+
+  /* ===== escena de fondo en retos ===== */
+  .stage{
+    background:rgba(255,255,255,.94); backdrop-filter:blur(6px);
+    border-radius:32px; overflow:hidden;
+    box-shadow:0 14px 32px rgba(10,5,40,.45); text-align:center;
+  }
+  .stage-banner{height:88px; position:relative; overflow:hidden;}
+  .stage-banner svg{width:100%; height:220px; display:block;}
+  .stage-banner .npc-on{position:absolute; bottom:6px; left:50%; transform:translateX(-50%); font-size:2.6rem; filter:drop-shadow(0 3px 4px rgba(0,0,0,.4));}
+  .stage-body{padding:18px 16px 22px;}
   .progress-dots{display:flex; gap:6px; justify-content:center; margin-bottom:12px; flex-wrap:wrap;}
   .dot{width:11px; height:11px; border-radius:50%; background:rgba(43,35,80,.15);}
   .dot.on{background:var(--mint);}
   .dot.now{background:var(--sun); transform:scale(1.3);}
-  .word-emoji{font-size:4.6rem; line-height:1.1; margin:6px 0;}
-  .word-emoji.long{font-size:2.9rem;}
+  .word-emoji{font-size:4.4rem; line-height:1.1; margin:6px 0; filter:drop-shadow(0 4px 6px rgba(43,35,80,.25));}
+  .word-emoji.long{font-size:2.8rem;}
   .word-en{font-family:'Fredoka'; font-weight:700; font-size:2rem; margin:2px 0;}
   .word-en.phrase{font-size:1.4rem;}
   .word-es{color:var(--ink-soft); font-weight:700; font-size:1.02rem; margin-bottom:8px;}
@@ -128,81 +168,140 @@
   .hint{color:var(--ink-soft); font-weight:700; font-size:.92rem; margin-top:10px;}
 
   .opts{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px;}
-  .opt{background:#F6F9FF; border:4px solid rgba(43,35,80,.1); border-radius:24px; font-size:2.9rem; padding:16px 6px; cursor:pointer; transition:transform .08s;}
+  .opt{
+    background:linear-gradient(180deg,#FDFEFF,#EFF4FF);
+    border:4px solid rgba(43,35,80,.1); border-radius:24px;
+    font-size:2.9rem; padding:16px 6px; cursor:pointer; transition:transform .08s;
+    box-shadow:0 4px 0 rgba(43,35,80,.12);
+  }
   .opt.long{font-size:1.8rem;}
   .opt.txt{font-family:'Fredoka'; font-weight:600; font-size:1.2rem; color:var(--ink);}
   .opt:active{transform:scale(.95);}
-  .opt.good{background:#D9F7E8; border-color:var(--mint); animation:pop .4s;}
-  .opt.bad{background:#FFE3E0; border-color:var(--coral); animation:shake .4s;}
+  .opt.good{background:linear-gradient(180deg,#E9FFF4,#C9F5DF); border-color:var(--mint); animation:pop .4s;}
+  .opt.bad{background:linear-gradient(180deg,#FFEDEA,#FFD9D3); border-color:var(--coral); animation:shake .4s;}
   @keyframes pop{50%{transform:scale(1.12);}}
   @keyframes shake{25%{transform:translateX(-8px);}75%{transform:translateX(8px);}}
 
   .match-cols{display:flex; gap:14px; margin-top:14px;}
   .match-col{flex:1; display:flex; flex-direction:column; gap:10px;}
-  .match-item{border:3px solid rgba(43,35,80,.12); border-radius:16px; background:#F6F9FF; padding:12px 8px; cursor:pointer; font-weight:700; color:var(--ink);}
+  .match-item{border:3px solid rgba(43,35,80,.12); border-radius:16px; background:linear-gradient(180deg,#FDFEFF,#EFF4FF); padding:12px 8px; cursor:pointer; font-weight:700; color:var(--ink); box-shadow:0 3px 0 rgba(43,35,80,.1);}
   .match-item.word{font-family:'Fredoka'; font-size:1rem;}
   .match-item.img{font-size:1.9rem;}
   .match-item.sel{border-color:var(--sun); background:#FFF3D6; transform:scale(1.04);}
-  .match-item.done{background:#D9F7E8; border-color:var(--mint); opacity:.65; cursor:default;}
+  .match-item.done{background:#DDF7E9; border-color:var(--mint); opacity:.7; cursor:default;}
   .match-item.bad{border-color:var(--coral); background:#FFE3E0; animation:shake .4s;}
 
-  .scene{position:relative; border-radius:24px; margin-top:12px; border:3px solid rgba(43,35,80,.08); overflow:hidden;}
-  .scene-item{position:absolute; width:58px; height:58px; border-radius:50%; transform:translate(-50%,-50%); background:#fff; border:none; cursor:pointer; font-size:1.9rem; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 0 rgba(43,35,80,.16);}
-  .scene-item.found{background:#D9F7E8; border:3px solid var(--mint); font-size:1.5rem;}
+  .scene{position:relative; border-radius:24px; margin-top:12px; overflow:hidden; box-shadow:inset 0 0 0 3px rgba(43,35,80,.08);}
+  .scene > svg{position:absolute; inset:0; width:100%; height:100%;}
+  .scene-item{position:absolute; width:56px; height:56px; border-radius:50%; transform:translate(-50%,-50%); background:rgba(255,255,255,.96); border:none; cursor:pointer; font-size:1.85rem; display:flex; align-items:center; justify-content:center; box-shadow:0 5px 10px rgba(20,10,50,.35); z-index:2;}
+  .scene-item.found{background:#DDF7E9; border:3px solid var(--mint); font-size:1.45rem;}
   .scene-item:disabled{cursor:default;}
   .scene-item.wrong-shake{animation:shake .4s;}
 
-  .mgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px;}
-  .mcard{aspect-ratio:3/3.4; border-radius:18px; border:none; cursor:pointer; background:var(--berry); color:#fff; font-size:2rem; display:flex; align-items:center; justify-content:center; font-family:'Fredoka'; font-weight:600; box-shadow:0 4px 0 rgba(0,0,0,.18);}
+  .mgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:10px;}
+  .mcard{aspect-ratio:3/3.5; border-radius:18px; border:none; cursor:pointer;
+    background:linear-gradient(160deg,#A87BE8,#7A4DC9); color:#fff; font-size:1.9rem;
+    display:flex; align-items:center; justify-content:center; font-family:'Fredoka'; font-weight:600;
+    box-shadow:0 5px 0 rgba(60,30,110,.5); transition:transform .15s;}
   .mcard.flip{background:#fff; color:var(--ink); border:4px solid rgba(43,35,80,.12); box-shadow:var(--shadow);}
-  .mcard.done{background:#D9F7E8; border:4px solid var(--mint); color:var(--ink); cursor:default;}
-  .mcard .wtxt{font-size:1rem; padding:4px; word-break:break-word;}
+  .mcard.done{background:#DDF7E9; border:4px solid var(--mint); color:var(--ink); cursor:default;}
+  .mcard .wtxt{font-size:.95rem; padding:4px; word-break:break-word;}
 
   .slots{display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin:14px 0; min-height:52px;}
   .slot{width:42px; height:50px; border-radius:12px; background:#F6F9FF; border:3px dashed rgba(43,35,80,.25); font-family:'Fredoka'; font-weight:700; font-size:1.5rem; display:flex; align-items:center; justify-content:center;}
   .slot.filled{border-style:solid; border-color:var(--sea); background:#fff;}
   .tiles{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:6px;}
-  .tile{min-width:46px; padding:10px 12px; border-radius:14px; border:none; cursor:pointer; background:var(--sun); color:#6B4A00; font-family:'Fredoka'; font-weight:700; font-size:1.35rem; box-shadow:0 4px 0 rgba(180,120,0,.35);}
-  .tile.word{font-size:1.1rem; background:var(--berry); color:#fff; box-shadow:0 4px 0 rgba(0,0,0,.2);}
+  .tile{min-width:46px; padding:10px 12px; border-radius:14px; border:none; cursor:pointer; background:linear-gradient(180deg,#FFD968,#FFB82E); color:#6B4A00; font-family:'Fredoka'; font-weight:700; font-size:1.35rem; box-shadow:0 4px 0 rgba(180,120,0,.4);}
+  .tile.word{font-size:1.1rem; background:linear-gradient(180deg,#C284F0,#9A4DDB); color:#fff; box-shadow:0 4px 0 rgba(80,30,140,.5);}
   .tile:disabled{opacity:.25; box-shadow:none; transform:translateY(3px);}
   .tile:active{transform:translateY(3px); box-shadow:none;}
   .answer-row{min-height:54px; background:#F6F9FF; border-radius:18px; border:3px dashed rgba(43,35,80,.2); display:flex; gap:8px; flex-wrap:wrap; justify-content:center; align-items:center; padding:8px; margin:12px 0;}
-  .answer-row .tile.word{background:var(--sea);}
-  .answer-row.good{border-color:var(--mint); background:#D9F7E8;}
+  .answer-row .tile.word{background:linear-gradient(180deg,#6FBBF7,#2E8FE0);}
+  .answer-row.good{border-color:var(--mint); background:#DDF7E9;}
   .answer-row.bad{border-color:var(--coral); background:#FFE3E0; animation:shake .4s;}
 
-  .mic-btn{width:100px; height:100px; border-radius:50%; border:none; cursor:pointer; background:radial-gradient(circle at 35% 30%, #FF9A76, var(--coral)); color:#fff; font-size:2.7rem; box-shadow:0 7px 0 rgba(0,0,0,.2); margin-top:6px;}
-  .mic-btn:active{transform:translateY(4px); box-shadow:0 2px 0 rgba(0,0,0,.2);}
-  .mic-btn.listening{animation:pulse 1s infinite; background:radial-gradient(circle at 35% 30%, #7DE0C6, var(--mint));}
-  @keyframes pulse{50%{transform:scale(1.08); box-shadow:0 0 0 16px rgba(62,201,167,.18);}}
+  .mic-btn{width:100px; height:100px; border-radius:50%; border:none; cursor:pointer;
+    background:radial-gradient(circle at 35% 30%, #FF9A76, #F0552C);
+    color:#fff; font-size:2.7rem; margin-top:6px;
+    box-shadow:0 8px 0 rgba(140,40,10,.5), 0 12px 24px rgba(240,85,44,.4);}
+  .mic-btn:active{transform:translateY(4px); box-shadow:0 3px 0 rgba(140,40,10,.5);}
+  .mic-btn.listening{animation:pulse 1s infinite; background:radial-gradient(circle at 35% 30%, #7DE0C6, #1FA383);}
+  @keyframes pulse{50%{transform:scale(1.08); box-shadow:0 0 0 18px rgba(62,201,167,.2);}}
   .feedback{min-height:2.1rem; font-family:'Fredoka'; font-weight:600; font-size:1.15rem; margin-top:12px;}
-  .feedback.ok{color:var(--mint);}
-  .feedback.no{color:var(--coral);}
+  .feedback.ok{color:#1FA383;}
+  .feedback.no{color:#F0552C;}
   .heard{color:var(--ink-soft); font-weight:700; font-size:.9rem; min-height:1.2rem;}
 
-  .overlay{position:fixed; inset:0; background:rgba(43,35,80,.5); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;}
-  .reward{background:#fff; border-radius:36px; padding:28px 24px; text-align:center; max-width:390px; width:100%; box-shadow:0 14px 0 rgba(0,0,0,.18); animation:pop .4s; max-height:90vh; overflow:auto;}
+  /* ===== batalla contra el guardián ===== */
+  .battle-head{
+    display:flex; align-items:center; justify-content:space-around; gap:8px;
+    padding:6px 8px 12px;
+  }
+  .fighter{text-align:center;}
+  .fighter .av{font-size:3rem; display:inline-block; filter:drop-shadow(0 4px 6px rgba(0,0,0,.35));}
+  .fighter .nm{font-family:'Fredoka'; font-weight:600; font-size:.85rem; color:var(--ink-soft);}
+  .fighter.boss .av.hit{animation:bossHit .5s;}
+  @keyframes bossHit{20%{transform:translateX(-10px) rotate(-8deg); filter:brightness(2) drop-shadow(0 0 12px #FFE28A);}60%{transform:translateX(8px) rotate(5deg);}}
+  .vs{font-family:'Fredoka'; font-weight:700; font-size:1.4rem; color:var(--coral); text-shadow:0 2px 0 rgba(0,0,0,.1);}
+  .shields{display:flex; gap:6px; justify-content:center; font-size:1.5rem; min-height:2rem;}
+  .shields .sh{transition:transform .3s, opacity .3s; display:inline-block;}
+  .shields .sh.broken{transform:scale(1.6) rotate(30deg); opacity:0;}
+
+  /* ===== recompensa ===== */
+  .overlay{position:fixed; inset:0; background:rgba(20,12,55,.62); backdrop-filter:blur(3px); z-index:100; display:flex; align-items:center; justify-content:center; padding:20px;}
+  .reward{background:#fff; border-radius:36px; padding:28px 24px; text-align:center; max-width:390px; width:100%;
+    box-shadow:0 20px 50px rgba(0,0,0,.45); animation:rewardIn .45s cubic-bezier(.34,1.56,.64,1) both; max-height:90vh; overflow:auto; position:relative;}
+  @keyframes rewardIn{from{opacity:0; transform:scale(.6);}to{opacity:1; transform:scale(1);}}
   .reward h2{margin:4px 0 8px; font-size:1.6rem;}
+  .burst{
+    position:absolute; top:14px; left:50%; transform:translateX(-50%);
+    width:150px; height:150px; pointer-events:none; z-index:0;
+    background:conic-gradient(from 0deg, rgba(255,220,90,.35) 0 12deg, transparent 12deg 30deg,
+      rgba(255,220,90,.35) 30deg 42deg, transparent 42deg 60deg, rgba(255,220,90,.35) 60deg 72deg,
+      transparent 72deg 90deg, rgba(255,220,90,.35) 90deg 102deg, transparent 102deg 120deg,
+      rgba(255,220,90,.35) 120deg 132deg, transparent 132deg 150deg, rgba(255,220,90,.35) 150deg 162deg,
+      transparent 162deg 180deg, rgba(255,220,90,.35) 180deg 192deg, transparent 192deg 210deg,
+      rgba(255,220,90,.35) 210deg 222deg, transparent 222deg 240deg, rgba(255,220,90,.35) 240deg 252deg,
+      transparent 252deg 270deg, rgba(255,220,90,.35) 270deg 282deg, transparent 282deg 300deg,
+      rgba(255,220,90,.35) 300deg 312deg, transparent 312deg 330deg, rgba(255,220,90,.35) 330deg 342deg, transparent 342deg 360deg);
+    border-radius:50%; animation:spin 8s linear infinite;
+  }
+  @keyframes spin{to{transform:translateX(-50%) rotate(360deg);}}
+  .reward > *{position:relative; z-index:1;}
   .rgems{font-size:2.4rem; letter-spacing:6px; margin:8px 0;}
   .rgems .g{opacity:.2; display:inline-block;}
-  .rgems .g.fill{opacity:1; animation:gempop .45s both;}
+  .rgems .g.fill{opacity:1; animation:gempop .45s both; filter:drop-shadow(0 0 8px #7FE3FF);}
   @keyframes gempop{0%{transform:scale(0) rotate(-40deg);}70%{transform:scale(1.4);}100%{transform:scale(1);}}
   .reward p{color:var(--ink-soft); font-weight:700; margin:6px 0 14px;}
 
   .confetti{position:fixed; top:-20px; width:12px; height:12px; z-index:200; border-radius:3px; pointer-events:none; animation:fall linear forwards;}
   @keyframes fall{to{transform:translateY(110vh) rotate(720deg);}}
 
-  .panel{background:#fff; border-radius:28px; padding:22px; max-width:400px; width:100%; box-shadow:0 12px 0 rgba(0,0,0,.15); max-height:88vh; overflow:auto;}
+  .panel{background:#fff; border-radius:28px; padding:22px; max-width:400px; width:100%; box-shadow:0 20px 50px rgba(0,0,0,.4); max-height:88vh; overflow:auto;}
   .panel .btn{width:100%; margin-top:10px;}
   .panel p{color:var(--ink-soft); font-weight:600; font-size:.95rem;}
 
-  .back-row{display:flex; justify-content:flex-start; margin-bottom:12px; gap:8px;}
+  .back-row{display:flex; justify-content:flex-start; margin-bottom:10px; gap:8px;}
+
+  /* animaciones de las escenas SVG */
+  .sway{transform-origin:bottom center; animation:swayA 5s ease-in-out infinite;}
+  @keyframes swayA{50%{transform:rotate(2.4deg);}}
+  .twinkle{animation:twk 2.6s ease-in-out infinite;}
+  @keyframes twk{50%{opacity:.15;}}
+  .floaty{animation:fltA 7s ease-in-out infinite;}
+  @keyframes fltA{50%{transform:translateY(-10px);}}
+  .wavemove{animation:wvm 7s linear infinite;}
+  @keyframes wvm{to{transform:translateX(-200px);}}
+  .aurora{animation:aur 6s ease-in-out infinite;}
+  @keyframes aur{50%{opacity:.25;}}
+  .flicker{animation:flk 1.8s ease-in-out infinite;}
+  @keyframes flk{50%{opacity:.45;}}
 
   @media (max-width:420px){
-    .word-emoji{font-size:3.8rem;}
+    .word-emoji{font-size:3.7rem;}
     .opt{font-size:2.4rem; padding:14px 6px;}
-    .heroes{grid-template-columns:repeat(3,1fr);}
     .slot{width:34px; height:44px; font-size:1.25rem;}
+    .trail-wrap{height:520px;}
   }
   @media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important;} }
 </style>
@@ -223,46 +322,301 @@
 "use strict";
 
 /* ============================================================
-   HISTORIA · 5 REINOS · RETOS EN INGLÉS
+   ESCENARIOS ILUSTRADOS (SVG por capas, sin imágenes externas)
+   ============================================================ */
+function svgTree(x,y,s,c1,c2){
+  return `<g class="sway" style="animation-delay:${(x%5)*0.4}s">
+    <rect x="${x-3*s}" y="${y-14*s}" width="${6*s}" height="${16*s}" rx="${2*s}" fill="#7A5230"/>
+    <ellipse cx="${x}" cy="${y-26*s}" rx="${16*s}" ry="${14*s}" fill="${c1}"/>
+    <ellipse cx="${x-9*s}" cy="${y-18*s}" rx="${11*s}" ry="${9*s}" fill="${c2}"/>
+    <ellipse cx="${x+10*s}" cy="${y-19*s}" rx="${10*s}" ry="${9*s}" fill="${c2}"/>
+  </g>`;
+}
+function svgPine(x,y,s,c,snow){
+  let cap = snow?`<path d="M${x-11*s},${y-22*s} L${x},${y-34*s} L${x+11*s},${y-22*s} Q${x},${y-27*s} ${x-11*s},${y-22*s}" fill="#FFFFFF" opacity=".9"/>`:'';
+  return `<g class="sway" style="animation-delay:${(x%4)*0.5}s">
+    <rect x="${x-2.5*s}" y="${y-8*s}" width="${5*s}" height="${9*s}" fill="#6B4A2F"/>
+    <path d="M${x-16*s},${y-6*s} L${x},${y-24*s} L${x+16*s},${y-6*s} Z" fill="${c}"/>
+    <path d="M${x-12*s},${y-16*s} L${x},${y-34*s} L${x+12*s},${y-16*s} Z" fill="${c}"/>
+    ${cap}
+  </g>`;
+}
+function svgPalm(x,y,s){
+  return `<g class="sway" style="animation-delay:${(x%3)*0.6}s">
+    <path d="M${x},${y} Q${x+4*s},${y-20*s} ${x+2*s},${y-34*s}" stroke="#8A6238" stroke-width="${4.5*s}" fill="none" stroke-linecap="round"/>
+    <g fill="#3E9A5F">
+      <path d="M${x+2*s},${y-34*s} q-16,${-8*s} -26,${2*s} q14,${-2*s} 26,${4*s} Z"/>
+      <path d="M${x+2*s},${y-34*s} q16,${-8*s} 26,${2*s} q-14,${-2*s} -26,${4*s} Z"/>
+      <path d="M${x+2*s},${y-34*s} q-4,${-16*s} -16,${-18*s} q10,${8*s} 12,${20*s} Z"/>
+      <path d="M${x+2*s},${y-34*s} q6,${-16*s} 18,${-16*s} q-12,${8*s} -14,${18*s} Z"/>
+    </g>
+    <circle cx="${x-2*s}" cy="${y-30*s}" r="${3.2*s}" fill="#8A5A2B"/>
+    <circle cx="${x+7*s}" cy="${y-31*s}" r="${3.2*s}" fill="#8A5A2B"/>
+  </g>`;
+}
+function svgStars(n, w, h, seed){
+  let out = '';
+  for(let i=0;i<n;i++){
+    const x = ((seed+i*97)%w), y = ((seed*3+i*53)%h);
+    out += `<circle class="twinkle" style="animation-delay:${(i%6)*0.45}s" cx="${x}" cy="${y}" r="${1+(i%3)*0.7}" fill="#FFF6D8"/>`;
+  }
+  return out;
+}
+function svgCloudPuff(x,y,s,op){
+  return `<g class="floaty" style="animation-delay:${(x%6)*0.5}s" opacity="${op||1}">
+    <ellipse cx="${x}" cy="${y}" rx="${26*s}" ry="${12*s}" fill="#FFFFFF"/>
+    <ellipse cx="${x-14*s}" cy="${y+3*s}" rx="${14*s}" ry="${8*s}" fill="#FFFFFF"/>
+    <ellipse cx="${x+15*s}" cy="${y+3*s}" rx="${15*s}" ry="${8*s}" fill="#FFFFFF"/>
+  </g>`;
+}
+
+const SCENES = {
+ forest(w,h){ return `
+  <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="fsky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#8FDCFF"/><stop offset=".55" stop-color="#C9F0D8"/><stop offset="1" stop-color="#8FCB7E"/>
+      </linearGradient>
+    </defs>
+    <rect width="${w}" height="${h}" fill="url(#fsky)"/>
+    <circle cx="${w*0.82}" cy="${h*0.12}" r="34" fill="#FFE9A8"/>
+    <circle cx="${w*0.82}" cy="${h*0.12}" r="52" fill="#FFE9A8" opacity=".3"/>
+    ${svgCloudPuff(w*0.25, h*0.09, 1, .9)}
+    ${svgCloudPuff(w*0.62, h*0.2, 0.7, .75)}
+    <path d="M0,${h*0.42} Q${w*0.25},${h*0.34} ${w*0.5},${h*0.42} T${w},${h*0.4} V${h} H0 Z" fill="#7FBF6C"/>
+    <path d="M0,${h*0.58} Q${w*0.3},${h*0.5} ${w*0.6},${h*0.58} T${w},${h*0.56} V${h} H0 Z" fill="#63A957"/>
+    <path d="M0,${h*0.76} Q${w*0.4},${h*0.68} ${w*0.75},${h*0.77} T${w},${h*0.75} V${h} H0 Z" fill="#4E9147"/>
+    ${svgTree(w*0.12, h*0.5, 1.1, '#3E7F3B','#4E9C48')}
+    ${svgTree(w*0.9, h*0.55, 1.3, '#37753A','#478F44')}
+    ${svgTree(w*0.3, h*0.66, 1.0, '#3E7F3B','#4E9C48')}
+    ${svgTree(w*0.72, h*0.72, 1.4, '#2F6B34','#3E853E')}
+    ${svgTree(w*0.08, h*0.88, 1.5, '#2A5F30','#377838')}
+    ${svgTree(w*0.5, h*0.93, 1.2, '#2A5F30','#377838')}
+    <g><circle cx="${w*0.42}" cy="${h*0.62}" r="4" fill="#E85D75"/><rect x="${w*0.42-1}" y="${h*0.62}" width="2" height="8" fill="#3E7F3B"/></g>
+    <g><circle cx="${w*0.62}" cy="${h*0.84}" r="4" fill="#F2B950"/><rect x="${w*0.62-1}" y="${h*0.84}" width="2" height="8" fill="#3E7F3B"/></g>
+    <g><ellipse cx="${w*0.24}" cy="${h*0.79}" rx="6" ry="4" fill="#E0523F"/><rect x="${w*0.24-2}" y="${h*0.79}" width="4" height="6" fill="#F5EAD0"/><circle cx="${w*0.24-2}" cy="${h*0.78}" r="1.3" fill="#fff"/><circle cx="${w*0.24+2.5}" cy="${h*0.79}" r="1.3" fill="#fff"/></g>
+  </svg>`;},
+ island(w,h){ return `
+  <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="isky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#6BC8F5"/><stop offset=".5" stop-color="#AEE4FF"/><stop offset="1" stop-color="#FFE9B8"/>
+      </linearGradient>
+      <linearGradient id="isea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#2E9AD4"/><stop offset="1" stop-color="#1C6FA8"/>
+      </linearGradient>
+    </defs>
+    <rect width="${w}" height="${h}" fill="url(#isky)"/>
+    <circle cx="${w*0.2}" cy="${h*0.1}" r="30" fill="#FFDD7A"/>
+    <circle cx="${w*0.2}" cy="${h*0.1}" r="48" fill="#FFDD7A" opacity=".3"/>
+    ${svgCloudPuff(w*0.66, h*0.08, 0.9, .95)}
+    <rect y="${h*0.36}" width="${w}" height="${h*0.34}" fill="url(#isea)"/>
+    <g class="wavemove">
+      <path d="M-200,${h*0.4} q25,-7 50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0" stroke="#BDEBFF" stroke-width="4" fill="none" opacity=".8"/>
+      <path d="M-200,${h*0.5} q25,-6 50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0 t50,0" stroke="#8FD4F5" stroke-width="3" fill="none" opacity=".6"/>
+    </g>
+    <g class="floaty"><path d="M${w*0.68},${h*0.44} h34 l-8,10 h-20 Z" fill="#8A5A2B"/><rect x="${w*0.68+15}" y="${h*0.44-26}" width="3" height="26" fill="#5A3A1B"/><path d="M${w*0.68+18},${h*0.44-26} q20,10 0,24 Z" fill="#FFF3D6"/></g>
+    <path d="M0,${h*0.66} Q${w*0.4},${h*0.58} ${w},${h*0.68} V${h} H0 Z" fill="#F5DFA8"/>
+    <path d="M0,${h*0.8} Q${w*0.5},${h*0.74} ${w},${h*0.82} V${h} H0 Z" fill="#EFD190"/>
+    ${svgPalm(w*0.14, h*0.72, 1.15)}
+    ${svgPalm(w*0.86, h*0.78, 1.35)}
+    <circle cx="${w*0.4}" cy="${h*0.88}" r="4" fill="#F2A0B8"/>
+    <path d="M${w*0.58},${h*0.93} q4,-6 8,0 q-4,4 -8,0" fill="#E88A5A"/>
+    <circle cx="${w*0.72}" cy="${h*0.9}" r="3" fill="#FFF" opacity=".8"/>
+  </svg>`;},
+ ice(w,h){ return `
+  <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="csky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#4A6BB8"/><stop offset=".55" stop-color="#8FB8E8"/><stop offset="1" stop-color="#E8F4FF"/>
+      </linearGradient>
+      <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter>
+    </defs>
+    <rect width="${w}" height="${h}" fill="url(#csky)"/>
+    ${svgStars(16, w, h*0.3, 31)}
+    <path class="aurora" d="M-20,${h*0.16} Q${w*0.3},${h*0.04} ${w*0.55},${h*0.14} T${w+20},${h*0.08} V${h*0.24} Q${w*0.6},${h*0.3} ${w*0.3},${h*0.22} T-20,${h*0.28} Z" fill="#7FE8C9" opacity=".4" filter="url(#blur8)"/>
+    <path class="aurora" style="animation-delay:2s" d="M-20,${h*0.24} Q${w*0.4},${h*0.14} ${w*0.7},${h*0.22} T${w+20},${h*0.18} V${h*0.3} Q${w*0.5},${h*0.36} ${w*0.2},${h*0.3} T-20,${h*0.34} Z" fill="#B48FF0" opacity=".35" filter="url(#blur8)"/>
+    <path d="M0,${h*0.5} L${w*0.22},${h*0.28} L${w*0.42},${h*0.5} Z" fill="#DCEAF7"/>
+    <path d="M${w*0.16},${h*0.34} L${w*0.22},${h*0.28} L${w*0.28},${h*0.34} L${w*0.22},${h*0.38} Z" fill="#FFF"/>
+    <path d="M${w*0.3},${h*0.52} L${w*0.58},${h*0.2} L${w*0.86},${h*0.52} Z" fill="#C9DDF0"/>
+    <path d="M${w*0.5},${h*0.29} L${w*0.58},${h*0.2} L${w*0.66},${h*0.29} L${w*0.58},${h*0.35} Z" fill="#FFF"/>
+    <path d="M${w*0.66},${h*0.5} L${w*0.86},${h*0.3} L${w+10},${h*0.5} Z" fill="#DCEAF7"/>
+    <path d="M0,${h*0.52} Q${w*0.5},${h*0.44} ${w},${h*0.53} V${h} H0 Z" fill="#F2F9FF"/>
+    <path d="M0,${h*0.72} Q${w*0.5},${h*0.65} ${w},${h*0.73} V${h} H0 Z" fill="#E2F0FB"/>
+    ${svgPine(w*0.12, h*0.62, 1.1, '#2F6B4F', true)}
+    ${svgPine(w*0.85, h*0.66, 1.3, '#2A5F47', true)}
+    ${svgPine(w*0.3, h*0.82, 1.2, '#2F6B4F', true)}
+    ${svgPine(w*0.68, h*0.9, 1.4, '#255541', true)}
+    <g><circle cx="${w*0.48}" cy="${h*0.86}" r="9" fill="#FFF"/><circle cx="${w*0.48}" cy="${h*0.78}" r="6.5" fill="#FFF"/><circle cx="${w*0.48-2}" cy="${h*0.775}" r="1" fill="#333"/><circle cx="${w*0.48+2}" cy="${h*0.775}" r="1" fill="#333"/><path d="M${w*0.48},${h*0.785} l5,1.5 l-5,1.5 Z" fill="#F2953F"/></g>
+  </svg>`;},
+ clouds(w,h){ return `
+  <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="nsky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#6B4FC9"/><stop offset=".5" stop-color="#B48FE8"/><stop offset="1" stop-color="#F5C9E0"/>
+      </linearGradient>
+    </defs>
+    <rect width="${w}" height="${h}" fill="url(#nsky)"/>
+    ${svgStars(22, w, h*0.5, 17)}
+    <circle cx="${w*0.78}" cy="${h*0.14}" r="34" fill="#FFF3C9"/>
+    <circle cx="${w*0.72}" cy="${h*0.12}" r="9" fill="#F0DFA8" opacity=".6"/>
+    <circle cx="${w*0.83}" cy="${h*0.18}" r="6" fill="#F0DFA8" opacity=".6"/>
+    <g fill="none" stroke-width="9" opacity=".85">
+      <path d="M-10,${h*0.55} Q${w*0.5},${h*0.28} ${w+10},${h*0.5}" stroke="#FF6B6B"/>
+      <path d="M-10,${h*0.58} Q${w*0.5},${h*0.32} ${w+10},${h*0.53}" stroke="#FFC93C"/>
+      <path d="M-10,${h*0.61} Q${w*0.5},${h*0.36} ${w+10},${h*0.56}" stroke="#3EC9A7"/>
+      <path d="M-10,${h*0.64} Q${w*0.5},${h*0.4} ${w+10},${h*0.59}" stroke="#3FA7F5"/>
+    </g>
+    ${svgCloudPuff(w*0.18, h*0.3, 1.1, .95)}
+    ${svgCloudPuff(w*0.7, h*0.42, 0.9, .9)}
+    ${svgCloudPuff(w*0.36, h*0.62, 1.3, .95)}
+    ${svgCloudPuff(w*0.85, h*0.74, 1.0, .9)}
+    ${svgCloudPuff(w*0.14, h*0.85, 1.2, .95)}
+    ${svgCloudPuff(w*0.6, h*0.92, 1.4, 1)}
+    <g class="floaty" style="animation-delay:1s">
+      <path d="M${w*0.5},${h*0.16} a16,18 0 1,1 0.1,0" fill="#FF8A5C"/>
+      <path d="M${w*0.5-16},${h*0.16} h32 l-6,14 h-20 Z" fill="#FF8A5C" opacity=".7"/>
+      <rect x="${w*0.5-7}" y="${h*0.16+26}" width="14" height="10" rx="3" fill="#8A5A2B"/>
+      <line x1="${w*0.5-12}" y1="${h*0.16+14}" x2="${w*0.5-6}" y2="${h*0.16+26}" stroke="#6B4A2F" stroke-width="1.6"/>
+      <line x1="${w*0.5+12}" y1="${h*0.16+14}" x2="${w*0.5+6}" y2="${h*0.16+26}" stroke="#6B4A2F" stroke-width="1.6"/>
+    </g>
+  </svg>`;},
+ castle(w,h){ return `
+  <svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="ksky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#161033"/><stop offset=".6" stop-color="#3A2E7A"/><stop offset="1" stop-color="#6B5CC9"/>
+      </linearGradient>
+    </defs>
+    <rect width="${w}" height="${h}" fill="url(#ksky)"/>
+    ${svgStars(26, w, h*0.5, 7)}
+    <circle cx="${w*0.2}" cy="${h*0.12}" r="30" fill="#F5EFC9"/>
+    <circle cx="${w*0.16}" cy="${h*0.1}" r="8" fill="#E0D8A8" opacity=".55"/>
+    <g fill="#0E0A24">
+      <path d="M${w*0.5-90},${h} V${h*0.52} h22 v-14 h12 v14 h20 V${h*0.4} l13,-20 13,20 V${h*0.52} h20 v-14 h12 v14 h22 V${h} Z"/>
+      <rect x="${w*0.5-110}" y="${h*0.62}" width="20" height="${h*0.38}"/>
+      <path d="M${w*0.5-110},${h*0.62} h20 v-10 l-10,-8 -10,8 Z"/>
+      <rect x="${w*0.5+90}" y="${h*0.62}" width="20" height="${h*0.38}"/>
+      <path d="M${w*0.5+90},${h*0.62} h20 v-10 l-10,-8 -10,8 Z"/>
+    </g>
+    <path d="M${w*0.5},${h*0.4} l0,-26" stroke="#0E0A24" stroke-width="3"/>
+    <path d="M${w*0.5},${h*0.4-26} q14,4 0,10 Z" fill="#E0523F"/>
+    <g fill="#FFD968" class="flicker">
+      <rect x="${w*0.5-58}" y="${h*0.62}" width="9" height="13" rx="4"/>
+      <rect x="${w*0.5+49}" y="${h*0.62}" width="9" height="13" rx="4"/>
+      <rect x="${w*0.5-5}" y="${h*0.56}" width="10" height="15" rx="5"/>
+    </g>
+    <g fill="#0E0A24">
+      <path class="floaty" d="M${w*0.3},${h*0.24} q4,-6 8,0 q4,-6 8,0 q-8,8 -16,0"/>
+      <path class="floaty" style="animation-delay:1.4s" d="M${w*0.66},${h*0.18} q3,-5 6,0 q3,-5 6,0 q-6,6 -12,0"/>
+    </g>
+    <path d="M0,${h*0.86} Q${w*0.5},${h*0.8} ${w},${h*0.87} V${h} H0 Z" fill="#241B4F"/>
+  </svg>`;}
+};
+
+/* ============================================================
+   PARTÍCULAS (canvas): nieve, luciérnagas, burbujas, estrellas, ascuas
+   ============================================================ */
+let fxRAF = null, fxCanvas = null;
+function stopFX(){ if(fxRAF){ cancelAnimationFrame(fxRAF); fxRAF = null; } fxCanvas = null; }
+function startFX(canvas, type){
+  stopFX();
+  if(!canvas || !canvas.getContext) return;
+  const ctx = canvas.getContext('2d');
+  if(!ctx) return;
+  fxCanvas = canvas;
+  const W = canvas.width = canvas.offsetWidth || 400;
+  const H = canvas.height = canvas.offsetHeight || 560;
+  const N = type==='snow' ? 46 : 26;
+  const ps = [];
+  for(let i=0;i<N;i++){
+    ps.push({x:Math.random()*W, y:Math.random()*H, r:1+Math.random()*2.5,
+      vx:(Math.random()-.5)*0.4, vy:0.3+Math.random()*0.8, ph:Math.random()*6.28});
+  }
+  function frame(){
+    if(fxCanvas !== canvas){ return; }
+    ctx.clearRect(0,0,W,H);
+    for(const p of ps){
+      p.ph += 0.03;
+      if(type==='snow'){
+        p.x += p.vx + Math.sin(p.ph)*0.3; p.y += p.vy;
+        if(p.y > H){ p.y = -4; p.x = Math.random()*W; }
+        ctx.globalAlpha = .85;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.28); ctx.fill();
+      }else if(type==='fireflies'){
+        p.x += Math.sin(p.ph)*0.5; p.y += Math.cos(p.ph*0.7)*0.4;
+        if(p.x<0)p.x=W; if(p.x>W)p.x=0; if(p.y<0)p.y=H; if(p.y>H)p.y=0;
+        const a = 0.35 + Math.abs(Math.sin(p.ph*1.6))*0.6;
+        ctx.globalAlpha = a;
+        ctx.fillStyle = '#FFF3A0';
+        ctx.shadowColor = '#FFF3A0'; ctx.shadowBlur = 8;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r*0.9, 0, 6.28); ctx.fill();
+        ctx.shadowBlur = 0;
+      }else if(type==='bubbles'){
+        p.y -= p.vy*0.8; p.x += Math.sin(p.ph)*0.4;
+        if(p.y < -4){ p.y = H+4; p.x = Math.random()*W; }
+        ctx.globalAlpha = .4;
+        ctx.strokeStyle = '#FFFFFF'; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r+1, 0, 6.28); ctx.stroke();
+      }else if(type==='stars'){
+        const a = 0.25 + Math.abs(Math.sin(p.ph*1.2))*0.7;
+        ctx.globalAlpha = a;
+        ctx.fillStyle = '#FFF6D8';
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r*0.8, 0, 6.28); ctx.fill();
+      }else if(type==='embers'){
+        p.y -= p.vy*0.6; p.x += Math.sin(p.ph)*0.3;
+        if(p.y < -4){ p.y = H+4; p.x = Math.random()*W; }
+        const a = 0.3 + Math.abs(Math.sin(p.ph*2))*0.5;
+        ctx.globalAlpha = a;
+        ctx.fillStyle = '#C9A7F5';
+        ctx.shadowColor = '#C9A7F5'; ctx.shadowBlur = 6;
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r*0.8, 0, 6.28); ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+    ctx.globalAlpha = 1;
+    fxRAF = requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+/* ============================================================
+   DATOS · 5 REINOS
    ============================================================ */
 const HEROES = ['🦸‍♀️','🦸','🧙‍♀️','🧙','🐱','🦊'];
 
 const REALMS = [
- {id:'forest', name:'El Bosque Encantado', icon:'🌳', guardian:'🦉', artifact:'🍀',
-  bg:'linear-gradient(180deg,#7BC47F,#B9E4A8 50%,#E8F7DC)', deco:['🌲','🍄','🦋','🌷','🐿️'],
-  color:'#3E9A5F',
+ {id:'forest', name:'El Bosque Encantado', icon:'🌳', guardian:'🦉', guardianName:'el Búho Sabio', artifact:'🍀',
+  scene:'forest', fx:'fireflies', body:'linear-gradient(180deg,#2E5B3A,#5B9A5F 60%,#A8D89A)', color:'#3E8A50', road:'#E8D9A8',
   intro:'El Búho Sabio protege la primera gema. ¡Ayuda a los animales del bosque y te dejará pasar!',
   words:[
    {en:'dog',es:'perro',e:'🐶'},{en:'cat',es:'gato',e:'🐱'},{en:'bird',es:'pájaro',e:'🐦'},
    {en:'rabbit',es:'conejo',e:'🐰'},{en:'bear',es:'oso',e:'🐻'},{en:'frog',es:'rana',e:'🐸'},
    {en:'tree',es:'árbol',e:'🌳'},{en:'flower',es:'flor',e:'🌷'},{en:'butterfly',es:'mariposa',e:'🦋'},{en:'mushroom',es:'seta',e:'🍄'}]},
- {id:'island', name:'La Isla Pirata', icon:'🏝️', guardian:'🦜', artifact:'🗝️',
-  bg:'linear-gradient(180deg,#5AC8FA,#9FE0FF 45%,#FFF2C9)', deco:['⛵','🐚','🦀','🌴','⚓'],
-  color:'#1E90C9',
+ {id:'island', name:'La Isla Pirata', icon:'🏝️', guardian:'🦜', guardianName:'el Loro Pirata', artifact:'🗝️',
+  scene:'island', fx:'bubbles', body:'linear-gradient(180deg,#1C6FA8,#3FA7D9 55%,#F5DFA8)', color:'#1E7FB8', road:'#F7E7C6',
   intro:'El Loro Pirata esconde la gema en su cofre. ¡Consigue la llave superando sus pruebas!',
   words:[
    {en:'apple',es:'manzana',e:'🍎'},{en:'banana',es:'plátano',e:'🍌'},{en:'fish',es:'pez',e:'🐟'},
    {en:'water',es:'agua',e:'💧'},{en:'bread',es:'pan',e:'🍞'},{en:'cheese',es:'queso',e:'🧀'},
    {en:'boat',es:'barco',e:'⛵'},{en:'sea',es:'mar',e:'🌊'},{en:'crab',es:'cangrejo',e:'🦀'},{en:'shell',es:'concha',e:'🐚'}]},
- {id:'ice', name:'La Montaña de Hielo', icon:'🏔️', guardian:'🐻‍❄️', artifact:'❄️',
-  bg:'linear-gradient(180deg,#8FB8E8,#CFE6FF 50%,#F2F9FF)', deco:['⛄','🧊','🌨️','🐧','✨'],
-  color:'#4A7FC1',
+ {id:'ice', name:'La Montaña de Hielo', icon:'🏔️', guardian:'🐻‍❄️', guardianName:'el Oso Polar', artifact:'❄️',
+  scene:'ice', fx:'snow', body:'linear-gradient(180deg,#2E4A8F,#6B93C9 55%,#DCEAF7)', color:'#3E6BAF', road:'#DCEAF7',
   intro:'¡Brrr! El Oso Polar guarda la gema helada. ¡Abrígate bien y demuestra lo que sabes!',
   words:[
    {en:'hat',es:'gorro',e:'🧢'},{en:'jacket',es:'chaqueta',e:'🧥'},{en:'gloves',es:'guantes',e:'🧤'},
    {en:'scarf',es:'bufanda',e:'🧣'},{en:'boots',es:'botas',e:'👢'},{en:'snow',es:'nieve',e:'❄️'},
    {en:'cold',es:'frío',e:'🥶'},{en:'penguin',es:'pingüino',e:'🐧'},{en:'ice',es:'hielo',e:'🧊'},{en:'snowman',es:'muñeco de nieve',e:'⛄'}]},
- {id:'clouds', name:'El Reino de las Nubes', icon:'🌈', guardian:'🦄', artifact:'🌟',
-  bg:'linear-gradient(180deg,#C9A7F5,#F5C9E8 50%,#FFF3D6)', deco:['☁️','🎈','🪁','🌙','⭐'],
-  color:'#9A5FD1',
+ {id:'clouds', name:'El Reino de las Nubes', icon:'🌈', guardian:'🦄', guardianName:'el Unicornio', artifact:'🌟',
+  scene:'clouds', fx:'stars', body:'linear-gradient(180deg,#4A3D8F,#8E6BC9 55%,#F5C9E0)', color:'#8A5FC9', road:'#F5E0FF',
   intro:'El Unicornio de las Nubes pinta arcoíris con números y colores. ¡Juega con él para ganar su gema!',
   words:[
    {en:'red',es:'rojo',e:'🔴'},{en:'blue',es:'azul',e:'🔵'},{en:'green',es:'verde',e:'🟢'},
    {en:'yellow',es:'amarillo',e:'🟡'},{en:'one',es:'uno',e:'1️⃣'},{en:'two',es:'dos',e:'2️⃣'},
    {en:'three',es:'tres',e:'3️⃣'},{en:'star',es:'estrella',e:'⭐'},{en:'moon',es:'luna',e:'🌙'},{en:'rainbow',es:'arcoíris',e:'🌈'}]},
- {id:'castle', name:'El Castillo del Dragón', icon:'🏰', guardian:'🐉', artifact:'👑',
-  bg:'linear-gradient(180deg,#6B5CC9,#9A8AE8 50%,#E8D9FF)', deco:['🗝️','🕯️','🛡️','⚔️','💜'],
-  color:'#5A4AB8',
+ {id:'castle', name:'El Castillo del Dragón', icon:'🏰', guardian:'🐉', guardianName:'el Dragón', artifact:'👑',
+  scene:'castle', fx:'embers', body:'linear-gradient(180deg,#161033,#3A2E7A 55%,#6B5CC9)', color:'#5A4AB8', road:'#8A7AD9',
   intro:'¡El Dragón habla solo en inglés! Dile frases mágicas completas y te devolverá la última gema.',
   phrases:true,
   words:[
@@ -276,30 +630,26 @@ const REALMS = [
    {en:'Thank you very much',es:'Muchas gracias',e:'💝🙏'}]}
 ];
 
-/* Historias de cada parada (7 retos + guardián). {G} = guardián, {A} = artefacto */
 const STOP_PLOTS = [
  {icon:'🌉', story:'¡El puente está roto! Escucha las palabras mágicas y toca el dibujo correcto para repararlo.', game:'listen'},
  {icon:'🧺', story:'Un duende ha mezclado sus carteles. ¡Une cada palabra con su dibujo para ayudarle!', game:'match'},
  {icon:'🔮', story:'La bola mágica dice cosas en inglés. ¡Encuentra en el paisaje lo que va diciendo!', game:'find'},
- {icon:'🎒', story:'¡Cofres gemelos! Levanta las tapas y une cada palabra con su pareja secreta.', game:'memory'},
- {icon:'🗣️', story:'La puerta encantada solo se abre con tu voz. ¡Di las palabras mágicas en inglés!', game:'speak'},
+ {icon:'🎁', story:'¡Cofres gemelos! Levanta las tapas y une cada palabra con su pareja secreta.', game:'memory'},
+ {icon:'🚪', story:'La puerta encantada solo se abre con tu voz. ¡Di las palabras mágicas en inglés!', game:'speak'},
  {icon:'🧩', story:'Las letras del hechizo se han desordenado. ¡Colócalas bien para seguir el camino!', game:'spell'},
  {icon:'⚡', story:'¡Última prueba antes del guardián! Escucha con atención y no falles.', game:'listen'},
- {icon:'💎', story:'¡Ha llegado el momento! El guardián te pondrá a prueba con preguntas sorpresa.', game:'boss'}
+ {icon:'💎', story:'¡Ha llegado el momento de la batalla! Rompe los escudos del guardián acertando sus preguntas.', game:'boss'}
 ];
-/* En el castillo (frases) las paradas cambian ligeramente */
 const STOP_PLOTS_CASTLE = [
  {icon:'🌉', story:'¡El puente levadizo está cerrado! Escucha la frase del guardia y elige el dibujo correcto.', game:'listen'},
  {icon:'📜', story:'El pergamino mágico se ha roto en trozos. ¡Ordena las palabras para arreglar la frase!', game:'build'},
- {icon:'🗣️', story:'La armadura encantada quiere oírte. ¡Dile una frase completa en inglés!', game:'speak'},
+ {icon:'🚪', story:'La armadura encantada quiere oírte. ¡Dile una frase completa en inglés!', game:'speak'},
  {icon:'🔮', story:'¿Qué frase es? Lee con atención y elige la traducción correcta.', game:'trans'},
  {icon:'📜', story:'¡Otro pergamino roto! Ordena las palabras del hechizo final.', game:'build'},
- {icon:'🗣️', story:'El eco del castillo repite lo que dices. ¡Pronuncia otra frase mágica!', game:'speak'},
+ {icon:'🚪', story:'El eco del castillo repite lo que dices. ¡Pronuncia otra frase mágica!', game:'speak'},
  {icon:'⚡', story:'El Dragón se acerca… ¡última prueba de escucha!', game:'listen'},
- {icon:'👑', story:'¡El Dragón te espera! Contesta sus preguntas y recupera la última gema.', game:'boss'}
+ {icon:'👑', story:'¡El Dragón te espera! Rompe sus escudos contestando bien y recupera la última gema.', game:'boss'}
 ];
-
-const GEMS_TO_UNLOCK = 10; // gemas para abrir el siguiente reino (además del guardián)
 
 /* ============================================================
    ESTADO
@@ -316,11 +666,7 @@ function realmProg(id){
   if(!state.realms[id]) state.realms[id] = {stop:0, boss:false, gems:0};
   return state.realms[id];
 }
-function realmUnlocked(i){
-  if(i===0) return true;
-  const prev = realmProg(REALMS[i-1].id);
-  return prev.boss;
-}
+function realmUnlocked(i){ return i===0 || realmProg(REALMS[i-1].id).boss; }
 function artifacts(){ return REALMS.filter(r=>realmProg(r.id).boss).map(r=>r.artifact); }
 function updateBadge(){ document.getElementById('gemBadge').textContent = '💎 ' + state.gems; }
 
@@ -346,6 +692,7 @@ const sndBad  = ()=>tone([[220,.18],[180,.25]]);
 const sndGem  = ()=>tone([[880,.09],[1175,.14]]);
 const sndFlip = ()=>tone([[600,.06]]);
 const sndWin  = ()=>tone([[523,.14],[659,.14],[784,.14],[1047,.3]]);
+const sndHit  = ()=>tone([[300,.08],[500,.1],[900,.14]]);
 
 let enVoice = null;
 function pickVoice(){
@@ -446,18 +793,22 @@ function sceneSlots(n){
 let activeSR = null;
 function stopSR(){ if(activeSR){ try{activeSR.abort();}catch(e){} activeSR = null; } }
 function setBg(realm){
-  document.body.style.background = realm ? realm.bg : 'linear-gradient(180deg,#8E7CF0,#C9B8FF 45%,#FFE9F3)';
+  document.body.style.background = realm ? realm.body : 'linear-gradient(180deg,#1E1840,#4A3D8F 55%,#8E7CF0)';
 }
 
 /* ============================================================
-   PANTALLA · INTRO Y ELECCIÓN DE HÉROE
+   INTRO
    ============================================================ */
 function renderIntro(){
-  stopSR(); setBg(null);
+  stopSR(); stopFX(); setBg(null);
   let selected = state.hero || null;
   app.innerHTML = `
-    <div class="story-card">
-      <div class="big">⭐</div>
+    <div class="screen">
+    <div class="intro-sky">
+      <svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice">${svgStars(30, 400, 200, 11)}</svg>
+      <span class="big-star">⭐</span>
+    </div>
+    <div class="glass" style="padding-top:84px">
       <h1 style="margin:6px 0">La Estrella Mágica</h1>
       <p>¡Oh no! Una tormenta ha robado las <b>5 gemas</b> de la Estrella Mágica y las ha escondido en <b>5 reinos de fantasía</b>.<br><br>
       Solo un valiente que sepa hablar <b>inglés</b> puede recuperarlas. ¿Serás tú?</p>
@@ -466,6 +817,7 @@ function renderIntro(){
         ${HEROES.map(h=>`<button class="hero-pick ${h===selected?'sel':''}" data-h="${h}">${h}</button>`).join('')}
       </div>
       <button class="btn sun big" id="startBtn" ${selected?'':'disabled'}>¡Empezar la aventura! 🚀</button>
+    </div>
     </div>`;
   const startBtn = document.getElementById('startBtn');
   app.querySelectorAll('.hero-pick').forEach(b=>{
@@ -477,40 +829,41 @@ function renderIntro(){
       sndFlip();
     };
   });
-  startBtn.onclick = ()=>{
-    state.hero = selected; saveState();
-    sndWin();
-    renderWorld();
-  };
+  startBtn.onclick = ()=>{ state.hero = selected; saveState(); sndWin(); renderWorld(); };
 }
 
 /* ============================================================
-   PANTALLA · MAPA DE REINOS
+   MAPA DE REINOS (tarjetas con paisaje real de cada reino)
    ============================================================ */
 function renderWorld(){
-  stopSR(); setBg(null); updateBadge();
-  const arts = artifacts();
-  const allDone = arts.length === REALMS.length;
+  stopSR(); stopFX(); setBg(null); updateBadge();
+  const allDone = artifacts().length === REALMS.length;
   let html = `
-    <div class="story-card" style="padding:16px; margin-bottom:14px">
-      <span style="font-size:2.2rem">${state.hero||'🦸'}</span>
+    <div class="screen">
+    <div class="glass" style="padding:16px; margin-bottom:14px">
+      <span style="font-size:2.2rem; filter:drop-shadow(0 3px 4px rgba(0,0,0,.2))">${state.hero||'🦸'}</span>
       <h2 style="margin:4px 0">${allDone ? '¡La Estrella brilla de nuevo!' : 'Elige un reino'}</h2>
-      <p style="margin:4px 0">Gemas de la Estrella: ${REALMS.map(r=>realmProg(r.id).boss?r.artifact:'❔').join(' ')}</p>
+      <div class="gems-strip">${REALMS.map(r=>`<span class="${realmProg(r.id).boss?'':'off'}">${realmProg(r.id).boss?r.artifact:'❔'}</span>`).join('')}</div>
       ${allDone ? '<button class="btn sun big" id="finaleBtn">🌟 Ver el final 🌟</button>' : ''}
     </div>`;
   REALMS.forEach((r,i)=>{
     const p = realmProg(r.id);
     const unlocked = realmUnlocked(i);
     html += `
-      <button class="realm-card ${unlocked?'':'locked'}" data-r="${i}" ${unlocked?'':'disabled'} style="background:${r.color}">
-        <span class="re">${unlocked?r.icon:'🔒'}</span>
-        <span class="ri">
-          <span class="rn">${r.name}</span><br>
-          <span class="rd">${unlocked ? (p.boss ? '¡Gema conseguida!' : 'Retos superados: '+p.stop+' / '+STOP_PLOTS.length) : 'Vence al guardián del reino anterior'}</span>
+      <button class="realm-card ${unlocked?'':'locked'}" data-r="${i}" ${unlocked?'':'disabled'}>
+        <span class="scene-bg">${SCENES[r.scene](400,118)}</span>
+        <span class="veil"></span>
+        <span class="content">
+          <span class="re">${unlocked?r.icon:'🔒'}</span>
+          <span class="ri">
+            <span class="rn">${r.name}</span>
+            <span class="rd">${unlocked ? (p.boss ? '¡Gema conseguida! Puedes volver a jugar' : 'Retos superados: '+p.stop+' / '+STOP_PLOTS.length) : 'Vence a '+REALMS[i-1].guardianName+' para entrar'}</span>
+          </span>
+          <span class="artifact">${p.boss ? r.artifact : ''}</span>
         </span>
-        <span class="artifact">${p.boss ? r.artifact : ''}</span>
       </button>`;
   });
+  html += '</div>';
   app.innerHTML = html;
   app.querySelectorAll('.realm-card:not(.locked)').forEach(b=>{ b.onclick = ()=>renderRealm(+b.dataset.r); });
   const fb = document.getElementById('finaleBtn');
@@ -519,33 +872,49 @@ function renderWorld(){
 }
 
 /* ============================================================
-   PANTALLA · CAMINO DEL REINO (aventura visual)
+   CAMINO DEL REINO (escenario ilustrado + partículas + carretera)
    ============================================================ */
 const TRAIL_POS = [
-  {top:92, left:20},{top:80, left:62},{top:68, left:28},{top:56, left:70},
+  {top:92, left:22},{top:80, left:64},{top:68, left:28},{top:56, left:70},
   {top:44, left:30},{top:32, left:66},{top:20, left:32},{top:8,  left:60}
 ];
+function roadPath(){
+  // curva suave que pasa por todas las paradas (coordenadas 0-100)
+  const pts = TRAIL_POS.map(p=>({x:p.left, y:p.top}));
+  let d = `M ${pts[0].x} ${pts[0].y}`;
+  for(let i=1;i<pts.length;i++){
+    const prev = pts[i-1], cur = pts[i];
+    const mx = (prev.x+cur.x)/2, my = (prev.y+cur.y)/2;
+    d += ` Q ${prev.x} ${prev.y} ${mx} ${my}`;
+  }
+  const last = pts[pts.length-1];
+  d += ` T ${last.x} ${last.y}`;
+  return d;
+}
 function renderRealm(ri, walkFrom){
-  stopSR();
+  stopSR(); stopFX();
   const r = REALMS[ri];
   setBg(r);
   const p = realmProg(r.id);
   const plots = r.phrases ? STOP_PLOTS_CASTLE : STOP_PLOTS;
   const heroPos = Math.min(p.stop, plots.length-1);
-  const startPos = (walkFrom!==undefined) ? walkFrom : heroPos;
-  let decoHtml = '';
-  for(let i=0;i<10;i++){
-    const d = r.deco[i % r.deco.length];
-    decoHtml += `<span class="deco" style="top:${5+Math.random()*90}%; left:${Math.random()*92}%">${d}</span>`;
-  }
+  const startPos = (walkFrom!==undefined) ? Math.min(walkFrom, plots.length-1) : heroPos;
+  const d = roadPath();
   app.innerHTML = `
+    <div class="screen">
     <div class="back-row">
       <button class="btn ghost" id="backBtn">⬅ Reinos</button>
       <button class="btn ghost" id="storyBtn">📖 Historia</button>
     </div>
-    <h2 style="text-align:center; color:#fff; text-shadow:0 2px 0 rgba(0,0,0,.25); margin:4px 0">${r.icon} ${r.name}</h2>
-    <div class="trail" style="background:${r.bg}">
-      ${decoHtml}
+    <h2 class="realm-title">${r.icon} ${r.name}</h2>
+    <div class="trail-wrap">
+      <div class="trail-scene">${SCENES[r.scene](400,560)}</div>
+      <svg class="trail-road" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="${d}" fill="none" stroke="rgba(60,40,20,.35)" stroke-width="7" stroke-linecap="round"/>
+        <path d="${d}" fill="none" stroke="${r.road}" stroke-width="5.4" stroke-linecap="round"/>
+        <path d="${d}" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="0.8" stroke-dasharray="2.4 2.4" stroke-linecap="round"/>
+      </svg>
+      <canvas class="trail-fx" id="fxCanvas"></canvas>
       ${plots.map((s,i)=>{
         const done = i < p.stop || (s.game==='boss' && p.boss);
         const isNext = i === p.stop && !(s.game==='boss' && p.boss);
@@ -557,25 +926,27 @@ function renderRealm(ri, walkFrom){
       }).join('')}
       <span class="hero-token" id="heroTok" style="top:${TRAIL_POS[startPos].top}%; left:${TRAIL_POS[startPos].left}%">${state.hero||'🦸'}</span>
     </div>
-    <p class="hint" style="text-align:center; color:#fff; text-shadow:0 1px 0 rgba(0,0,0,.3)">Toca la parada que brilla ✨ para tu siguiente reto</p>`;
+    <p class="hint" style="text-align:center; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.5)">Toca la parada que brilla ✨ para tu siguiente reto</p>
+    </div>`;
   document.getElementById('backBtn').onclick = renderWorld;
   document.getElementById('storyBtn').onclick = ()=>showStoryPopup(r);
   app.querySelectorAll('.trail-stop:not(.locked)').forEach(b=>{
     b.onclick = ()=>{
       const i = +b.dataset.i;
       const s = plots[i];
-      if(i < p.stop && s.game!=='boss'){ startStop(ri, i, true); return; } // repetir reto ya superado
-      if(s.game==='boss' && p.boss){ startStop(ri, i, true); return; }
-      startStop(ri, i, false);
+      const replay = (i < p.stop) || (s.game==='boss' && p.boss);
+      startStop(ri, i, replay);
     };
   });
-  // Animación de caminar si venimos de completar un reto
+  startFX(document.getElementById('fxCanvas'), r.fx);
   if(walkFrom!==undefined && heroPos!==startPos){
+    const tok = document.getElementById('heroTok');
     setTimeout(()=>{
-      const tok = document.getElementById('heroTok');
+      tok.classList.add('walking');
       tok.style.top = TRAIL_POS[heroPos].top + '%';
       tok.style.left = TRAIL_POS[heroPos].left + '%';
-    }, 250);
+      setTimeout(()=>tok.classList.remove('walking'), 1350);
+    }, 300);
   }
   window.scrollTo(0,0);
 }
@@ -606,32 +977,35 @@ function startStop(ri, si, replay){
   ov.innerHTML = `
     <div class="reward">
       <div style="font-size:3rem">${s.game==='boss' ? r.guardian : s.icon}</div>
-      <h2>${s.game==='boss' ? '¡El Guardián!' : 'Reto ' + (si+1)}</h2>
+      <h2>${s.game==='boss' ? '¡Batalla contra '+r.guardianName+'!' : 'Reto ' + (si+1)}</h2>
       <p>${s.story}</p>
       <button class="btn sun big" id="go">¡Acepto el reto! ⚡</button>
     </div>`;
   document.body.appendChild(ov);
-  ov.querySelector('#go').onclick = ()=>{
-    ov.remove();
-    GAME_RUN[s.game](ri, si, replay);
-  };
+  ov.querySelector('#go').onclick = ()=>{ ov.remove(); GAME_RUN[s.game](ri, si, replay); };
 }
 
-function gameShell(ri, inner){
+function gameShell(ri, inner, npc){
   const r = REALMS[ri];
+  stopFX();
   app.innerHTML = `
+    <div class="screen">
     <div class="back-row"><button class="btn ghost" id="backBtn">⬅ ${r.name}</button></div>
-    <div class="stage" id="stage">${inner}</div>`;
+    <div class="stage" id="stage">
+      <div class="stage-banner">${SCENES[r.scene](400,220)}${npc?`<span class="npc-on">${npc}</span>`:''}</div>
+      <div class="stage-body">${inner}</div>
+    </div>
+    </div>`;
   document.getElementById('backBtn').onclick = ()=>{ stopSR(); renderRealm(ri); };
   window.scrollTo(0,0);
-  return document.getElementById('stage');
+  return document.getElementById('stage').querySelector('.stage-body');
 }
 
-/* Recompensa de un reto: gemas + avance del héroe */
 function stopReward(ri, si, gems, msg, replay){
   const r = REALMS[ri];
   const p = realmProg(r.id);
-  const isBoss = (r.phrases ? STOP_PLOTS_CASTLE : STOP_PLOTS)[si].game === 'boss';
+  const plots = r.phrases ? STOP_PLOTS_CASTLE : STOP_PLOTS;
+  const isBoss = plots[si].game === 'boss';
   const isNew = !replay;
   if(isNew){
     state.gems += gems;
@@ -647,6 +1021,7 @@ function stopReward(ri, si, gems, msg, replay){
   for(let i=0;i<3;i++) gemHtml += `<span class="g ${i<gems?'fill':''}" style="animation-delay:${0.3+i*0.35}s">💎</span>`;
   ov.innerHTML = `
     <div class="reward">
+      <div class="burst"></div>
       <div style="font-size:3rem">${isBoss ? r.artifact : (gems>=3?'🎉':'😄')}</div>
       <h2>${isBoss ? '¡GEMA RECUPERADA!' : (gems>=3?'¡PERFECTO!':(gems>=2?'¡Muy bien!':'¡Buen intento!'))}</h2>
       <div class="rgems">${gemHtml}</div>
@@ -659,21 +1034,19 @@ function stopReward(ri, si, gems, msg, replay){
   if(gems >= 3 || isBoss){ confetti(); if(isBoss) sndWin(); }
   ov.querySelector('#rwOk').onclick = ()=>{
     ov.remove();
-    renderRealm(ri, isBoss ? undefined : si); // animar el paseo del héroe
-    if(!isBoss && isNew){ /* el héroe camina a la siguiente parada */ }
-    if(isBoss && artifacts().length === REALMS.length){ setTimeout(renderFinale, 1200); }
+    renderRealm(ri, (isBoss || !isNew) ? undefined : si);
+    if(isBoss && artifacts().length === REALMS.length){ setTimeout(renderFinale, 1400); }
   };
 }
 
 /* ============================================================
-   RETOS (adaptados del modo clásico, 5 rondas)
+   RETOS
    ============================================================ */
 function pickWords(r, n){ return shuffle(r.words).slice(0, Math.min(n, r.words.length)); }
 
-/* --- Escucha y elige --- */
-function gameListen(ri, si, replay, roundsN, bossMode){
+function gameListen(ri, si, replay){
   const r = REALMS[ri];
-  const rounds = pickWords(r, roundsN||5);
+  const rounds = pickWords(r, 5);
   let idx = 0, correct = 0, firstTry = true;
   const results = [];
   function draw(){
@@ -685,18 +1058,17 @@ function gameListen(ri, si, replay, roundsN, bossMode){
     }).slice(0,3);
     const options = shuffle([w, ...distract]);
     firstTry = true;
-    const stage = gameShell(ri, `
+    const body = gameShell(ri, `
       ${dots(idx, rounds.length, results)}
-      <div class="npc">${bossMode ? r.guardian : '🔮'}</div>
       <h2 style="margin:4px 0">👂 ¿Qué has oído?</h2>
       <button class="btn mint" id="replayBtn">🔊 Escuchar otra vez</button>
       <div class="opts">
         ${options.map(o=>`<button class="opt ${emojiLen(o.e)>2?'long':''}" data-en="${o.en.replace(/"/g,'')}" aria-label="${o.es}">${o.e}</button>`).join('')}
-      </div>`);
+      </div>`, '🔮');
     const play = ()=>speak(w.en);
     setTimeout(play, 400);
-    stage.querySelector('#replayBtn').onclick = play;
-    stage.querySelectorAll('.opt').forEach(b=>{
+    body.querySelector('#replayBtn').onclick = play;
+    body.querySelectorAll('.opt').forEach(b=>{
       b.onclick = ()=>{
         if(b.dataset.en === w.en.replace(/"/g,'')){
           b.classList.add('good'); sndGood();
@@ -706,7 +1078,6 @@ function gameListen(ri, si, replay, roundsN, bossMode){
           setTimeout(()=>{
             idx++;
             if(idx < rounds.length) draw();
-            else if(bossMode) bossMode(correct, rounds.length);
             else stopReward(ri, si, gemsFromScore(correct, rounds.length), `Has acertado ${correct} de ${rounds.length}`, replay);
           }, 900);
         }else{
@@ -719,24 +1090,22 @@ function gameListen(ri, si, replay, roundsN, bossMode){
   draw();
 }
 
-/* --- Empareja palabra e imagen --- */
 function gameMatch(ri, si, replay){
   const r = REALMS[ri];
   const items = pickWords(r, 5);
   const wordsCol = shuffle(items.map((w,i)=>({...w, i})));
   const imgsCol = shuffle(items.map((w,i)=>({...w, i})));
   let doneCount = 0, attempts = 0, pending = null;
-  const stage = gameShell(ri, `
-    <div class="npc">🧝</div>
+  const body = gameShell(ri, `
     <h2 style="margin:4px 0">🔗 Une palabra y dibujo</h2>
     <div class="match-cols">
       <div class="match-col">${wordsCol.map(w=>`<button class="match-item word" data-i="${w.i}">${w.en.toUpperCase()}</button>`).join('')}</div>
       <div class="match-col">${imgsCol.map(w=>`<button class="match-item img" data-i="${w.i}">${w.e}</button>`).join('')}</div>
-    </div>`);
+    </div>`, '🧝');
   function select(side, btn, i){
     if(btn.classList.contains('done')) return;
     if(!pending || pending.side === side){
-      stage.querySelectorAll(`.match-item.${side}`).forEach(b=>b.classList.remove('sel'));
+      body.querySelectorAll(`.match-item.${side}`).forEach(b=>b.classList.remove('sel'));
       btn.classList.add('sel');
       pending = {side, btn, i};
       sndFlip();
@@ -760,16 +1129,15 @@ function gameMatch(ri, si, replay){
       setTimeout(()=>{ prev.classList.remove('bad'); btn.classList.remove('bad'); }, 500);
     }
   }
-  stage.querySelectorAll('.match-item.word').forEach(b=>{ b.onclick = ()=>select('word', b, +b.dataset.i); });
-  stage.querySelectorAll('.match-item.img').forEach(b=>{ b.onclick = ()=>select('img', b, +b.dataset.i); });
+  body.querySelectorAll('.match-item.word').forEach(b=>{ b.onclick = ()=>select('word', b, +b.dataset.i); });
+  body.querySelectorAll('.match-item.img').forEach(b=>{ b.onclick = ()=>select('img', b, +b.dataset.i); });
 }
 
-/* --- Busca en el paisaje lo que suena --- */
 function gameFind(ri, si, replay){
   const r = REALMS[ri];
   const items = pickWords(r, 7);
   const slots = sceneSlots(items.length);
-  const sceneHeight = Math.max(200, (slots[0]?.rows||3)*100 + 20);
+  const sceneHeight = Math.max(220, (slots[0]?.rows||3)*105 + 20);
   const order = shuffle(items.map((_,i)=>i)).slice(0,5);
   const found = new Set();
   let round = 0, correct = 0, firstTry = true;
@@ -777,18 +1145,18 @@ function gameFind(ri, si, replay){
   function draw(){
     firstTry = true;
     const target = items[order[round]];
-    const stage = gameShell(ri, `
+    const body = gameShell(ri, `
       ${dots(round, order.length, results)}
-      <div class="npc">🔮</div>
       <h2 style="margin:4px 0">🔍 Escucha y encuentra</h2>
       <button class="btn mint" id="replayBtn">🔊 Escuchar otra vez</button>
-      <div class="scene" style="height:${sceneHeight}px; background:${r.bg}">
+      <div class="scene" style="height:${sceneHeight}px">
+        ${SCENES[r.scene](400, sceneHeight)}
         ${items.map((w,i)=>`<button class="scene-item ${found.has(i)?'found':''}" ${found.has(i)?'disabled':''} data-i="${i}" style="top:${slots[i].top}%; left:${slots[i].left}%" aria-label="${w.es}">${found.has(i)?'✅':w.e}</button>`).join('')}
-      </div>`);
+      </div>`, '🔮');
     const play = ()=>speak(target.en);
     setTimeout(play, 400);
-    stage.querySelector('#replayBtn').onclick = play;
-    stage.querySelectorAll('.scene-item:not(:disabled)').forEach(b=>{
+    body.querySelector('#replayBtn').onclick = play;
+    body.querySelectorAll('.scene-item:not(:disabled)').forEach(b=>{
       b.onclick = ()=>{
         const i = +b.dataset.i;
         if(i === order[round]){
@@ -812,7 +1180,6 @@ function gameFind(ri, si, replay){
   draw();
 }
 
-/* --- Memoria (cofres gemelos) --- */
 function gameMemory(ri, si, replay){
   const r = REALMS[ri];
   const pairs = pickWords(r, 4);
@@ -821,14 +1188,13 @@ function gameMemory(ri, si, replay){
     ...pairs.map(w=>({key:w.en, type:'t', label:w.en.toUpperCase()}))
   ]);
   let flipped = [], attempts = 0, found = 0, lock = false;
-  const stage = gameShell(ri, `
-    <div class="npc">🎒</div>
+  const body = gameShell(ri, `
     <h2 style="margin:4px 0">🧠 Cofres gemelos</h2>
     <p class="hint" style="margin:0">Intentos: <b id="attCnt">0</b></p>
-    <div class="mgrid" style="grid-template-columns:repeat(4,1fr)">
-      ${cards.map((c,i)=>`<button class="mcard" data-i="${i}">📦</button>`).join('')}
-    </div>`);
-  stage.querySelectorAll('.mcard').forEach(btn=>{
+    <div class="mgrid">
+      ${cards.map((c,i)=>`<button class="mcard" data-i="${i}">🎁</button>`).join('')}
+    </div>`, '🎁');
+  body.querySelectorAll('.mcard').forEach(btn=>{
     btn.onclick = ()=>{
       if(lock) return;
       const c = cards[+btn.dataset.i];
@@ -839,7 +1205,7 @@ function gameMemory(ri, si, replay){
       flipped.push({btn, c});
       if(flipped.length === 2){
         lock = true; attempts++;
-        stage.querySelector('#attCnt').textContent = attempts;
+        body.querySelector('#attCnt').textContent = attempts;
         const [a,b] = flipped;
         if(a.c.key === b.c.key && a.c.type !== b.c.type){
           sndGood(); speak(a.c.key);
@@ -852,7 +1218,7 @@ function gameMemory(ri, si, replay){
         }else{
           sndBad();
           setTimeout(()=>{
-            [a,b].forEach(x=>{ x.btn.classList.remove('flip'); x.btn.textContent = '📦'; });
+            [a,b].forEach(x=>{ x.btn.classList.remove('flip'); x.btn.textContent = '🎁'; });
             flipped = []; lock = false;
           }, 850);
         }
@@ -861,7 +1227,6 @@ function gameMemory(ri, si, replay){
   });
 }
 
-/* --- Deletreo del hechizo --- */
 function gameSpell(ri, si, replay){
   const r = REALMS[ri];
   const words = shuffle(r.words.filter(w=>!w.en.includes(' ') && w.en.length<=6)).slice(0,4);
@@ -873,9 +1238,8 @@ function gameSpell(ri, si, replay){
     const letters = w.en.toUpperCase().split('');
     const tiles = shuffle(letters.map((ch,i)=>({ch,i})));
     let filled = [];
-    const stage = gameShell(ri, `
+    const body = gameShell(ri, `
       ${dots(idx, words.length, results)}
-      <div class="npc">🧩</div>
       <div class="word-emoji">${w.e}</div>
       <div class="word-es" style="font-size:1.15rem"><b>${w.es}</b></div>
       <div class="controls" style="margin-top:4px">
@@ -885,13 +1249,13 @@ function gameSpell(ri, si, replay){
       <div class="slots" id="slots">${letters.map(()=>'<div class="slot"></div>').join('')}</div>
       <div class="tiles">${tiles.map((t,k)=>`<button class="tile" data-k="${k}">${t.ch}</button>`).join('')}</div>
       <div class="controls"><button class="btn coral" id="delBtn">⬅ Borrar</button></div>
-      <div class="feedback" id="fb"></div>`);
-    const slots = stage.querySelectorAll('.slot');
-    const fb = stage.querySelector('#fb');
+      <div class="feedback" id="fb"></div>`, '🧩');
+    const slots = body.querySelectorAll('.slot');
+    const fb = body.querySelector('#fb');
     const play = ()=>speak(w.en);
     setTimeout(play, 350);
-    stage.querySelector('#hearBtn').onclick = play;
-    stage.querySelector('#peekBtn').onclick = ()=>{
+    body.querySelector('#hearBtn').onclick = play;
+    body.querySelector('#peekBtn').onclick = ()=>{
       firstTry = false;
       fb.className = 'feedback'; fb.textContent = w.en.toUpperCase();
       setTimeout(()=>{ if(fb.textContent === w.en.toUpperCase()) fb.textContent = ''; }, 1500);
@@ -915,12 +1279,12 @@ function gameSpell(ri, si, replay){
         sndBad(); firstTry = false;
         fb.className = 'feedback no'; fb.textContent = 'Uy, casi… ¡otra vez! 🔁';
         setTimeout(()=>{
-          filled.forEach(f=>{ stage.querySelector(`.tile[data-k="${f.k}"]`).disabled = false; });
+          filled.forEach(f=>{ body.querySelector(`.tile[data-k="${f.k}"]`).disabled = false; });
           filled = []; refresh(); fb.textContent = '';
         }, 900);
       }
     }
-    stage.querySelectorAll('.tile').forEach(btn=>{
+    body.querySelectorAll('.tile').forEach(btn=>{
       btn.onclick = ()=>{
         if(filled.length >= letters.length) return;
         sndFlip();
@@ -930,15 +1294,14 @@ function gameSpell(ri, si, replay){
         if(filled.length === letters.length) setTimeout(check, 250);
       };
     });
-    stage.querySelector('#delBtn').onclick = ()=>{
+    body.querySelector('#delBtn').onclick = ()=>{
       const last = filled.pop();
-      if(last){ stage.querySelector(`.tile[data-k="${last.k}"]`).disabled = false; refresh(); }
+      if(last){ body.querySelector(`.tile[data-k="${last.k}"]`).disabled = false; refresh(); }
     };
   }
   draw();
 }
 
-/* --- Ordena la frase (castillo) --- */
 function gameBuild(ri, si, replay){
   const r = REALMS[ri];
   const phrases = pickWords(r, 4);
@@ -950,26 +1313,25 @@ function gameBuild(ri, si, replay){
     const tokens = w.en.split(' ');
     const tiles = shuffle(tokens.map((t,i)=>({t,i})));
     let answer = [];
-    const stage = gameShell(ri, `
+    const body = gameShell(ri, `
       ${dots(idx, phrases.length, results)}
-      <div class="npc">📜</div>
       <div class="word-emoji ${emojiLen(w.e)>2?'long':''}">${w.e}</div>
       <div class="word-es" style="font-size:1.1rem"><b>${w.es}</b></div>
       <button class="btn ghost" id="hearBtn">🔊 Escuchar la frase</button>
       <div class="answer-row" id="ans"></div>
       <div class="tiles" id="tiles">${tiles.map((t,k)=>`<button class="tile word" data-k="${k}">${t.t}</button>`).join('')}</div>
-      <div class="feedback" id="fb"></div>`);
-    const ans = stage.querySelector('#ans');
-    const fb = stage.querySelector('#fb');
+      <div class="feedback" id="fb"></div>`, '📜');
+    const ans = body.querySelector('#ans');
+    const fb = body.querySelector('#fb');
     const play = ()=>speak(w.en);
     setTimeout(play, 350);
-    stage.querySelector('#hearBtn').onclick = play;
+    body.querySelector('#hearBtn').onclick = play;
     function refresh(){
       ans.innerHTML = answer.map((a,j)=>`<button class="tile word" data-j="${j}">${a.t}</button>`).join('');
       ans.querySelectorAll('.tile').forEach(b=>{
         b.onclick = ()=>{
           const item = answer.splice(+b.dataset.j,1)[0];
-          stage.querySelector(`#tiles .tile[data-k="${item.k}"]`).disabled = false;
+          body.querySelector(`#tiles .tile[data-k="${item.k}"]`).disabled = false;
           refresh();
         };
       });
@@ -994,12 +1356,12 @@ function gameBuild(ri, si, replay){
         speak(w.en, 0.75);
         setTimeout(()=>{
           ans.classList.remove('bad');
-          answer.forEach(a=>{ stage.querySelector(`#tiles .tile[data-k="${a.k}"]`).disabled = false; });
+          answer.forEach(a=>{ body.querySelector(`#tiles .tile[data-k="${a.k}"]`).disabled = false; });
           answer = []; refresh(); fb.textContent = '';
         }, 1100);
       }
     }
-    stage.querySelectorAll('#tiles .tile').forEach(btn=>{
+    body.querySelectorAll('#tiles .tile').forEach(btn=>{
       btn.onclick = ()=>{
         sndFlip();
         btn.disabled = true;
@@ -1012,7 +1374,6 @@ function gameBuild(ri, si, replay){
   draw();
 }
 
-/* --- Traduce (castillo) --- */
 function gameTrans(ri, si, replay){
   const r = REALMS[ri];
   const rounds = pickWords(r, 5);
@@ -1022,16 +1383,15 @@ function gameTrans(ri, si, replay){
     const w = rounds[idx];
     const options = shuffle([w, ...shuffle(r.words.filter(x=>x.en!==w.en)).slice(0,3)]);
     firstTry = true;
-    const stage = gameShell(ri, `
+    const body = gameShell(ri, `
       ${dots(idx, rounds.length, results)}
-      <div class="npc">🔮</div>
       <h2 style="margin:4px 0">🔁 ¿Cómo se dice en inglés?</h2>
       <div class="word-emoji ${emojiLen(w.e)>2?'long':''}">${w.e}</div>
       <div class="word-es" style="font-size:1.2rem"><b>${w.es}</b></div>
       <div class="opts" style="grid-template-columns:1fr">
         ${options.map((o,i)=>`<button class="opt txt" data-i="${i}">${o.en}</button>`).join('')}
-      </div>`);
-    stage.querySelectorAll('.opt').forEach(b=>{
+      </div>`, '🔮');
+    body.querySelectorAll('.opt').forEach(b=>{
       b.onclick = ()=>{
         if(options[+b.dataset.i].en === w.en){
           b.classList.add('good'); sndGood();
@@ -1053,7 +1413,6 @@ function gameTrans(ri, si, replay){
   draw();
 }
 
-/* --- ¡Habla! --- */
 function gameSpeak(ri, si, replay){
   const r = REALMS[ri];
   const isPhrase = !!r.phrases;
@@ -1069,9 +1428,8 @@ function gameSpeak(ri, si, replay){
     tries = 0;
     const hasSR = !!SR && !state.noMic;
     const w = words[idx];
-    const stage = gameShell(ri, `
+    const body = gameShell(ri, `
       ${dots(idx, words.length, results)}
-      <div class="npc">🚪</div>
       <div class="word-emoji ${emojiLen(w.e)>2?'long':''}">${w.e}</div>
       <div class="word-en ${isPhrase?'phrase':''}" style="color:${r.color}">${isPhrase?w.en:w.en.toUpperCase()}</div>
       <div class="word-es">${w.es}</div>
@@ -1085,13 +1443,13 @@ function gameSpeak(ri, si, replay){
              <button class="btn mint big" id="okBtn">✔️ ¡Lo dijo bien!</button>
              <button class="btn coral" id="koBtn">Otra vez</button>
            </div>`}
-    `);
-    stage.querySelector('#hearBtn').onclick = ()=>speak(w.en);
+    `, '🚪');
+    body.querySelector('#hearBtn').onclick = ()=>speak(w.en);
     setTimeout(()=>speak(w.en), 350);
     if(hasSR){
-      const mic = stage.querySelector('#micBtn');
-      const fb = stage.querySelector('#fb');
-      const heard = stage.querySelector('#heard');
+      const mic = body.querySelector('#micBtn');
+      const fb = body.querySelector('#fb');
+      const heard = body.querySelector('#heard');
       function fail(silent){
         tries++;
         sndBad();
@@ -1130,7 +1488,7 @@ function gameSpeak(ri, si, replay){
           if(ev.error === 'not-allowed' || ev.error === 'service-not-allowed'){
             fb.className = 'feedback no';
             fb.textContent = 'El micrófono está bloqueado en este dispositivo';
-            if(!stage.querySelector('#switchBtn')){
+            if(!body.querySelector('#switchBtn')){
               const sw = document.createElement('button');
               sw.className = 'btn berry'; sw.id = 'switchBtn';
               sw.textContent = '🙋 Jugar sin micrófono (valida un adulto)';
@@ -1143,27 +1501,89 @@ function gameSpeak(ri, si, replay){
         try{ rec.start(); }catch(e){}
       };
     }else{
-      stage.querySelector('#okBtn').onclick = ()=>{ sndGood(); wins++; results[idx]=true; next(); };
-      stage.querySelector('#koBtn').onclick = ()=>{ sndBad(); speak(w.en, 0.75); tries++; if(tries>=3){ results[idx]=false; next(); } };
+      body.querySelector('#okBtn').onclick = ()=>{ sndGood(); wins++; results[idx]=true; next(); };
+      body.querySelector('#koBtn').onclick = ()=>{ sndBad(); speak(w.en, 0.75); tries++; if(tries>=3){ results[idx]=false; next(); } };
     }
   }
   draw();
 }
 
-/* --- Guardián del reino (jefe): 6 preguntas mixtas --- */
+/* ============================================================
+   BATALLA CONTRA EL GUARDIÁN (con escudos)
+   ============================================================ */
 function gameBoss(ri, si, replay){
-  gameListen(ri, si, replay, 6, (correct, total)=>{
-    if(correct >= 4){
-      stopReward(ri, si, 3, `¡Has vencido al guardián! ${correct} de ${total} respuestas correctas`, replay);
+  const r = REALMS[ri];
+  const TOTAL = 6, NEED = 4;
+  const rounds = shuffle(r.words).slice(0, TOTAL);
+  let idx = 0, broken = 0, firstTry = true;
+  function battleHead(){
+    let sh = '';
+    for(let i=0;i<NEED;i++) sh += `<span class="sh ${i<broken?'broken':''}">🛡️</span>`;
+    return `
+      <div class="battle-head">
+        <div class="fighter"><span class="av">${state.hero||'🦸'}</span><div class="nm">Tú</div></div>
+        <div class="vs">VS</div>
+        <div class="fighter boss"><span class="av" id="bossAv">${r.guardian}</span><div class="nm">${r.guardianName}</div></div>
+      </div>
+      <div class="shields" id="shields">${sh}</div>
+      <p class="hint" style="margin:2px 0">Rompe ${NEED} escudos acertando a la primera</p>`;
+  }
+  function draw(){
+    const w = rounds[idx];
+    const used = new Set([w.e]);
+    const distract = shuffle(r.words).filter(x=>{
+      if(x.en===w.en || used.has(x.e)) return false;
+      used.add(x.e); return true;
+    }).slice(0,3);
+    const options = shuffle([w, ...distract]);
+    firstTry = true;
+    const body = gameShell(ri, `
+      ${battleHead()}
+      ${dots(idx, TOTAL)}
+      <button class="btn mint" id="replayBtn">🔊 Escuchar otra vez</button>
+      <div class="opts">
+        ${options.map(o=>`<button class="opt ${emojiLen(o.e)>2?'long':''}" data-en="${o.en.replace(/"/g,'')}" aria-label="${o.es}">${o.e}</button>`).join('')}
+      </div>`, r.guardian);
+    const play = ()=>speak(w.en);
+    setTimeout(play, 400);
+    body.querySelector('#replayBtn').onclick = play;
+    body.querySelectorAll('.opt').forEach(b=>{
+      b.onclick = ()=>{
+        if(b.dataset.en === w.en.replace(/"/g,'')){
+          b.classList.add('good'); sndGood();
+          speak(w.en, 0.9);
+          if(firstTry && broken < NEED){
+            broken++;
+            sndHit();
+            const av = body.querySelector('#bossAv');
+            av.classList.add('hit');
+            const shs = body.querySelectorAll('.shields .sh:not(.broken)');
+            if(shs.length) shs[0].classList.add('broken');
+            setTimeout(()=>av.classList.remove('hit'), 550);
+          }
+          setTimeout(()=>{
+            idx++;
+            if(idx < TOTAL && broken < NEED) draw();
+            else finish();
+          }, 1000);
+        }else{
+          b.classList.add('bad'); sndBad(); firstTry = false;
+          setTimeout(()=>b.classList.remove('bad'), 500);
+        }
+      };
+    });
+  }
+  function finish(){
+    if(broken >= NEED){
+      stopReward(ri, si, 3, `¡Has vencido a ${r.guardianName}! Escudos rotos: ${broken} de ${NEED}`, replay);
     }else{
-      const r = REALMS[ri];
       const ov = document.createElement('div');
       ov.className = 'overlay';
       ov.innerHTML = `
         <div class="reward">
           <div style="font-size:3rem">${r.guardian}</div>
           <h2>¡Casi lo tienes!</h2>
-          <p>El guardián pide al menos 4 aciertos de ${total}.<br>Tuviste ${correct}. ¡Practica los retos del camino y vuelve a intentarlo! 💪</p>
+          <p>Necesitas romper ${NEED} escudos acertando a la primera.<br>Rompiste ${broken}. ¡Practica los retos del camino y vuelve más fuerte! 💪</p>
           <button class="btn sun big" id="rt">Reintentar 🔁</button>
           <button class="btn ghost" id="bk" style="margin-top:10px">Volver al camino</button>
         </div>`;
@@ -1171,29 +1591,35 @@ function gameBoss(ri, si, replay){
       ov.querySelector('#rt').onclick = ()=>{ ov.remove(); gameBoss(ri, si, replay); };
       ov.querySelector('#bk').onclick = ()=>{ ov.remove(); renderRealm(ri); };
     }
-  });
+  }
+  draw();
 }
 
 const GAME_RUN = {listen:gameListen, match:gameMatch, find:gameFind, memory:gameMemory, speak:gameSpeak, spell:gameSpell, build:gameBuild, trans:gameTrans, boss:gameBoss};
 
 /* ============================================================
-   FINAL DE LA AVENTURA
+   FINAL
    ============================================================ */
 function renderFinale(){
-  stopSR(); setBg(null);
+  stopSR(); stopFX(); setBg(null);
   confetti(); sndWin();
   setTimeout(confetti, 800);
   app.innerHTML = `
-    <div class="story-card">
-      <div class="big">🌟</div>
+    <div class="screen">
+    <div class="intro-sky" style="height:200px">
+      <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">${svgStars(34, 400, 190, 23)}</svg>
+      <span class="big-star" style="font-size:5.4rem">🌟</span>
+    </div>
+    <div class="glass" style="padding-top:84px">
       <h1 style="margin:6px 0">¡LO HAS CONSEGUIDO!</h1>
       <p style="font-size:1.5rem; letter-spacing:4px; margin:8px 0">${REALMS.map(r=>r.artifact).join(' ')}</p>
       <p>Has recuperado las <b>5 gemas</b> y la Estrella Mágica vuelve a brillar sobre todos los reinos.<br><br>
       El Dragón, el Unicornio, el Oso Polar, el Loro y el Búho te nombran…<br>
       <b style="font-size:1.3rem">🏅 ¡Héroe del Inglés! 🏅</b><br><br>
       Gemas conseguidas en total: <b>💎 ${state.gems}</b></p>
-      <div style="font-size:2.6rem; margin:8px 0">${state.hero||'🦸'}</div>
+      <div style="font-size:2.6rem; margin:8px 0; filter:drop-shadow(0 4px 6px rgba(0,0,0,.2))">${state.hero||'🦸'}</div>
       <button class="btn sun big" id="againBtn">Seguir explorando 🗺️</button>
+    </div>
     </div>`;
   document.getElementById('againBtn').onclick = renderWorld;
   window.scrollTo(0,0);
@@ -1208,8 +1634,8 @@ function renderParent(){
   ov.innerHTML = `
     <div class="panel">
       <h2>⚙️ Zona de padres</h2>
-      <p style="margin-top:-8px; font-size:.8rem; color:#9A94B8">Modo Aventura · Versión 1</p>
-      <p>${REALMS.map((r,i)=>{
+      <p style="margin-top:-8px; font-size:.8rem; color:#9A94B8">Modo Aventura · Versión 2 (gráficos pro)</p>
+      <p>${REALMS.map(r=>{
         const p = realmProg(r.id);
         return r.icon+' '+r.name+': '+(p.boss?'✅ completado':'retos '+p.stop+'/'+STOP_PLOTS.length);
       }).join('<br>')}</p>
