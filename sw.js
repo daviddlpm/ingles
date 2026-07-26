@@ -1,4 +1,4 @@
-const CACHE_NAME = 'reino-ingles-v2';
+const CACHE_NAME = 'reino-ingles-v1';
 const urlsToCache = [
   './',
   './index.html',
@@ -15,23 +15,19 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
-  if (event.request.method !== 'GET') return;
-
   event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      const fetchPromise = fetch(event.request).then(networkResponse => {
-        if (networkResponse && networkResponse.status === 200 && event.request.url.startsWith('http')) {
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, networkResponse.clone());
+    caches.match(event.request)
+      .then(response => {
+        if (response) return response;
+        return fetch(event.request).then(fetchRes => {
+          return caches.open(CACHE_NAME).then(cache => {
+            if (event.request.url.startsWith('http')) {
+              cache.put(event.request, fetchRes.clone());
+            }
+            return fetchRes;
           });
-        }
-        return networkResponse;
-      }).catch(() => {
-        // Ignorar fallos de red silenciosamente si falla en background
-      });
-      
-      return cachedResponse || fetchPromise;
-    })
+        });
+      })
   );
 });
 

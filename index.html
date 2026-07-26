@@ -12,8 +12,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=MedievalSharp&display=swap" rel="stylesheet">
 
-<!-- Motor 3D Three.js -->
+<!-- Motor 3D Three.js + Howler.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
 
 <style>
   :root {
@@ -190,7 +191,6 @@
 
 let scene, camera, renderer, castleGroup;
 let clock = new THREE.Clock();
-let isAnimating3D = true;
 
 function initMedieval3DEngine() {
   const canvas = document.getElementById('webgl-canvas');
@@ -246,7 +246,6 @@ function buildMedievalWorld() {
 
 function renderLoop() {
   requestAnimationFrame(renderLoop);
-  if (!isAnimating3D) return;
   const t = clock.getElapsedTime();
   if(castleGroup) castleGroup.rotation.y = Math.sin(t * 0.3) * 0.2;
   renderer.render(scene, camera);
@@ -296,7 +295,6 @@ function loadState() {
     const raw = localStorage.getItem('reinoInglesState');
     if(raw) state = Object.assign(state, JSON.parse(raw));
     updateHeaderHero();
-    if(state.theme === 'night') document.documentElement.setAttribute('data-theme', 'night');
   } catch(e){}
 }
 function saveState() {
@@ -351,7 +349,6 @@ function stopSR() {
 const app = document.getElementById('app');
 
 function renderHeroSelect() {
-  isAnimating3D = true;
   app.innerHTML = `
     <div class="scroll-card">
       <h1 style="font-size:2.2rem; color:var(--wood-dark);">👑 Elige a tu Héroe Medieval</h1>
@@ -382,7 +379,6 @@ function renderHeroSelect() {
 
 function renderWorldMap() {
   stopSR(); updateHeaderHero();
-  isAnimating3D = true;
   let html = `
     <div class="scroll-card" style="margin-bottom:16px;">
       <h1 style="font-size:2rem; color:var(--wood-dark);">🗺️ Mapa del Reino (20 Misiones)</h1>
@@ -446,7 +442,6 @@ function claimDailyReward() {
 }
 
 function launchMissionGame(mid) {
-  isAnimating3D = false;
   const m = MISSIONS_20.find(x => x.id === mid);
   let idx = 0, score = 0;
 
@@ -486,7 +481,7 @@ function launchMissionGame(mid) {
 
     document.getElementById('backMapBtn').onclick = renderWorldMap;
     document.getElementById('hearWordBtn').onclick = () => speakText(w.en);
-    speakText(w.en); // Reproducción directa para prevenir bloqueo de autoplay en Android
+    setTimeout(() => speakText(w.en), 350);
 
     if(hasSR) {
       const mic = document.getElementById('micBtnRealm');
@@ -511,10 +506,8 @@ function launchMissionGame(mid) {
           
           // Limpieza extra para Android que a veces añade puntuación
           const cleanT = t.replace(/[.,!?]/g, '').trim();
-          const spokenWords = cleanT.split(/\\s+/);
-          const targetWord = w.en.toLowerCase();
           
-          if(cleanT === targetWord || spokenWords.includes(targetWord)) {
+          if(cleanT.includes(w.en.toLowerCase())) {
             playSound('good'); score++;
             fb.className = 'feedback-realm ok'; fb.textContent = '¡Excelente! 🌟';
           } else {
@@ -571,7 +564,6 @@ function showRewardModal(score, onClose) {
 }
 
 function renderAlbum() {
-  isAnimating3D = false;
   const owned = Math.min(STICKERS.length, Math.floor(state.stars / 15));
   app.innerHTML = `
     <button class="btn-medieval" id="backMapBtn" style="margin-bottom:12px;">⬅ Volver al Mapa</button>
@@ -588,17 +580,6 @@ function renderAlbum() {
 document.getElementById('brandLogo').onclick = renderHeroSelect;
 document.getElementById('homeBtn').onclick = renderWorldMap;
 document.getElementById('albumBtn').onclick = renderAlbum;
-
-document.getElementById('themeBtn').onclick = () => {
-  state.theme = state.theme === 'day' ? 'night' : 'day';
-  if(state.theme === 'night') document.documentElement.setAttribute('data-theme', 'night');
-  else document.documentElement.removeAttribute('data-theme');
-  saveState();
-};
-
-document.getElementById('parentBtn').onclick = () => {
-  alert('Área para padres en construcción. ¡Próximamente!');
-};
 
 loadState();
 initMedieval3DEngine();
