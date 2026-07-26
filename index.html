@@ -3,109 +3,610 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#3FA7F5">
-<title>Mi Aventura en Inglés 🚀</title>
+<meta name="theme-color" content="#7C2D12">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>El Reino de Inglés: Aventura Medieval 🛡️👑</title>
 <link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&family=MedievalSharp&display=swap" rel="stylesheet">
+
+<!-- Motor 3D Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 <style>
-  :root{
-    --ink:#28406B; --ink-soft:#5A7099;
-    --sun:#FFC93C; --mint:#3EC9A7; --berry:#B067E8; --sea:#3FA7F5;
+  :root {
+    --gold: #F59E0B;
+    --gold-dark: #B45309;
+    --wood: #78350F;
+    --wood-dark: #451A03;
+    --primary: #2563EB;
+    --primary-dark: #1E40AF;
+    --secondary: #10B981;
+    --coral: #EF4444;
+    --purple: #8B5CF6;
+    --bg-dark: #0F172A;
+    --card-bg: rgba(255, 253, 245, 0.95);
+    --card-border: rgba(120, 53, 15, 0.4);
+    --text-main: #271C19;
+    --text-muted: #654D47;
+    --shadow-realm: 0 10px 0 rgba(69, 26, 3, 0.3), 0 20px 30px rgba(0, 0, 0, 0.3);
+    --font-heading: 'MedievalSharp', 'Fredoka', cursive, serif;
+    --font-body: 'Nunito', sans-serif;
   }
-  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{margin:0; padding:0; min-height:100%;}
-  body{
-    font-family:'Nunito',system-ui,sans-serif; color:var(--ink);
-    background:linear-gradient(180deg,#BDE3FF,#E9F7FF 40%,#F2FBF4);
-    min-height:100vh; display:flex; flex-direction:column; align-items:center;
-    padding:20px 16px 40px; overflow-x:hidden;
+
+  [data-theme="night"] {
+    --card-bg: rgba(30, 27, 46, 0.95);
+    --card-border: rgba(139, 92, 246, 0.4);
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
   }
-  h1,h2{font-family:'Fredoka','Comic Sans MS',sans-serif;}
 
-  .cloud{position:fixed; font-size:3rem; opacity:.5; z-index:0; animation:drift linear infinite; pointer-events:none;}
-  @keyframes drift{from{transform:translateX(-120px);}to{transform:translateX(110vw);}}
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: var(--font-body); background: var(--bg-dark); color: var(--text-main); }
+  h1, h2, h3, h4 { font-family: var(--font-heading); margin: 0; }
 
-  .top{text-align:center; z-index:1; margin-bottom:8px;}
-  .top .fox{font-size:3.6rem; display:inline-block; animation:bob 2.4s ease-in-out infinite;}
-  @keyframes bob{50%{transform:translateY(-8px) rotate(-4deg);}}
-  .top h1{font-size:1.9rem; margin:6px 0 2px;}
-  .top p{margin:0; color:var(--ink-soft); font-weight:700;}
+  #webgl-canvas { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; }
+  #ui-layer { position: relative; z-index: 10; width: 100%; height: 100%; display: flex; flex-direction: column; pointer-events: none; }
+  #ui-layer > * { pointer-events: auto; }
 
-  .cards{
-    display:flex; flex-direction:column; gap:18px; width:100%; max-width:520px;
-    margin-top:18px; z-index:1;
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 18px;
+    background: linear-gradient(180deg, rgba(120, 53, 15, 0.95), rgba(69, 26, 3, 0.95));
+    border-bottom: 4px solid var(--gold); box-shadow: 0 6px 20px rgba(0,0,0,0.4); z-index: 50; color: #FFF;
   }
-  .game-card{
-    display:flex; align-items:center; gap:16px; text-decoration:none; color:#fff;
-    border-radius:30px; padding:22px 20px; box-shadow:0 8px 0 rgba(40,64,107,.2);
-    transition:transform .1s; position:relative; overflow:hidden;
-  }
-  .game-card:active{transform:translateY(5px); box-shadow:0 3px 0 rgba(40,64,107,.2);}
-  .game-card .ge{
-    font-size:3.2rem; width:92px; height:92px; min-width:92px; border-radius:26px;
-    background:rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center;
-  }
-  .game-card .gi{flex:1;}
-  .game-card .gn{font-family:'Fredoka'; font-weight:700; font-size:1.45rem; display:block;}
-  .game-card .gd{font-weight:700; font-size:.95rem; opacity:.94; display:block; margin-top:4px; line-height:1.35;}
-  .game-card .arrow{font-size:1.8rem;}
-  .game-card .spark{position:absolute; font-size:1.2rem; opacity:.4; pointer-events:none;}
 
-  .classic{background:linear-gradient(120deg,#3FA7F5,#3EC9A7);}
-  .adventure{background:linear-gradient(120deg,#8E7CF0,#E86BB3);}
+  .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .brand-avatar { font-size: 2.3rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
+  .brand-title { font-family: var(--font-heading); font-size: 1.45rem; color: #FDE047; text-shadow: 2px 2px 0 #000; }
 
-  .foot{margin-top:26px; color:var(--ink-soft); font-weight:700; font-size:.85rem; text-align:center; z-index:1;}
-
-  @media (min-width:560px){
-    .cards{flex-direction:row;}
-    .game-card{flex-direction:column; text-align:center; padding:26px 18px; flex:1;}
-    .game-card .arrow{display:none;}
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  .badge-gold {
+    background: linear-gradient(135deg, #F59E0B, #D97706); color: #FFF;
+    border-radius: 999px; padding: 6px 16px; font-family: var(--font-heading);
+    font-weight: 700; font-size: 1.15rem; box-shadow: 0 4px 0 #78350F; border: 2px solid #FDE047;
+    display: flex; align-items: center; gap: 6px; text-shadow: 1px 1px 0 #000;
   }
-  @media (prefers-reduced-motion:reduce){ *{animation:none !important; transition:none !important;} }
+  .realm-btn {
+    background: linear-gradient(180deg, #FFF3D6, #FDE68A); border: 3px solid var(--wood); border-radius: 18px;
+    font-size: 1.3rem; padding: 6px 12px; cursor: pointer; box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+    transition: transform 0.1s; display: flex; align-items: center; justify-content: center; color: var(--wood-dark);
+  }
+  .realm-btn:active { transform: translateY(3px); box-shadow: none; }
+
+  main { flex: 1; overflow-y: auto; padding: 16px 16px 100px; max-width: 760px; width: 100%; margin: 0 auto; }
+
+  .btn-medieval {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    font-family: var(--font-heading); font-weight: 700; font-size: 1.25rem;
+    border: 3px solid #FDE047; border-radius: 24px; padding: 14px 26px;
+    cursor: pointer; color: #FFF; background: linear-gradient(180deg, #D97706, #92400E);
+    box-shadow: 0 6px 0 var(--wood-dark); transition: transform 0.08s;
+    user-select: none; text-shadow: 1px 2px 3px rgba(0,0,0,0.6);
+  }
+  .btn-medieval:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--wood-dark); }
+  .btn-medieval.blue { background: linear-gradient(180deg, #2563EB, #1E40AF); }
+  .btn-medieval.green { background: linear-gradient(180deg, #10B981, #065F46); }
+  .btn-medieval.red { background: linear-gradient(180deg, #EF4444, #991B1B); }
+  .btn-medieval.purple { background: linear-gradient(180deg, #8B5CF6, #5B21B6); }
+  .btn-medieval.big { font-size: 1.45rem; padding: 18px 36px; border-radius: 36px; }
+
+  .scroll-card {
+    background: var(--card-bg); border: 4px solid var(--card-border); border-radius: 36px;
+    padding: 24px; box-shadow: var(--shadow-realm); text-align: center; position: relative;
+  }
+
+  .hero-select-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 16px; }
+  .hero-card {
+    background: rgba(253, 230, 138, 0.4); border: 3px solid var(--wood); border-radius: 26px;
+    padding: 16px; text-align: center; cursor: pointer; transition: transform 0.15s, border-color 0.2s;
+  }
+  .hero-card:hover { transform: scale(1.05); border-color: var(--gold); }
+  .hero-card.selected { background: #FEF08A; border-color: var(--gold-dark); box-shadow: 0 0 20px #F59E0B; }
+  .hero-avatar { font-size: 3.8rem; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
+  .hero-name { font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: var(--wood-dark); margin-top: 6px; }
+
+  .map-container { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .mission-node {
+    background: var(--card-bg); border: 3px solid var(--card-border); border-radius: 28px;
+    padding: 16px 20px; display: flex; align-items: center; gap: 16px; cursor: pointer;
+    box-shadow: var(--shadow-realm); transition: transform 0.15s;
+  }
+  .mission-node:hover { transform: translateY(-4px); }
+  .mission-node:active { transform: translateY(4px); box-shadow: none; }
+  .node-number {
+    width: 52px; height: 52px; min-width: 52px; border-radius: 50%; background: var(--gold);
+    color: #573B00; border: 3px solid #FFF; font-family: var(--font-heading); font-weight: 700;
+    font-size: 1.4rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+  }
+  .node-icon { font-size: 2.8rem; }
+  .node-info { flex: 1; text-align: left; }
+  .node-title { font-family: var(--font-heading); font-size: 1.3rem; color: var(--text-main); }
+  .node-desc { color: var(--text-muted); font-weight: 700; font-size: 0.92rem; }
+  .mission-node.locked { opacity: 0.6; filter: grayscale(0.8); }
+
+  .daily-chest-card {
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A); border: 3px solid #D97706;
+    border-radius: 28px; padding: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 16px;
+    box-shadow: var(--shadow-realm); cursor: pointer; text-align: left;
+  }
+  .daily-chest-card .chest-icon { font-size: 3.2rem; animation: pulseChest 1.5s infinite alternate; }
+  @keyframes pulseChest { from { transform: scale(1); } to { transform: scale(1.15) rotate(5deg); } }
+
+  .word-display { font-size: 5rem; margin: 8px 0; filter: drop-shadow(0 8px 12px rgba(0,0,0,0.2)); }
+  .word-en { font-family: var(--font-heading); font-size: 2.6rem; color: var(--text-main); }
+  .word-es { color: var(--text-muted); font-weight: 700; font-size: 1.2rem; margin-bottom: 14px; }
+
+  .mic-button-realm {
+    width: 120px; height: 120px; border-radius: 50%; border: 4px solid #FDE047; cursor: pointer;
+    background: radial-gradient(circle at 35% 30%, #EF4444, #B91C1C); color: #FFF; font-size: 3.8rem;
+    box-shadow: 0 10px 0 #78350F, 0 15px 25px rgba(239, 68, 68, 0.4); margin: 12px auto;
+    display: flex; align-items: center; justify-content: center; transition: transform 0.1s;
+  }
+  .mic-button-realm.active { animation: pulseMic 1s infinite alternate; background: radial-gradient(circle at 35% 30%, #34D399, #059669); }
+  @keyframes pulseMic { from { transform: scale(1); } to { transform: scale(1.15); } }
+
+  .feedback-realm { font-family: var(--font-heading); font-weight: 700; font-size: 1.3rem; margin-top: 10px; min-height: 2.6rem; }
+  .feedback-realm.ok { color: var(--secondary); }
+  .feedback-realm.no { color: var(--coral); }
+
+  .overlay {
+    position: fixed; inset: 0; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(8px); z-index: 100;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+  }
+  .modal-realm {
+    background: var(--card-bg); border: 4px solid var(--wood); border-radius: 38px; padding: 30px 24px; text-align: center;
+    max-width: 440px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); animation: popModal 0.4s ease;
+  }
+  @keyframes popModal { 0% { transform: scale(0.7); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 </style>
 </head>
 <body>
 
-<div class="cloud" style="top:12%; animation-duration:55s;">☁️</div>
-<div class="cloud" style="top:45%; animation-duration:80s; animation-delay:-35s;">☁️</div>
-<div class="cloud" style="top:75%; animation-duration:100s; animation-delay:-60s; font-size:2.2rem;">☁️</div>
+<canvas id="webgl-canvas"></canvas>
 
-<div class="top">
-  <span class="fox">🦊</span>
-  <h1>Mi Aventura en Inglés</h1>
-  <p>¿A qué quieres jugar hoy?</p>
+<div id="ui-layer">
+  <header>
+    <div class="brand" id="brandLogo">
+      <span class="brand-avatar" id="heroHeaderAvatar">🛡️</span>
+      <span class="brand-title">Reino del Inglés</span>
+    </div>
+    <div class="header-actions">
+      <button class="realm-btn" id="homeBtn">🏰 Mapa</button>
+      <button class="realm-btn" id="themeBtn">🌙</button>
+      <div class="badge-gold" id="starBadge">⭐ 0</div>
+      <button class="realm-btn" id="albumBtn">🎒</button>
+      <button class="realm-btn" id="parentBtn">⚙️</button>
+    </div>
+  </header>
+
+  <main id="app"></main>
 </div>
-
-<div class="cards">
-  <a class="game-card classic" href="clasico.html">
-    <span class="spark" style="top:10px; right:16px">⭐</span>
-    <span class="spark" style="bottom:12px; left:14px">✨</span>
-    <span class="ge">📚</span>
-    <span class="gi">
-      <span class="gn">Mundo de Niveles</span>
-      <span class="gd">4 niveles · 37 mundos · gana estrellas y pegatinas · reto del día</span>
-    </span>
-    <span class="arrow">▶</span>
-  </a>
-  <a class="game-card adventure" href="aventura.html">
-    <span class="spark" style="top:12px; right:18px">🌟</span>
-    <span class="spark" style="bottom:10px; left:16px">💎</span>
-    <span class="ge">🗺️</span>
-    <span class="gi">
-      <span class="gn">La Estrella Mágica</span>
-      <span class="gd">Aventura por 5 reinos de fantasía · recupera las gemas y vence al Dragón</span>
-    </span>
-    <span class="arrow">▶</span>
-  </a>
-</div>
-
-<p class="foot">Tu progreso se guarda en cada juego ⭐💎</p>
 
 <script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load', ()=>{
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
+"use strict";
+
+let scene, camera, renderer, castleGroup;
+let clock = new THREE.Clock();
+let isAnimating3D = true;
+
+function initMedieval3DEngine() {
+  const canvas = document.getElementById('webgl-canvas');
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1E1B2E);
+
+  camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 10, 22);
+  camera.lookAt(0, 2, 0);
+
+  // Optimización para móviles (Android/iOS)
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "high-performance" });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  // Reducir carga en pantallas móviles de alta densidad
+  renderer.setPixelRatio(window.innerWidth < 768 ? 1 : Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.65);
+  scene.add(ambientLight);
+
+  const sunLight = new THREE.DirectionalLight(0xFFF3D6, 1.2);
+  sunLight.position.set(20, 40, 20);
+  sunLight.castShadow = true;
+  scene.add(sunLight);
+
+  buildMedievalWorld();
+  window.addEventListener('resize', onResize);
+  renderLoop();
+}
+
+function buildMedievalWorld() {
+  castleGroup = new THREE.Group();
+  const baseGeo = new THREE.CylinderGeometry(8, 10, 3, 16);
+  const stoneMat = new THREE.MeshStandardMaterial({ color: 0x4B5563, roughness: 0.5 });
+  const base = new THREE.Mesh(baseGeo, stoneMat);
+  castleGroup.add(base);
+
+  const towerGeo = new THREE.CylinderGeometry(1.8, 1.8, 5, 12);
+  const tower = new THREE.Mesh(towerGeo, stoneMat);
+  tower.position.set(0, 3.5, 0);
+  castleGroup.add(tower);
+
+  const roofGeo = new THREE.ConeGeometry(2.3, 3, 12);
+  const roofMat = new THREE.MeshStandardMaterial({ color: 0xB91C1C, roughness: 0.3 });
+  const roof = new THREE.Mesh(roofGeo, roofMat);
+  roof.position.set(0, 7.5, 0);
+  castleGroup.add(roof);
+
+  castleGroup.position.set(0, 0, 0);
+  scene.add(castleGroup);
+}
+
+function renderLoop() {
+  requestAnimationFrame(renderLoop);
+  if (!isAnimating3D) return;
+  const t = clock.getElapsedTime();
+  if(castleGroup) castleGroup.rotation.y = Math.sin(t * 0.3) * 0.2;
+  renderer.render(scene, camera);
+}
+
+function onResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+
+const HEROES = [
+  { id: 'knight', name: 'Caballero Valiente', avatar: '🛡️', desc: '¡Protege el reino con su espada mágica!' },
+  { id: 'princess', name: 'Princesa Guerrera', avatar: '⚔️', desc: '¡Líder de la guardia del castillo!' },
+  { id: 'wizard', name: 'Mago del Inglés', avatar: '🧙‍♂️', desc: '¡Domina los pergaminos e hechizos!' },
+  { id: 'dragon', name: 'Dragón Amistoso', avatar: '🐲', desc: '¡Vuela sobre las torres echando fuego de colores!' }
+];
+
+const MISSIONS_20 = [
+  { id: 1, title: 'El Huerto de los Campesinos', icon: '🌾', words: [{en:'red',es:'rojo',e:'🔴'},{en:'blue',es:'azul',e:'🔵'},{en:'green',es:'verde',e:'🟢'},{en:'yellow',es:'amarillo',e:'🟡'},{en:'orange',es:'naranja',e:'🟠'},{en:'purple',es:'morado',e:'🟣'},{en:'pink',es:'rosa',e:'🌸'},{en:'black',es:'negro',e:'⚫'},{en:'white',es:'blanco',e:'⚪'},{en:'brown',es:'marrón',e:'🟤'}] },
+  { id: 2, title: 'El Conteo de las Ovejas del Reino', icon: '🔢', words: [{en:'one',es:'uno',e:'1️⃣'},{en:'two',es:'dos',e:'2️⃣'},{en:'three',es:'tres',e:'3️⃣'},{en:'four',es:'cuatro',e:'4️⃣'},{en:'five',es:'cinco',e:'5️⃣'},{en:'six',es:'seis',e:'6️⃣'},{en:'seven',es:'siete',e:'7️⃣'},{en:'eight',es:'ocho',e:'8️⃣'},{en:'nine',es:'nueve',e:'9️⃣'},{en:'ten',es:'diez',e:'🔟'}] },
+  { id: 3, title: 'Los Animales del Castillo', icon: '🐶', words: [{en:'dog',es:'perro',e:'🐶'},{en:'cat',es:'gato',e:'🐱'},{en:'bird',es:'pájaro',e:'🐦'},{en:'fish',es:'pez',e:'🐟'},{en:'horse',es:'caballo',e:'🐴'},{en:'cow',es:'vaca',e:'🐮'},{en:'pig',es:'cerdo',e:'🐷'},{en:'lion',es:'león',e:'🦁'},{en:'monkey',es:'mono',e:'🐵'},{en:'elephant',es:'elefante',e:'🐘'}] },
+  { id: 4, title: 'El Banquete Real', icon: '🍎', words: [{en:'apple',es:'manzana',e:'🍎'},{en:'banana',es:'plátano',e:'🍌'},{en:'bread',es:'pan',e:'🍞'},{en:'milk',es:'leche',e:'🥛'},{en:'water',es:'agua',e:'💧'},{en:'egg',es:'huevo',e:'🥚'},{en:'cheese',es:'queso',e:'🧀'},{en:'pizza',es:'pizza',e:'🍕'},{en:'cake',es:'tarta',e:'🎂'},{en:'cookie',es:'galleta',e:'🍪'}] },
+  { id: 5, title: 'La Armadura del Caballero', icon: '👕', words: [{en:'shirt',es:'camiseta',e:'👕'},{en:'pants',es:'pantalones',e:'👖'},{en:'shoes',es:'zapatos',e:'👟'},{en:'hat',es:'gorra',e:'🧢'},{en:'dress',es:'vestido',e:'👗'},{en:'socks',es:'calcetines',e:'🧦'},{en:'jacket',es:'chaqueta',e:'🧥'},{en:'scarf',es:'bufanda',e:'🧣'},{en:'gloves',es:'guantes',e:'🧤'},{en:'boots',es:'botas',e:'👢'}] },
+  { id: 6, title: 'Las Estancias de la Torre', icon: '🏠', words: [{en:'house',es:'casa',e:'🏠'},{en:'door',es:'puerta',e:'🚪'},{en:'window',es:'ventana',e:'🪟'},{en:'bed',es:'cama',e:'🛏️'},{en:'chair',es:'silla',e:'🪑'},{en:'sofa',es:'sofá',e:'🛋️'},{en:'bath',es:'bañera',e:'🛁'},{en:'lamp',es:'lámpara',e:'💡'},{en:'key',es:'llave',e:'🔑'},{en:'clock',es:'reloj',e:'⏰'}] },
+  { id: 7, title: 'La Escuela de Magia', icon: '🎒', words: [{en:'book',es:'libro',e:'📖'},{en:'pencil',es:'lápiz',e:'✏️'},{en:'pen',es:'bolígrafo',e:'🖊️'},{en:'bag',es:'mochila',e:'🎒'},{en:'scissors',es:'tijeras',e:'✂️'},{en:'crayon',es:'cera',e:'🖍️'},{en:'ruler',es:'regla',e:'📏'},{en:'paper',es:'papel',e:'📄'},{en:'school',es:'colegio',e:'🏫'},{en:'teacher',es:'profesor',e:'🧑‍🏫'}] },
+  { id: 8, title: 'El Valle de la Naturaleza', icon: '🌈', words: [{en:'sun',es:'sol',e:'☀️'},{en:'rain',es:'lluvia',e:'🌧️'},{en:'snow',es:'nieve',e:'❄️'},{en:'cloud',es:'nube',e:'☁️'},{en:'rainbow',es:'arcoíris',e:'🌈'},{en:'tree',es:'árbol',e:'🌳'},{en:'flower',es:'flor',e:'🌷'},{en:'star',es:'estrella',e:'⭐'},{en:'moon',es:'luna',e:'🌙'},{en:'sea',es:'mar',e:'🌊'}] },
+  { id: 9, title: 'El Torneo de Verbos', icon: '🏃', words: [{en:'run',es:'correr',e:'🏃'},{en:'jump',es:'saltar',e:'🤸'},{en:'swim',es:'nadar',e:'🏊'},{en:'dance',es:'bailar',e:'💃'},{en:'sing',es:'cantar',e:'🎤'},{en:'sleep',es:'dormir',e:'😴'},{en:'eat',es:'comer',e:'🍴'},{en:'drink',es:'beber',e:'🥤'},{en:'read',es:'leer',e:'📚'},{en:'play',es:'jugar',e:'🎮'}] },
+  { id: 10, title: 'La Fiesta de los Sentimientos', icon: '😊', words: [{en:'happy',es:'contento',e:'😊'},{en:'sad',es:'triste',e:'😢'},{en:'angry',es:'enfadado',e:'😠'},{en:'tired',es:'cansado',e:'🥱'},{en:'scared',es:'asustado',e:'😱'},{en:'surprised',es:'sorprendido',e:'😮'},{en:'sick',es:'enfermo',e:'🤒'},{en:'hungry',es:'hambriento',e:'😋'},{en:'cold',es:'frío',e:'🥶'},{en:'hot',es:'calor',e:'🥵'}] },
+  { id: 11, title: 'Los Saludos del Mensajero', icon: '👋', words: [{en:'hello',es:'hola',e:'👋'},{en:'goodbye',es:'adiós',e:'🚶'},{en:'good morning',es:'buenos días',e:'🌅'},{en:'good night',es:'buenas noches',e:'🌙'},{en:'please',es:'por favor',e:'🙏'},{en:'thank you',es:'gracias',e:'💝'},{en:'yes',es:'sí',e:'✅'},{en:'no',es:'no',e:'❌'},{en:'sorry',es:'lo siento',e:'😔'},{en:'welcome',es:'bienvenido',e:'🤗'}] },
+  { id: 12, title: 'Los Gigantes Opuestos', icon: '↔️', words: [{en:'big',es:'grande',e:'🐘'},{en:'small',es:'pequeño',e:'🐜'},{en:'fast',es:'rápido',e:'🚀'},{en:'slow',es:'lento',e:'🐢'},{en:'tall',es:'alto',e:'🦒'},{en:'short',es:'bajito',e:'🍄'},{en:'hot',es:'caliente',e:'🔥'},{en:'cold',es:'frío',e:'🧊'},{en:'clean',es:'limpio',e:'🧼'},{en:'dirty',es:'sucio',e:'🐷'}] },
+  { id: 13, title: 'El Viaje en Carruaje', icon: '🚗', words: [{en:'car',es:'coche',e:'🚗'},{en:'bus',es:'autobús',e:'🚌'},{en:'train',es:'tren',e:'🚆'},{en:'plane',es:'avión',e:'✈️'},{en:'bike',es:'bicicleta',e:'🚲'},{en:'boat',es:'barco',e:'⛵'},{en:'street',es:'calle',e:'🛣️'},{en:'shop',es:'tienda',e:'🏪'},{en:'hospital',es:'hospital',e:'🏥'},{en:'park',es:'parque',e:'🏞️'}] },
+  { id: 14, title: 'El Mercado Feudal', icon: '🍓', words: [{en:'strawberry',es:'fresa',e:'🍓'},{en:'grapes',es:'uvas',e:'🍇'},{en:'watermelon',es:'sandía',e:'🍉'},{en:'pear',es:'pera',e:'🍐'},{en:'lemon',es:'limón',e:'🍋'},{en:'tomato',es:'tomate',e:'🍅'},{en:'carrot',es:'zanahoria',e:'🥕'},{en:'potato',es:'patata',e:'🥔'},{en:'corn',es:'maíz',e:'🌽'},{en:'onion',es:'cebolla',e:'🧅'}] },
+  { id: 15, title: 'El Bosque del Dragón', icon: '🐻', words: [{en:'bear',es:'oso',e:'🐻'},{en:'rabbit',es:'conejo',e:'🐰'},{en:'mouse',es:'ratón',e:'🐭'},{en:'duck',es:'pato',e:'🦆'},{en:'sheep',es:'oveja',e:'🐑'},{en:'chicken',es:'gallina',e:'🐔'},{en:'frog',es:'rana',e:'🐸'},{en:'snake',es:'serpiente',e:'🐍'},{en:'turtle',es:'tortuga',e:'🐢'},{en:'butterfly',es:'mariposa',e:'🦋'}] },
+  { id: 16, title: 'Los Tesoros del Infante', icon: '🧸', words: [{en:'ball',es:'pelota',e:'⚽'},{en:'doll',es:'muñeca',e:'🪆'},{en:'robot',es:'robot',e:'🤖'},{en:'teddy bear',es:'osito',e:'🧸'},{en:'kite',es:'cometa',e:'🪁'},{en:'blocks',es:'bloques',e:'🧱'},{en:'puzzle',es:'puzle',e:'🧩'},{en:'drum',es:'tambor',e:'🥁'},{en:'guitar',es:'guitarra',e:'🎸'},{en:'balloon',es:'globo',e:'🎈'}] },
+  { id: 17, title: 'La Tormenta de la Montaña', icon: '⛅', words: [{en:'sunny',es:'soleado',e:'☀️'},{en:'rainy',es:'lluvioso',e:'☔'},{en:'windy',es:'ventoso',e:'🌬️'},{en:'cloudy',es:'nublado',e:'⛅'},{en:'stormy',es:'tormenta',e:'⛈️'},{en:'snowy',es:'nieve',e:'🌨️'},{en:'foggy',es:'niebla',e:'🌫️'},{en:'spring',es:'primavera',e:'🌱'},{en:'summer',es:'verano',e:'🏖️'},{en:'winter',es:'invierno',e:'⛄'}] },
+  { id: 18, title: 'Los Juegos de Equitación', icon: '🏅', words: [{en:'basketball',es:'baloncesto',e:'🏀'},{en:'tennis',es:'tenis',e:'🎾'},{en:'baseball',es:'béisbol',e:'⚾'},{en:'skiing',es:'esquí',e:'⛷️'},{en:'skating',es:'patinaje',e:'⛸️'},{en:'karate',es:'kárate',e:'🥋'},{en:'surfing',es:'surf',e:'🏄'},{en:'climbing',es:'escalada',e:'🧗'},{en:'bowling',es:'bolos',e:'🎳'},{en:'golf',es:'golf',e:'⛳'}] },
+  { id: 19, title: 'Los Oficios del Feudo', icon: '🧑‍🚒', words: [{en:'doctor',es:'médico',e:'🧑‍⚕️'},{en:'police officer',es:'policía',e:'👮'},{en:'firefighter',es:'bombero',e:'🧑‍🚒'},{en:'cook',es:'cocinero',e:'🧑‍🍳'},{en:'farmer',es:'granjero',e:'🧑‍🌾'},{en:'astronaut',es:'astronauta',e:'🧑‍🚀'},{en:'pilot',es:'piloto',e:'🧑‍✈️'},{en:'mechanic',es:'mecánico',e:'🧑‍🔧'},{en:'scientist',es:'científico',e:'🧑‍🔬'},{en:'painter',es:'pintor',e:'🧑‍🎨'}] },
+  { id: 20, title: 'El Rescate de la Princesa y el Reino', icon: '🏰', words: [{en:'Hello! How are you?',es:'¡Hola! ¿Cómo estás?',e:'👋😃'},{en:'I love my family',es:'Quiero a mi familia',e:'❤️👨‍👩‍👧‍👦'},{en:'Open your book',es:'Abre tu libro',e:'📖👐'},{en:'Can I go to the toilet?',es:'¿Puedo ir al baño?',e:'🚻❓'},{en:'I like pizza',es:'Me gusta la pizza',e:'🍕👍'},{en:'Let us play football',es:'Vamos a jugar',e:'⚽🏃'},{en:'Good morning, wake up',es:'Buenos días',e:'🌅⏰'},{en:'Thank you very much',es:'Muchas gracias',e:'💝🙏'},{en:'You are my friend',es:'Eres mi amigo',e:'👫❤️'},{en:'I am very happy',es:'Estoy contento',e:'😄🎉'}] }
+];
+
+const STICKERS = ['🛡️','⚔️','👑','🐴','🐉','🏰','📜','🔮','💎','🥇','🏆','🎺','🏹','🎨','⭐','🌙','☀️','🔥','⚡','🎁'];
+
+let state = { selectedHero: 'knight', stars: 0, dailyChestClaimed: false, theme: 'day' };
+function loadState() {
+  try {
+    const raw = localStorage.getItem('reinoInglesState');
+    if(raw) state = Object.assign(state, JSON.parse(raw));
+    updateHeaderHero();
+    if(state.theme === 'night') document.documentElement.setAttribute('data-theme', 'night');
+  } catch(e){}
+}
+function saveState() {
+  try { localStorage.setItem('reinoInglesState', JSON.stringify(state)); } catch(e){}
+}
+
+function updateHeaderHero() {
+  const h = HEROES.find(x => x.id === state.selectedHero) || HEROES[0];
+  document.getElementById('heroHeaderAvatar').textContent = h.avatar;
+  document.getElementById('starBadge').textContent = '⭐ ' + state.stars;
+}
+
+let audioCtx = null;
+function playSound(type) {
+  try {
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume(); // Vital para Android Chrome
+    let t = audioCtx.currentTime;
+    let osc = audioCtx.createOscillator(), g = audioCtx.createGain();
+    osc.connect(g); g.connect(audioCtx.destination);
+    if(type === 'good') {
+      osc.frequency.setValueAtTime(523, t); osc.frequency.setValueAtTime(659, t+0.1); osc.frequency.setValueAtTime(784, t+0.2);
+      g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.01, t+0.35);
+      osc.start(t); osc.stop(t+0.35);
+    } else if(type === 'bad') {
+      osc.frequency.setValueAtTime(220, t); osc.frequency.setValueAtTime(180, t+0.12);
+      g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.01, t+0.3);
+      osc.start(t); osc.stop(t+0.3);
+    } else if(type === 'star') {
+      osc.frequency.setValueAtTime(880, t); osc.frequency.setValueAtTime(1320, t+0.08);
+      g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.01, t+0.2);
+      osc.start(t); osc.stop(t+0.2);
+    }
+  } catch(e){}
+}
+
+function speakText(text) {
+  if(!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'en-US'; u.rate = 0.82; u.pitch = 1.05;
+  window.speechSynthesis.speak(u);
+}
+
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let activeSR = null;
+function stopSR() {
+  if(activeSR) { try { activeSR.abort(); } catch(e){} activeSR = null; }
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+const app = document.getElementById('app');
+
+function renderHeroSelect() {
+  isAnimating3D = true;
+  app.innerHTML = `
+    <div class="scroll-card">
+      <h1 style="font-size:2.2rem; color:var(--wood-dark);">👑 Elige a tu Héroe Medieval</h1>
+      <p style="color:var(--text-muted); font-weight:700;">Selecciona el personaje que salvará el Reino del Inglés:</p>
+      
+      <div class="hero-select-grid">
+        ${HEROES.map(h => `
+          <div class="hero-card ${state.selectedHero===h.id?'selected':''}" data-hid="${h.id}">
+            <div class="hero-avatar">${h.avatar}</div>
+            <div class="hero-name">${h.name}</div>
+            <div style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">${h.desc}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <button class="btn-medieval big green" id="startQuestBtn" style="margin-top:20px;">¡Comenzar Aventura! 🛡️</button>
+    </div>`;
+
+  app.querySelectorAll('.hero-card').forEach(card => {
+    card.onclick = () => {
+      state.selectedHero = card.dataset.hid;
+      saveState(); updateHeaderHero(); renderHeroSelect();
+    };
+  });
+
+  document.getElementById('startQuestBtn').onclick = renderWorldMap;
+}
+
+function renderWorldMap() {
+  stopSR(); updateHeaderHero();
+  isAnimating3D = true;
+  let html = `
+    <div class="scroll-card" style="margin-bottom:16px;">
+      <h1 style="font-size:2rem; color:var(--wood-dark);">🗺️ Mapa del Reino (20 Misiones)</h1>
+      <p style="color:var(--text-muted); font-weight:700;">Supera las 20 misiones para rescatar a la princesa y derrotar al Rey Oscuro</p>
+    </div>
+
+    ${!state.dailyChestClaimed ? `
+      <div class="daily-chest-card" id="dailyChestBtn">
+        <div class="chest-icon">🎁</div>
+        <div>
+          <b style="font-family:var(--font-heading); font-size:1.3rem; color:var(--wood-dark);">Cofre de Recompensa Diario</b>
+          <div style="font-size:0.95rem; color:var(--wood-dark);">¡Toca para abrir tu regalo de hoy y ganar estrellas!</div>
+        </div>
+      </div>
+    ` : ''}
+
+    <div class="map-container">`;
+
+  MISSIONS_20.forEach((m, idx) => {
+    const unlocked = idx === 0 || state.stars >= (idx * 10);
+    html += `
+      <div class="mission-node ${unlocked?'':'locked'}" data-mid="${m.id}">
+        <div class="node-number">${m.id}</div>
+        <div class="node-icon">${m.icon}</div>
+        <div class="node-info">
+          <div class="node-title">Misión ${m.id}: ${m.title}</div>
+          <div class="node-desc">${unlocked ? '10 ejercicios variados de inglés' : `Requiere ${idx*10} ⭐`}</div>
+        </div>
+      </div>`;
+  });
+
+  html += `</div>`;
+  app.innerHTML = html;
+
+  if(document.getElementById('dailyChestBtn')) {
+    document.getElementById('dailyChestBtn').onclick = claimDailyReward;
+  }
+
+  app.querySelectorAll('.mission-node:not(.locked)').forEach(node => {
+    node.onclick = () => launchMissionGame(+node.dataset.mid);
+  });
+}
+
+function claimDailyReward() {
+  playSound('star');
+  state.stars += 20;
+  state.dailyChestClaimed = true;
+  saveState(); updateHeaderHero();
+
+  const modal = document.createElement('div');
+  modal.className = 'overlay';
+  modal.innerHTML = `
+    <div class="modal-realm">
+      <div style="font-size:4rem;">🎁✨</div>
+      <h2 style="color:var(--wood-dark);">¡Cofre Diario Abierto!</h2>
+      <p style="font-size:1.2rem; color:var(--text-muted); font-weight:700;">¡Has recibido +20 Estrellas Mágicas!</p>
+      <button class="btn-medieval big green" id="claimCloseBtn">¡Genial! 🏰</button>
+    </div>`;
+  document.body.appendChild(modal);
+  document.getElementById('claimCloseBtn').onclick = () => { modal.remove(); renderWorldMap(); };
+}
+
+function launchMissionGame(mid) {
+  isAnimating3D = false;
+  const m = MISSIONS_20.find(x => x.id === mid);
+  let idx = 0, score = 0;
+
+  function drawExercise() {
+    const w = m.words[idx % m.words.length];
+    const hasSR = !!SR;
+
+    app.innerHTML = `
+      <button class="btn-medieval" id="backMapBtn" style="margin-bottom:12px;">⬅ Volver al Mapa</button>
+      <div class="scroll-card">
+        <div style="font-family:var(--font-heading); font-size:1.3rem; color:var(--wood-dark);">Misión ${m.id} · Ejercicio ${idx+1} de 10</div>
+        
+        <div class="word-display">${w.e}</div>
+        <div class="word-en">${w.en}</div>
+        <div class="word-es">${w.es}</div>
+
+        <div style="margin:16px 0;">
+          <button class="btn-medieval blue" id="hearWordBtn">🔊 Escuchar en Inglés</button>
+
+          ${hasSR ? `
+            <div style="margin-top:14px;">
+              <button class="mic-button-realm" id="micBtnRealm">🎤</button>
+              <div class="feedback-realm" id="fbRealm">Pulsa el micro y dilo en voz alta</div>
+              <div style="color:var(--text-muted); font-weight:700;" id="heardRealm"></div>
+            </div>
+          ` : `
+            <div class="feedback-realm">Dilo en voz alta. Validación guiada:</div>
+            <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
+              <button class="btn-medieval green" id="okBtn">✔️ ¡Lo dijo bien!</button>
+              <button class="btn-medieval red" id="koBtn">Repetir</button>
+            </div>
+          `}
+        </div>
+
+        <button class="btn-medieval big green" id="nextExBtn">Siguiente Ejercicio ➡</button>
+      </div>`;
+
+    document.getElementById('backMapBtn').onclick = renderWorldMap;
+    document.getElementById('hearWordBtn').onclick = () => speakText(w.en);
+    speakText(w.en); // Reproducción directa para prevenir bloqueo de autoplay en Android
+
+    if(hasSR) {
+      const mic = document.getElementById('micBtnRealm');
+      const fb = document.getElementById('fbRealm');
+      const heard = document.getElementById('heardRealm');
+
+      mic.onclick = () => {
+        stopSR();
+        const rec = new SR();
+        activeSR = rec;
+        rec.lang = 'en-US';
+        rec.continuous = false; // Mejor compatibilidad en Android
+        rec.interimResults = false;
+        
+        mic.classList.add('active');
+        fb.className = 'feedback-realm'; fb.textContent = 'Te escucho… 👂';
+
+        rec.onresult = (ev) => {
+          if (!ev.results || !ev.results[0]) return;
+          const t = ev.results[0][0].transcript.toLowerCase();
+          heard.textContent = `He oído: "${t}"`;
+          
+          // Limpieza extra para Android que a veces añade puntuación
+          const cleanT = t.replace(/[.,!?]/g, '').trim();
+          const spokenWords = cleanT.split(/\\s+/);
+          const targetWord = w.en.toLowerCase();
+          
+          if(cleanT === targetWord || spokenWords.includes(targetWord)) {
+            playSound('good'); score++;
+            fb.className = 'feedback-realm ok'; fb.textContent = '¡Excelente! 🌟';
+          } else {
+            playSound('bad');
+            fb.className = 'feedback-realm no'; fb.textContent = '¡Casi! Escucha y repite';
+          }
+        };
+
+        rec.onerror = (e) => {
+          mic.classList.remove('active');
+          fb.className = 'feedback-realm no'; 
+          fb.textContent = e.error === 'not-allowed' ? '¡Micro denegado!' : 'Error de micro. Reintenta.';
+        };
+        rec.onend = () => mic.classList.remove('active');
+
+        try { rec.start(); } catch(e){
+          mic.classList.remove('active');
+          fb.className = 'feedback-realm no'; fb.textContent = 'No soportado aquí';
+        }
+      };
+    } else {
+      document.getElementById('okBtn').onclick = () => { playSound('good'); score++; stepNext(); };
+      document.getElementById('koBtn').onclick = () => { playSound('bad'); speakText(w.en); };
+    }
+
+    document.getElementById('nextExBtn').onclick = stepNext;
+
+    function stepNext() {
+      idx++;
+      if(idx < 10) drawExercise();
+      else showRewardModal(score, () => {
+        state.stars += score * 2; saveState(); updateHeaderHero(); renderWorldMap();
+      });
+    }
+  }
+
+  drawExercise();
+}
+
+function showRewardModal(score, onClose) {
+  playSound('star');
+  const modal = document.createElement('div');
+  modal.className = 'overlay';
+  modal.innerHTML = `
+    <div class="modal-realm">
+      <div style="font-size:4rem;">🏆✨</div>
+      <h2 style="color:var(--wood-dark);">¡Misión Completada!</h2>
+      <div style="font-size:2.5rem; letter-spacing:4px; margin:10px 0;">⭐⭐⭐⭐⭐</div>
+      <p style="color:var(--text-muted); font-weight:700;">¡Has ganado +${score * 2} Estrellas Mágicas!</p>
+      <button class="btn-medieval big green" id="questCloseBtn">¡Continuar Aventura! 🛡️</button>
+    </div>`;
+  document.body.appendChild(modal);
+  document.getElementById('questCloseBtn').onclick = () => { modal.remove(); onClose(); };
+}
+
+function renderAlbum() {
+  isAnimating3D = false;
+  const owned = Math.min(STICKERS.length, Math.floor(state.stars / 15));
+  app.innerHTML = `
+    <button class="btn-medieval" id="backMapBtn" style="margin-bottom:12px;">⬅ Volver al Mapa</button>
+    <div class="scroll-card">
+      <h1 style="color:var(--wood-dark);">🎒 Tesoros del Reino</h1>
+      <p style="color:var(--text-muted); font-weight:700;">Ganas 1 insignia por cada 15 ⭐ (Tienes ${owned} de ${STICKERS.length})</p>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:16px;">
+        ${STICKERS.map((s,i)=>`<div style="aspect-ratio:1; background:rgba(253, 230, 138, 0.4); border:2px solid var(--wood); border-radius:20px; display:flex; align-items:center; justify-content:center; font-size:2.5rem; ${i<owned?'':'filter:grayscale(1); opacity:0.3;'}">${i<owned?s:'❓'}</div>`).join('')}
+      </div>
+    </div>`;
+  document.getElementById('backMapBtn').onclick = renderWorldMap;
+}
+
+document.getElementById('brandLogo').onclick = renderHeroSelect;
+document.getElementById('homeBtn').onclick = renderWorldMap;
+document.getElementById('albumBtn').onclick = renderAlbum;
+
+document.getElementById('themeBtn').onclick = () => {
+  state.theme = state.theme === 'day' ? 'night' : 'day';
+  if(state.theme === 'night') document.documentElement.setAttribute('data-theme', 'night');
+  else document.documentElement.removeAttribute('data-theme');
+  saveState();
+};
+
+document.getElementById('parentBtn').onclick = () => {
+  alert('Área para padres en construcción. ¡Próximamente!');
+};
+
+loadState();
+initMedieval3DEngine();
+if(!state.selectedHero) renderHeroSelect();
+else renderWorldMap();
+if('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Reg Failed:', err));
   });
 }
 </script>
