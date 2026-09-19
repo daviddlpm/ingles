@@ -1,24 +1,18 @@
 {
-  "name": "El Reino de Inglés: Aventura Medieval 🛡️👑",
+  "name": "El Reino del Inglés · Aventura Medieval",
   "short_name": "Reino Inglés",
-  "description": "Aventura gráfica interactiva para aprender inglés (6-7 años)",
-  "start_url": "./",
-  "display": "fullscreen",
+  "description": "Aventura gráfica medieval para aprender inglés (7 años)",
+  "lang": "es",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
   "orientation": "any",
-  "background_color": "#1E1B2E",
-  "theme_color": "#78350F",
+  "background_color": "#7C2D12",
+  "theme_color": "#7C2D12",
   "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }
   ]
 }
